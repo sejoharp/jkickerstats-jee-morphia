@@ -16,9 +16,10 @@ public class SeasonParserTest {
 
 	@Inject
 	private SeasonParser parser;
-	
-	 @Inject BeanManager beanManager;
-	
+
+	@Inject
+	BeanManager beanManager;
+
 	@Test
 	public void returnsAllSeasons() {
 		assertThat(beanManager, notNullValue());
