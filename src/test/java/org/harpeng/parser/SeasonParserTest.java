@@ -30,12 +30,14 @@ public class SeasonParserTest {
 		assertThat(parser, notNullValue());
 	}
 
+	public static final String RECOURCES_DIRECTORY = System.getProperty("user.dir")
+			+ "/src/test/resources/";
+
 	@Test
 	public void returnsAllSeasons() {
 		List<Integer> expectedSeasonsIDs = Arrays.asList(7, 4, 3, 2, 1);
-		String recourcesDir = System.getProperty("user.dir")
-				+ "/src/test/resources/";
-		List<Integer> seasonsIDs = parser.getSeasonIDs(new File(recourcesDir
+
+		List<Integer> seasonsIDs = parser.getSeasonIDs(new File(RECOURCES_DIRECTORY
 				+ "uebersicht.html"));
 		assertThat(seasonsIDs, equalTo(expectedSeasonsIDs));
 	}
