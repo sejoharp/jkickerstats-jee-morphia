@@ -1,15 +1,19 @@
 package org.harpeng.parser;
 
+import static jodd.jerry.Jerry.jerry;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.IsEqual.*;
+import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNull.notNullValue;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.enterprise.inject.spi.BeanManager;
 import javax.inject.Inject;
+
+import jodd.io.FileUtil;
+import jodd.jerry.Jerry;
 
 import org.harpeng.WeldJUnit4Runner;
 import org.junit.Before;
@@ -22,23 +26,19 @@ public class SeasonParserTest {
 	@Inject
 	private SeasonParser parser;
 
-	@Inject
-	BeanManager beanManager;
-
 	@Before
 	public void checkPreconditions() {
 		assertThat(parser, notNullValue());
 	}
 
-	public static final String RECOURCES_DIRECTORY = System.getProperty("user.dir")
-			+ "/src/test/resources/";
+	public static final String RECOURCES_DIRECTORY = System
+			.getProperty("user.dir") + "/src/test/resources/";
 
 	@Test
-	public void returnsAllSeasons() {
+	public void returnsAllSeasons() throws IOException {
 		List<Integer> expectedSeasonsIDs = Arrays.asList(7, 4, 3, 2, 1);
-
-		List<Integer> seasonsIDs = parser.getSeasonIDs(new File(RECOURCES_DIRECTORY
-				+ "uebersicht.html"));
+		Jerry doc = jerry().parse(FileUtil.readString(new File(RECOURCES_DIRECTORY + "uebersicht.html")));
+		List<Integer> seasonsIDs = parser.getSeasonIDs(doc);
 		assertThat(seasonsIDs, equalTo(expectedSeasonsIDs));
 	}
 }

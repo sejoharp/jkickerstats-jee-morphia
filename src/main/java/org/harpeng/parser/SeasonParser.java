@@ -11,8 +11,7 @@ import jodd.io.FileUtil;
 import jodd.jerry.Jerry;
 
 public class SeasonParser {
-	public List<Integer> getSeasonIDs(File html) {
-		Jerry doc = readDocument(html);
+	public List<Integer> getSeasonIDs(Jerry doc) {
 		return new ArrayList<Integer>();
 	}
 
