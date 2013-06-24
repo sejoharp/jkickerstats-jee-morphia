@@ -1,0 +1,434 @@
+
+<?xml version="1.0" encoding=""?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>Kickern in Hamburg - Liga Tool</title>
+	<meta name="description" content="Liga-Ergebnisse, Mannschaften &amp; Spieltage des Hamburger Tischfu&szlig;ball-Landesverbandes (TFVHH), aktuelle Saison" />
+	<meta name="keywords" content="kickern, hamburg, liga, ligatool, landesverband, tfvhh, tischfu&szlig;ball, landesliga, ergebnisse, mannschaften, spieltage" />
+	<meta name="robots" content="index, follow" />
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<script src="/liga-tool/includes/js/joomla.javascript.js" type="text/javascript"></script>
+	  <base href="http://www.kickern-hamburg.de/liga-tool/mannschaftswettbewerbe" />
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <meta name="robots" content="index, follow" />
+  <meta name="generator" content="Joomla! 1.7 - Open Source Content Management" />
+  <title>Ergebnisse und Tabellen</title>
+  <link href="/liga-tool/templates/kickernhh/favicon.ico" rel="shortcut icon" type="image/vnd.microsoft.icon" />
+  <script src="/liga-tool/media/system/js/core.js" type="text/javascript"></script>
+  <script src="/liga-tool/media/system/js/mootools-core.js" type="text/javascript"></script>
+  <script src="/liga-tool/media/system/js/mootools-more.js" type="text/javascript"></script>
+  <script src="/liga-tool/templates/kickernhh/javascript/md_stylechanger.js" type="text/javascript" defer="defer"></script>
+  <script type="text/javascript">
+function keepAlive() {	var myAjax = new Request({method: "get", url: "index.php"}).send();} window.addEvent("domready", function(){ keepAlive.periodical(840000); });
+  </script>
+
+	<link rel="stylesheet" href="/liga-tool/templates/system/css/system.css" type="text/css" />
+	<link rel="shortcut icon" href="/favicon.ico" />
+	<link rel="stylesheet" type="text/css" href="/kickern-hh/css/layout.css" />
+	<link rel="stylesheet" type="text/css" href="/kickern-hh/css/typography.css" />
+	<link rel="stylesheet" type="text/css" href="/kickern-hh/css/form.css" />
+	<style type="text/css">
+		#Content { margin-right: 250px; }
+		#Content > #Breadcrumbs { padding-bottom: 23px; }
+		#Content table td { border: none }
+		#Content table tr.sectiontableentry2 > td, #Content table tr.sectiontableentry1 > td { border: 1px solid #999; }
+/*		#Content table.contentholder { margin-left: 23px; } (gibt probleme im IE ...) */
+		#Content table.contentpaneopen tr.sectiontableheader th { border: 1px dotted #999; padding: 5px; }
+		#Content p.readon { /* margin-left: 23px; */ margin-top: -10px; font-weight: bold; }
+		table td.contentheading, h4.contentheading a { color: #b00; font-weight: bold; border: none; }
+		td[align="center"], th { text-align: center; }
+		th[align="left"], td { text-align: left; }
+		#Content select, #Content input, #Content textarea { width: auto; max-width: 50%;}
+		form#login-form ul { display: none; }
+		form#login-form #form-login-remember { float: left; }
+		article ul.actions { display: none; }
+		article dl.article-info { display: none; }
+		article ul.pagenav { display: none; }
+	</style>
+</head>
+
+<body>
+<div id="Container">
+	<a href="/" style="border: none;" title="Startseite"><img id="top" src="/kickern-hh/images/logo_turm.png" width="85" height="100" align="left" alt="Turm-Logo" style="float: left;" title="Startseite" /></a>
+	<div id="Header">
+		<div id="Advertisment">
+			<p><strong>Kicker-Sven.de</strong> - der Spieler-Shop!</p>
+			<p>Tecball, Leonhart, P4P, Zubeh&ouml;r &amp; mehr,</p>
+			<p>weitere Infos unter <a href="http://www.kicker-sven.de/">www.kicker-sven.de</a></p>
+			<p class="notice">Anzeige</p>
+		</div>
+		<!-- Announcements!!
+      <div style="position: absolute; left: 420px; top: 10px; border: 1px solid gray; padding: 2px 5px; padding-bottom: 0px;">
+      <a href="/phpBB2/viewtopic.php?t=3557" style="background-color: white;"><img src="/kickern-hh/images/liga-2011.gif" width="140" height="63" /></a>
+      </div>
+		-->
+		<div id="LoginBox">
+			<form action="/liga-tool/mannschaftswettbewerbe" method="post" id="login-form" >
+		<fieldset class="userdata">
+	<p id="form-login-username">
+		<label for="modlgn-username">Benutzername</label>
+		<input id="modlgn-username" type="text" name="username" class="inputbox"  size="18" />
+	</p>
+	<p id="form-login-password">
+		<label for="modlgn-passwd">Passwort</label>
+		<input id="modlgn-passwd" type="password" name="password" class="inputbox" size="18"  />
+	</p>
+		<p id="form-login-remember">
+		<label for="modlgn-remember">Angemeldet bleiben</label>
+		<input id="modlgn-remember" type="checkbox" name="remember" class="inputbox" value="yes"/>
+	</p>
+		<input type="submit" name="Submit" class="button" value="Anmelden" />
+	<input type="hidden" name="option" value="com_users" />
+	<input type="hidden" name="task" value="user.login" />
+	<input type="hidden" name="return" value="aW5kZXgucGhwP3Rhc2s9YmVnZWdudW5nX3NwaWVscGxhbiZ2ZXJhbnN0YWx0dW5naWQ9NDMmaWQ9MzA4MyZvcHRpb249Y29tX3Nwb3J0c21hbmFnZXImdmlldz1zcG9ydHNtYW5hZ2VyJkl0ZW1pZD0xMDQ=" />
+	<input type="hidden" name="497d4c7505a36f2fd82310e11bd119cf" value="1" />	</fieldset>
+	<ul>
+		<li>
+			<a href="/liga-tool/component/users/?view=reset">
+			Passwort vergessen?</a>
+		</li>
+		<li>
+			<a href="/liga-tool/component/users/?view=remind">
+			Benutzername vergessen?</a>
+		</li>
+			</ul>
+	</form>
+
+		</div>
+		</div>
+	<div class="clear"><!-- --></div>
+	<div id="Navigation" class="nav">
+		<ul><!-- 
+			--><li id="nav-news" class="link"><a href="/news/" title="Zur Seite &quot;News&quot"><span>News</span></a></li><!-- 
+			--><li id="nav-verband" class="link"><a href="/verband/" title="Zur Seite &quot;TFVHH&quot"><span>Verband</span></a></li><!-- 
+			--><li id="nav-forum-2" class="link"><a href="/phpBB2/" title="Zur Seite &quot;Forum&quot"><span>Forum</span></a></li><!-- 
+			--><li id="nav-liga" class="current"><a href="/liga-tool/" title="Zur Seite &quot;Wettbewerbe&quot"><span>Wettbewerbe</span></a></li><!-- 
+			--><li id="nav-gallery" class="link"><a href="/gallery/" title="Zur Seite &quot;Photos&quot"><span>Galerie</span></a></li><!-- 
+			--><li id="nav-guide" class="link"><a href="/guide/" title="Zur Seite &quot;Guide&quot"><span>Guide</span></a></li><!-- 
+			--><li id="nav-about" class="link"><a href="/about/" title="Zur Seite &quot;Über uns&quot"><span>Über uns</span></a></li><!-- 
+			--><li id="nav-links" class="link"><a href="/links/" title="Zur Seite &quot;Unsere Lieblings-Links&quot"><span>Links</span></a></li><!-- 
+			--><li id="nav-impressum" class="link last"><a href="/impressum/" title="Zur Seite &quot;Kontakt / Impressum&quot"><span>Kontakt</span></a></li><!-- 
+		--></ul>
+	</div>	
+
+	<div id="Layout">
+		<div class="typography">
+			<h2>Wettbewerbe</h2>
+			<div id="breadcrumbs">
+<div class="breadcrumbs">
+<span class="showHere">Aktuelle Seite: </span><span>Ergebnisse und Tabellen</span></div>
+</div>
+			<div id="Sidebar">
+				<div class="sidebarBox">
+					<div class="moduletable">
+ <h3><span
+	class="backh"><span class="backh2"><span class="backh3">Info</span></span></span></h3>
+ 
+<ul class="menu">
+<li class="item-141"><a href="/liga-tool/kalender" >Kalender</a></li><li class="item-113"><a href="/liga-tool/vereine" >Vereine</a></li><li class="item-111"><a href="/liga-tool/spieler" >Spieler</a></li><li class="item-114"><a href="/liga-tool/spielorte" >Spielorte</a></li></ul>
+</div>
+<div class="moduletable_menu">
+ <h3><span
+	class="backh"><span class="backh2"><span class="backh3">Hamburger Kickerliga</span></span></span></h3>
+ 
+<ul class="menu">
+<li class="item-106"><a href="/liga-tool/" >Aktuelle Partien</a></li><li class="item-104 current active deeper parent"><a href="/liga-tool/mannschaftswettbewerbe" >Ergebnisse und Tabellen</a><ul><li class="item-119"><a href="/liga-tool/mannschaftswettbewerbe?task=veranstaltung&veranstaltungid=54" >1. Liga</a></li><li class="item-124"><a href="/liga-tool/mannschaftswettbewerbe?task=veranstaltung&veranstaltungid=55" >2. Liga</a></li><li class="item-123"><a href="/liga-tool/mannschaftswettbewerbe?task=veranstaltung&veranstaltungid=61" >3. Liga (Gruppe A)</a></li><li class="item-125"><a href="/liga-tool/mannschaftswettbewerbe?task=veranstaltung&veranstaltungid=62" >3. Liga (Gruppe B)</a></li><li class="item-126"><a href="/liga-tool/mannschaftswettbewerbe?task=veranstaltung&veranstaltungid=63" >4. Liga (Gruppe A)</a></li><li class="item-127"><a href="/liga-tool/mannschaftswettbewerbe?task=veranstaltung&veranstaltungid=64" >4. Liga (Gruppe B)</a></li><li class="item-128"><a href="/liga-tool/mannschaftswettbewerbe?task=veranstaltung&veranstaltungid=65" >4. Liga (Gruppe C)</a></li><li class="item-129"><a href="/liga-tool/mannschaftswettbewerbe?task=veranstaltung&veranstaltungid=66" >4. Liga (Gruppe D)</a></li><li class="item-131"><a href="/liga-tool/mannschaftswettbewerbe?task=veranstaltung&veranstaltungid=67" >Pokal</a></li></ul></li><li class="item-112"><a href="/liga-tool/mannschaften" >Mannschaften</a></li><li class="item-107"><a href="/liga-tool/spielerstatistiken" >Spielerstatistiken</a></li><li class="item-116"><a href="/liga-tool/dokumente" >Dokumente</a></li><li class="item-117"><a href="/liga-tool/info-und-teilnahme" >Info und Teilnahme</a></li><li class="item-143"><a href="/liga-tool/spielordnung" >Spielordnung</a></li></ul>
+</div>
+<div class="moduletable">
+ <h3><span
+	class="backh"><span class="backh2"><span class="backh3">Turniere</span></span></span></h3>
+ 
+<ul class="menu">
+<li class="item-108"><a href="/liga-tool/menu-turniere" >Ergebnisse</a></li><li class="item-110"><a href="/liga-tool/menu-ranglisten" >Ranglisten</a></li><li class="item-144"><a href="/liga-tool/elorangliste" >ELO-Rangliste</a></li></ul>
+</div>
+<div class="moduletable">
+ <h3><span
+	class="backh"><span class="backh2"><span class="backh3">Sonstiges</span></span></span></h3>
+ 
+<ul class="menu">
+<li class="item-118"><a href="/liga-tool/bundesliga" >Bundesliga</a></li><li class="item-120"><a href="/liga-tool/laenderauswahl" >Länderauswahl</a></li><li class="item-121"><a href="/liga-tool/nationalmannschaft" >Nationalmannschaft</a></li><li class="item-122"><a href="/liga-tool/turniere-dm-wm-p4p" >Turniere: DM, WM, P4P</a></li></ul>
+</div>
+<div class="moduletable">
+ <h3><span
+	class="backh"><span class="backh2"><span class="backh3">Archiv</span></span></span></h3>
+ 
+<ul class="menu">
+<li class="item-145"><a href="/liga-tool/saison-2012" >Saison 2012</a></li><li class="item-135"><a href="/liga-tool/saison-2011" >Saison 2011</a></li><li class="item-136"><a href="/liga-tool/saison-2010" >Saison 2010</a></li><li class="item-137"><a href="/liga-tool/saison-2009" >Saison 2009</a></li><li class="item-138"><a href="/liga-tool/saison-2008" >Saison 2008</a></li><li class="item-134"><a href="/liga-tool/saison-20062007" >Saison 2006/2007</a></li></ul>
+</div>
+
+					
+					
+					<div class="clear"></div>
+				</div>
+				<div class="sidebarBottom"></div>
+			</div>
+  
+			<div id="Content">
+					
+<div id="system-message-container">
+</div>
+					﻿		<table border="0" cellspacing="0" cellpadding="3" width="100%">
+		<tr>
+	    	<th width="30" class="sectiontableheader"></th>
+			<th class="sectiontableheader" align="left">
+			<img src="/liga-tool/images/M_images/arrow.png" border="0" />
+							<a href="/liga-tool/mannschaftswettbewerbe#vid43">
+				Wettbewerbe</a> &gt;
+				<a href="/liga-tool/mannschaftswettbewerbe?task=veranstaltung&veranstaltungid=43#id3083">
+				Kickerliga Hamburg 2012, 3. Liga, Gruppe A</a> &gt;
+				HKC Holzschuh vs. Boltens (b)							</th>
+							<th width="50" class="sectiontableheader">&nbsp;</th>
+                					<th class="sectiontableheader" align="right">
+					<a href="/liga-tool/mannschaftswettbewerbe?task=begegnung_spielplan&veranstaltungid=43&id=1974">
+					&lt; Zur&uuml;ck</a>
+					</th>
+								<th width="50" class="sectiontableheader">&nbsp;</th>
+									<th class="sectiontableheader"  align="left">
+					<a href="/liga-tool/mannschaftswettbewerbe?task=begegnung_spielplan&veranstaltungid=43&id=1992">
+					Weiter &gt;</a>
+					</th>
+						</tr>
+		</table>
+
+	 	<table class="contentpaneopen">
+		<tr>
+		<td nowrap>
+		N/A, 5. Spieltag		</td>
+		</tr>
+		</table>
+
+	 	<table class="contentpaneopen">
+	 	<tr>
+	  <td>vs.</td>
+    <td>
+	 	<table>
+ 		<tr>
+			<td>
+			      </td>
+      <td>
+      <h2>HKC Holzschuh</h2>
+      </td>
+    </tr>
+    <tr>
+			<td>
+			<img src="http://www.kickern-hamburg.de/liga-tool/images/sportsmanager/vereine/I45T1325600247W48H48.png" width="48" height="48" border="0" align="left" />      </td>
+			<td>
+      <h2>Boltens (b)</h2>
+      </td>
+		</tr>
+		</table>
+    </td>
+    <td width="64"></td>
+		<td align="center"><h2>32:0</h2><h3>(96:0)</h3></td>
+    </tr>
+	 	<table>
+
+				 	<table class="contentpaneopen">
+			<tr class="sectiontableheader">
+			<th nowrap><strong>Spiel</strong></th>
+						<th nowrap><strong>Heim</strong></th>
+			<th nowrap><strong>Ergebnis</strong></th>
+			<th nowrap><strong>Gast</strong></th>
+						</tr>
+							<tr class="sectiontableentry1">
+				<td nowrap align="center">1</td>
+				
+				<td>
+								</td>
+
+				<td nowrap align="center">7:0</td>
+
+				<td>
+								</td>
+
+								</tr>
+								<tr class="sectiontableentry2">
+				<td nowrap align="center">2</td>
+				
+				<td>
+								</td>
+
+				<td nowrap align="center">7:0</td>
+
+				<td>
+								</td>
+
+								</tr>
+								<tr class="sectiontableentry1">
+				<td nowrap align="center">3</td>
+				
+				<td>
+								</td>
+
+				<td nowrap align="center">5:0</td>
+
+				<td>
+								</td>
+
+								</tr>
+								<tr class="sectiontableentry2">
+				<td nowrap align="center">4</td>
+				
+				<td>
+								</td>
+
+				<td nowrap align="center">5:0</td>
+
+				<td>
+								</td>
+
+								</tr>
+								<tr class="sectiontableentry1">
+				<td nowrap align="center">5</td>
+				
+				<td>
+								</td>
+
+				<td nowrap align="center">7:0</td>
+
+				<td>
+								</td>
+
+								</tr>
+								<tr class="sectiontableentry2">
+				<td nowrap align="center">6</td>
+				
+				<td>
+								</td>
+
+				<td nowrap align="center">7:0</td>
+
+				<td>
+								</td>
+
+								</tr>
+								<tr class="sectiontableentry1">
+				<td nowrap align="center">7</td>
+				
+				<td>
+								</td>
+
+				<td nowrap align="center">5:0</td>
+
+				<td>
+								</td>
+
+								</tr>
+								<tr class="sectiontableentry2">
+				<td nowrap align="center">8</td>
+				
+				<td>
+								</td>
+
+				<td nowrap align="center">5:0</td>
+
+				<td>
+								</td>
+
+								</tr>
+								<tr class="sectiontableentry1">
+				<td nowrap align="center">9</td>
+				
+				<td>
+								</td>
+
+				<td nowrap align="center">7:0</td>
+
+				<td>
+								</td>
+
+								</tr>
+								<tr class="sectiontableentry2">
+				<td nowrap align="center">10</td>
+				
+				<td>
+								</td>
+
+				<td nowrap align="center">7:0</td>
+
+				<td>
+								</td>
+
+								</tr>
+								<tr class="sectiontableentry1">
+				<td nowrap align="center">11</td>
+				
+				<td>
+								</td>
+
+				<td nowrap align="center">5:0</td>
+
+				<td>
+								</td>
+
+								</tr>
+								<tr class="sectiontableentry2">
+				<td nowrap align="center">12</td>
+				
+				<td>
+								</td>
+
+				<td nowrap align="center">5:0</td>
+
+				<td>
+								</td>
+
+								</tr>
+								<tr class="sectiontableentry1">
+				<td nowrap align="center">13</td>
+				
+				<td>
+								</td>
+
+				<td nowrap align="center">7:0</td>
+
+				<td>
+								</td>
+
+								</tr>
+								<tr class="sectiontableentry2">
+				<td nowrap align="center">14</td>
+				
+				<td>
+								</td>
+
+				<td nowrap align="center">7:0</td>
+
+				<td>
+								</td>
+
+								</tr>
+								<tr class="sectiontableentry1">
+				<td nowrap align="center">15</td>
+				
+				<td>
+								</td>
+
+				<td nowrap align="center">5:0</td>
+
+				<td>
+								</td>
+
+								</tr>
+								<tr class="sectiontableentry2">
+				<td nowrap align="center">16</td>
+				
+				<td>
+								</td>
+
+				<td nowrap align="center">5:0</td>
+
+				<td>
+								</td>
+
+								</tr>
+							</table>
+			<span class="article_seperator">&nbsp;</span>
+			
+			</div><!-- Content -->
+		</div><!-- typography -->
+	</div><!-- Layout -->
+</div><!-- Container -->
+
+	</body>
+</html>
