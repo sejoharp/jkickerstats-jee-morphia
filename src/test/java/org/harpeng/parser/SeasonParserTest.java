@@ -7,7 +7,6 @@ import static org.hamcrest.core.IsNull.notNullValue;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -19,6 +18,8 @@ import org.harpeng.WeldJUnit4Runner;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import com.google.common.collect.Lists;
 
 @RunWith(WeldJUnit4Runner.class)
 public class SeasonParserTest {
@@ -36,9 +37,11 @@ public class SeasonParserTest {
 
 	@Test
 	public void returnsAllSeasons() throws IOException {
-		List<Integer> expectedSeasonsIDs = Arrays.asList(7, 4, 3, 2, 1);
-		Jerry doc = jerry().parse(FileUtil.readString(new File(RECOURCES_DIRECTORY + "uebersicht.html")));
-		List<Integer> seasonsIDs = parser.getSeasonIDs(doc);
+		List<Integer> expectedSeasonsIDs = Lists.newArrayList(7, 4, 3, 2, 1);
+		Jerry doc = jerry().parse(
+				FileUtil.readString(new File(RECOURCES_DIRECTORY
+						+ "uebersicht.html")));
+		List<Integer> seasonsIDs = parser.findSeasonIDs(doc);
 		assertThat(seasonsIDs, equalTo(expectedSeasonsIDs));
 	}
 }

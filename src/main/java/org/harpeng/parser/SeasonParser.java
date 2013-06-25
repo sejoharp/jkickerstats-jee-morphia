@@ -9,10 +9,18 @@ import java.util.List;
 
 import jodd.io.FileUtil;
 import jodd.jerry.Jerry;
+import jodd.jerry.JerryFunction;
 
 public class SeasonParser {
-	public List<Integer> getSeasonIDs(Jerry doc) {
-		return new ArrayList<Integer>();
+	public List<Integer> findSeasonIDs(Jerry doc) {
+		final List<Integer> seasonIDs = new ArrayList<>();
+		doc.$("div#Content select option").each(new JerryFunction() {
+			public boolean onNode(Jerry $this, int index) {
+				seasonIDs.add(Integer.valueOf($this.attr("value")));
+				return true;
+			}
+		});
+		return seasonIDs;
 	}
 
 	protected Jerry readDocument(File html) {
