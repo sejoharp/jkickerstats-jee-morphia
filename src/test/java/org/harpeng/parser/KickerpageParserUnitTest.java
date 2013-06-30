@@ -105,4 +105,40 @@ public class KickerpageParserUnitTest {
 				ligaLinksIDs.get(0),
 				equalTo("http://www.kickern-hamburg.de/liga-tool/mannschaftswettbewerbe?task=veranstaltung&veranstaltungid=8"));
 	}
+
+	@Test
+	public void filteringAllMatchLinks() throws IOException {
+		File testFile = new File(KickerpageParserTest.RECOURCES_DIRECTORY
+				+ "begegnungen.html");
+		Jerry doc = jerry().parse(FileUtil.readString(testFile));
+
+		assertThat(parser.filterMatchLinkSnippets(doc).size(), equalTo(110));
+	}
+
+	@Test
+	public void filteringAllGames() throws IOException {
+		File testFile = new File(KickerpageParserTest.RECOURCES_DIRECTORY
+				+ "begegnung.html");
+		Jerry doc = jerry().parse(FileUtil.readString(testFile));
+
+		assertThat(parser.filterGameSnippets(doc).size(), equalTo(16));
+	}
+
+	@Test
+	public void gameIsValid() throws IOException {
+		File testFile = new File(KickerpageParserTest.RECOURCES_DIRECTORY
+				+ "begegnung.html");
+		Jerry doc = jerry().parse(FileUtil.readString(testFile));
+		Jerry gameSnippets = parser.filterGameSnippets(doc);
+		assertThat(parser.isValidGameList(gameSnippets), equalTo(true));
+	}
+	
+	@Test
+	public void gameIsValidWithImages() throws IOException {
+		File testFile = new File(KickerpageParserTest.RECOURCES_DIRECTORY
+				+ "begegnung_bild.html");
+		Jerry doc = jerry().parse(FileUtil.readString(testFile));
+		Jerry gameSnippets = parser.filterGameSnippets(doc);
+		assertThat(parser.isValidGameList(gameSnippets), equalTo(true));
+	}
 }
