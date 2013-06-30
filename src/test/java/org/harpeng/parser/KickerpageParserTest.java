@@ -19,8 +19,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import com.google.common.collect.Lists;
-
 @RunWith(WeldJUnit4Runner.class)
 public class KickerpageParserTest {
 	public static final String RECOURCES_DIRECTORY = System
@@ -45,38 +43,5 @@ public class KickerpageParserTest {
 		assertThat(
 				ligaLinksIDs.get(0),
 				equalTo("http://www.kickern-hamburg.de/liga-tool/mannschaftswettbewerbe?task=veranstaltung&veranstaltungid=8"));
-	}
-
-	@Test
-	public void returnAllSeasons() throws IOException {
-		List<Integer> expectedSeasonsIDs = Lists.newArrayList(7, 4, 3, 2, 1);
-		File testFile = new File(RECOURCES_DIRECTORY + "uebersicht.html");
-		Jerry doc = jerry().parse(FileUtil.readString(testFile));
-
-		List<Integer> seasonsIDs = parser.findSeasonIDs(doc);
-
-		assertThat(seasonsIDs, equalTo(expectedSeasonsIDs));
-		assertThat(seasonsIDs.get(0), equalTo(expectedSeasonsIDs.get(0)));
-	}
-
-	@Test
-	public void returnAllMatchLinks() throws IOException {
-		File testFile = new File(RECOURCES_DIRECTORY + "begegnungen.html");
-		Jerry doc = jerry().parse(FileUtil.readString(testFile));
-
-		List<String> matchLinks = parser.findMatchLinks(doc);
-
-		assertThat(matchLinks.size(), equalTo(14));
-		String expectedMatchLink = "http://www.kickern-hamburg.de/liga-tool/mannschaftswettbewerbe?task=begegnung_spielplan&veranstaltungid=64&id=3815";
-		assertThat(matchLinks.get(0), equalTo(expectedMatchLink));
-	}
-	@Test
-	public void returnAllConfirmedMatchLinks() throws IOException {
-		File testFile = new File(RECOURCES_DIRECTORY + "begegnungen_live.html");
-		Jerry doc = jerry().parse(FileUtil.readString(testFile));
-
-		List<String> matchLinks = parser.findMatchLinks(doc);
-
-		assertThat(matchLinks.size(), equalTo(24));
 	}
 }
