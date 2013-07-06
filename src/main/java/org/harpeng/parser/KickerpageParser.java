@@ -50,8 +50,7 @@ public class KickerpageParser {
 	}
 
 	protected boolean hasMatchDate(Jerry doc) {
-		String rawData = doc.$("div#Content table > tr > td").first()
-				.text();
+		String rawData = doc.$("div#Content table > tr > td").first().text();
 		String[] dateChunks = rawData.split(",");
 		return dateChunks.length == 3;
 	}
@@ -62,21 +61,19 @@ public class KickerpageParser {
 			matchDate.setTimeInMillis(0);
 			return matchDate;
 		}
-		String rawData = doc.$("div#Content table > tr > td").first()
-				.text();
+		String rawData = doc.$("div#Content table > tr > td").first().text();
 		String rawDate = rawData.split(",")[1];
 		return parseDate(rawDate);
 	}
 
 	protected int parseMatchDay(Jerry doc, boolean matchDateAvailable) {
-		String rawData = doc.$("div#Content table tbody > tr > td").first()
-				.text();
+		String rawData = doc.$("div#Content table > tr > td").first().text();
 		String[] dateChunks = rawData.split(",");
 		String matchDayString;
 		if (matchDateAvailable) {
-			matchDayString = dateChunks[2].split(".")[0];
+			matchDayString = dateChunks[2].split("\\.")[0];
 		} else {
-			matchDayString = dateChunks[1].split(".")[0];
+			matchDayString = dateChunks[1].split("\\.")[0];
 		}
 		return Integer.parseInt(matchDayString.trim());
 	}
@@ -97,8 +94,7 @@ public class KickerpageParser {
 
 	protected Calendar parseDate(String rawDate) {
 		Calendar date = Calendar.getInstance();
-		SimpleDateFormat dateFormat = new SimpleDateFormat(
-				"dd.MM.yyyy HH:mm");
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm");
 		try {
 			date.setTime(dateFormat.parse(rawDate));
 		} catch (ParseException e) {

@@ -208,7 +208,7 @@ public class KickerpageParserUnitTest {
 		File testFile = new File(KickerpageParserTest.RECOURCES_DIRECTORY
 				+ "begegnung.html");
 		Calendar expectedDate = Calendar.getInstance();
-		expectedDate.setTimeInMillis(0);
+		expectedDate.clear();
 		expectedDate.set(2013, 1, 27, 20, 0);
 		Jerry doc = jerry().parse(FileUtil.readString(testFile));
 
@@ -224,5 +224,23 @@ public class KickerpageParserUnitTest {
 		Jerry doc = jerry().parse(FileUtil.readString(testFile));
 
 		assertThat(parser.parseMatchDate(doc, false), equalTo(expectedDate));
+	}
+
+	@Test
+	public void parseMatchday() throws IOException {
+		File testFile = new File(KickerpageParserTest.RECOURCES_DIRECTORY
+				+ "begegnung.html");
+		Jerry doc = jerry().parse(FileUtil.readString(testFile));
+
+		assertThat(parser.parseMatchDay(doc, true), equalTo(1));
+	}
+
+	@Test
+	public void parseMatchdayWithoutDate() throws IOException {
+		File testFile = new File(KickerpageParserTest.RECOURCES_DIRECTORY
+				+ "begegnung_no_date.html");
+		Jerry doc = jerry().parse(FileUtil.readString(testFile));
+
+		assertThat(parser.parseMatchDay(doc, false), equalTo(5));
 	}
 }
