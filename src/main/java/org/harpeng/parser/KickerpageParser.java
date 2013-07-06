@@ -78,18 +78,20 @@ public class KickerpageParser {
 		return Integer.parseInt(matchDayString.trim());
 	}
 
-	protected int parseHomeScore(Jerry doc, boolean imagesAvailable) {
+	protected String[] parseScore(Jerry doc, boolean imagesAvailable) {
 		int index = imagesAvailable ? 3 : 2;
 		String scoreString = doc.children().eq(index).text();
-		String[] scoreChunks = scoreString.split(":");
-		return Integer.parseInt(scoreChunks[0].trim());
+		return scoreString.split(":");
+	}
+
+	protected int parseHomeScore(Jerry doc, boolean imagesAvailable) {
+		String homescore = parseScore(doc, imagesAvailable)[0].trim();
+		return Integer.parseInt(homescore);
 	}
 
 	protected int parseGuestScore(Jerry doc, boolean imagesAvailable) {
-		int index = imagesAvailable ? 3 : 2;
-		String scoreString = doc.children().eq(index).text();
-		String[] scoreChunks = scoreString.split(":");
-		return Integer.parseInt(scoreChunks[1].trim());
+		String guestscore = parseScore(doc, imagesAvailable)[1].trim();
+		return Integer.parseInt(guestscore);
 	}
 
 	protected Calendar parseDate(String rawDate) {

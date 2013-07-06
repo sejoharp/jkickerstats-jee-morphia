@@ -243,4 +243,44 @@ public class KickerpageParserUnitTest {
 
 		assertThat(parser.parseMatchDay(doc, false), equalTo(5));
 	}
+	
+	@Test
+	public void parseHomeScore() throws IOException {
+		File testFile = new File(KickerpageParserTest.RECOURCES_DIRECTORY
+				+ "begegnung.html");
+		Jerry doc = jerry().parse(FileUtil.readString(testFile));
+
+		Jerry rawGames = parser.filterGameSnippets(doc);
+		assertThat(parser.parseHomeScore(rawGames.first(), false), equalTo(4));
+	}
+	
+	@Test
+	public void parseGuestScore() throws IOException {
+		File testFile = new File(KickerpageParserTest.RECOURCES_DIRECTORY
+				+ "begegnung.html");
+		Jerry doc = jerry().parse(FileUtil.readString(testFile));
+
+		Jerry rawGames = parser.filterGameSnippets(doc);
+		assertThat(parser.parseGuestScore(rawGames.first(), false), equalTo(7));
+	}
+	
+	@Test
+	public void parseHomeScoreWithImages() throws IOException {
+		File testFile = new File(KickerpageParserTest.RECOURCES_DIRECTORY
+				+ "begegnung_bild.html");
+		Jerry doc = jerry().parse(FileUtil.readString(testFile));
+
+		Jerry rawGames = parser.filterGameSnippets(doc);
+		assertThat(parser.parseHomeScore(rawGames.first(), true), equalTo(4));
+	}
+	
+	@Test
+	public void parseGuestScoreWithImages() throws IOException {
+		File testFile = new File(KickerpageParserTest.RECOURCES_DIRECTORY
+				+ "begegnung_bild.html");
+		Jerry doc = jerry().parse(FileUtil.readString(testFile));
+
+		Jerry rawGames = parser.filterGameSnippets(doc);
+		assertThat(parser.parseGuestScore(rawGames.first(), true), equalTo(7));
+	}
 }
