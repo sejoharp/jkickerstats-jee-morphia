@@ -6,6 +6,8 @@ import static org.hamcrest.core.IsEqual.equalTo;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import jodd.io.FileUtil;
@@ -132,7 +134,7 @@ public class KickerpageParserUnitTest {
 		Jerry gameSnippets = parser.filterGameSnippets(doc);
 		assertThat(parser.isValidGameList(gameSnippets), equalTo(true));
 	}
-	
+
 	@Test
 	public void gameIsValidWithImages() throws IOException {
 		File testFile = new File(KickerpageParserTest.RECOURCES_DIRECTORY
@@ -140,5 +142,87 @@ public class KickerpageParserUnitTest {
 		Jerry doc = jerry().parse(FileUtil.readString(testFile));
 		Jerry gameSnippets = parser.filterGameSnippets(doc);
 		assertThat(parser.isValidGameList(gameSnippets), equalTo(true));
+	}
+
+	@Test
+	public void teamnameWithoutDescription() {
+		String teamname = "Team Hauff (A)";
+		assertThat(parser.removeTeamDescriptions(teamname),
+				equalTo("Team Hauff"));
+	}
+
+	@Test
+	public void teamnameWithoutDescriptionIsStillComplete() {
+		String teamname = "Team Hauff";
+		assertThat(parser.removeTeamDescriptions(teamname),
+				equalTo("Team Hauff"));
+	}
+
+	@Test
+	public void gameHasHomeTeam() throws IOException {
+		File testFile = new File(KickerpageParserTest.RECOURCES_DIRECTORY
+				+ "begegnung.html");
+		Jerry doc = jerry().parse(FileUtil.readString(testFile));
+		assertThat(parser.parseHomeTeam(doc),
+				equalTo("Tingeltangel FC St. Pauli"));
+	}
+
+	@Test
+	public void gameHasGuestTeam() throws IOException {
+		File testFile = new File(KickerpageParserTest.RECOURCES_DIRECTORY
+				+ "begegnung.html");
+		Jerry doc = jerry().parse(FileUtil.readString(testFile));
+		assertThat(parser.parseGuestTeam(doc), equalTo("Hamburg Privateers 08"));
+	}
+
+	@Test
+	public void gameHasNoMatchdate() throws IOException {
+		File testFile = new File(KickerpageParserTest.RECOURCES_DIRECTORY
+				+ "begegnung_no_date.html");
+		Jerry doc = jerry().parse(FileUtil.readString(testFile));
+		assertThat(parser.hasMatchDate(doc), equalTo(false));
+	}
+
+	@Test
+	public void gameHasMatchdate() throws IOException {
+		File testFile = new File(KickerpageParserTest.RECOURCES_DIRECTORY
+				+ "begegnung.html");
+		Jerry doc = jerry().parse(FileUtil.readString(testFile));
+		assertThat(parser.hasMatchDate(doc), equalTo(true));
+	}
+
+	@Test
+	public void parsingADate() throws IOException {
+		String rawDate = "27.02.2013 20:00";
+		Calendar expectedDate = Calendar.getInstance();
+		expectedDate.setTimeInMillis(0);
+		expectedDate.set(2013, 1, 27, 20, 0);
+
+		Date resultDate = parser.parseDate(rawDate).getTime();
+
+		assertThat(resultDate, equalTo(expectedDate.getTime()));
+	}
+
+	@Test
+	public void parsingMatchdate() throws IOException {
+		File testFile = new File(KickerpageParserTest.RECOURCES_DIRECTORY
+				+ "begegnung.html");
+		Calendar expectedDate = Calendar.getInstance();
+		expectedDate.setTimeInMillis(0);
+		expectedDate.set(2013, 1, 27, 20, 0);
+		Jerry doc = jerry().parse(FileUtil.readString(testFile));
+
+		assertThat(parser.parseMatchDate(doc, true), equalTo(expectedDate));
+	}
+
+	@Test
+	public void parseGameWithoutMatchdate() throws IOException {
+		File testFile = new File(KickerpageParserTest.RECOURCES_DIRECTORY
+				+ "begegnung_no_date.html");
+		Calendar expectedDate = Calendar.getInstance();
+		expectedDate.setTimeInMillis(0);
+		Jerry doc = jerry().parse(FileUtil.readString(testFile));
+
+		assertThat(parser.parseMatchDate(doc, false), equalTo(expectedDate));
 	}
 }

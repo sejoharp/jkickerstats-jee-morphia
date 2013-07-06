@@ -29,29 +29,29 @@ public class KickerpageParser {
 	}
 
 	protected Jerry filterGameSnippets(Jerry doc) {
-		Jerry rawDoc = doc
-				.$("div#Content table.contentpaneopen");
+		Jerry rawDoc = doc.$("div#Content table.contentpaneopen");
 		return rawDoc.$("tr.sectiontableentry1, tr.sectiontableentry2");
 	}
 
 	protected String parseHomeTeam(Jerry doc) {
 		Jerry teams = doc.$("div#Content table.contentpaneopen").eq(1)
-				.$("tbody > tr > td > table > tbody h2");
+				.$("tr > td > table h2");
 		return removeTeamDescriptions(teams.first().text());
 	}
 
 	protected String parseGuestTeam(Jerry doc) {
 		Jerry teams = doc.$("div#Content table.contentpaneopen").eq(1)
-				.$("tbody > tr > td > table > tbody h2");
+				.$("tr > td > table h2");
 		return removeTeamDescriptions(teams.last().text());
 	}
 
 	protected String removeTeamDescriptions(String teamString) {
-		return teamString.split("(")[0].trim();
+		return teamString.split("\\(")[0].trim();
 	}
 
 	protected boolean hasMatchDate(Jerry doc) {
-		String rawData = doc.$("div#Content table tbody > tr > td").first().text();
+		String rawData = doc.$("div#Content table > tr > td").first()
+				.text();
 		String[] dateChunks = rawData.split(",");
 		return dateChunks.length == 3;
 	}
@@ -62,13 +62,15 @@ public class KickerpageParser {
 			matchDate.setTimeInMillis(0);
 			return matchDate;
 		}
-		String rawData = doc.$("div#Content table tbody > tr > td").first().text();
+		String rawData = doc.$("div#Content table > tr > td").first()
+				.text();
 		String rawDate = rawData.split(",")[1];
 		return parseDate(rawDate);
 	}
 
 	protected int parseMatchDay(Jerry doc, boolean matchDateAvailable) {
-		String rawData = doc.$("div#Content table tbody > tr > td").first().text();
+		String rawData = doc.$("div#Content table tbody > tr > td").first()
+				.text();
 		String[] dateChunks = rawData.split(",");
 		String matchDayString;
 		if (matchDateAvailable) {
@@ -95,10 +97,10 @@ public class KickerpageParser {
 
 	protected Calendar parseDate(String rawDate) {
 		Calendar date = Calendar.getInstance();
-		SimpleDateFormat dateFormatter = new SimpleDateFormat(
-				"dd.MM.YYYY HH:mm");
+		SimpleDateFormat dateFormat = new SimpleDateFormat(
+				"dd.MM.yyyy HH:mm");
 		try {
-			date.setTime(dateFormatter.parse(rawDate));
+			date.setTime(dateFormat.parse(rawDate));
 		} catch (ParseException e) {
 			throw new IllegalStateException(e);
 		}
