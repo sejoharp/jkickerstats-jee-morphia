@@ -160,4 +160,33 @@ public class KickerpageParser {
 		}
 		return true;
 	}
+
+	protected Boolean isDoubleMatch(Jerry gameDoc) {
+		System.out.println(gameDoc.text());
+		return gameDoc.$("td a").length() == 4;
+	}
+
+	protected Integer parseGamePosition(Jerry gameDoc) {
+		return Integer.parseInt(gameDoc.children().first().text());
+	}
+
+	protected void addPlayerNames(Game game, Jerry gameDoc, boolean doubleMatch) {
+		Jerry rawPlayerNames = gameDoc.$("td a");
+		if (doubleMatch) {
+			game.setHomePlayer1(parsePlayerName(rawPlayerNames, 0));
+			game.setHomePlayer2(parsePlayerName(rawPlayerNames, 1));
+			game.setGuestPlayer1(parsePlayerName(rawPlayerNames, 2));
+			game.setGuestPlayer2(parsePlayerName(rawPlayerNames, 3));
+		} else {
+			game.setHomePlayer1(parsePlayerName(rawPlayerNames, 0));
+			game.setGuestPlayer1(parsePlayerName(rawPlayerNames, 1));
+		}
+
+	}
+
+	protected String parsePlayerName(Jerry rawPlayerNames, int position) {
+		return rawPlayerNames.length() - 1 >= position ? rawPlayerNames.eq(
+				position).text() : "";
+	}
+
 }

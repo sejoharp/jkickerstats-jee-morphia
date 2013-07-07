@@ -14,6 +14,7 @@ import jodd.io.FileUtil;
 import jodd.jerry.Jerry;
 
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.google.common.collect.Lists;
@@ -21,9 +22,25 @@ import com.google.common.collect.Lists;
 public class KickerpageParserUnitTest {
 
 	private KickerpageParser parser;
+	private static Jerry begegnungDoc;
+	private static Jerry begegnungNoDateDoc;
+	private static Jerry begegnungenDoc;
+	private static Jerry begegnungBildDoc;
+	private static Jerry begegnungenLiveDoc;
+	private static Jerry uebersichtDoc;
+
+	@BeforeClass
+	public static void setup() throws IOException {
+		begegnungDoc = loadFile("begegnung.html");
+		begegnungenDoc = loadFile("begegnungen.html");
+		begegnungenLiveDoc = loadFile("begegnungen_live.html");
+		begegnungBildDoc = loadFile("begegnung_bild.html");
+		begegnungNoDateDoc = loadFile("begegnung_no_date.html");
+		uebersichtDoc = loadFile("uebersicht.html");
+	}
 
 	@Before
-	public void setup() {
+	public void initialize() {
 		parser = new KickerpageParser();
 	}
 
@@ -60,11 +77,8 @@ public class KickerpageParserUnitTest {
 	@Test
 	public void returnAllSeasons() throws IOException {
 		List<Integer> expectedSeasonsIDs = Lists.newArrayList(7, 4, 3, 2, 1);
-		File testFile = new File(KickerpageParserTest.RECOURCES_DIRECTORY
-				+ "uebersicht.html");
-		Jerry doc = jerry().parse(FileUtil.readString(testFile));
 
-		List<Integer> seasonsIDs = parser.findSeasonIDs(doc);
+		List<Integer> seasonsIDs = parser.findSeasonIDs(uebersichtDoc);
 
 		assertThat(seasonsIDs, equalTo(expectedSeasonsIDs));
 		assertThat(seasonsIDs.get(0), equalTo(expectedSeasonsIDs.get(0)));
@@ -72,11 +86,7 @@ public class KickerpageParserUnitTest {
 
 	@Test
 	public void returnAllMatchLinks() throws IOException {
-		File testFile = new File(KickerpageParserTest.RECOURCES_DIRECTORY
-				+ "begegnungen.html");
-		Jerry doc = jerry().parse(FileUtil.readString(testFile));
-
-		List<String> matchLinks = parser.findMatchLinks(doc);
+		List<String> matchLinks = parser.findMatchLinks(begegnungenDoc);
 
 		assertThat(matchLinks.size(), equalTo(14));
 		String expectedMatchLink = "http://www.kickern-hamburg.de/liga-tool/mannschaftswettbewerbe?task=begegnung_spielplan&veranstaltungid=64&id=3815";
@@ -85,22 +95,14 @@ public class KickerpageParserUnitTest {
 
 	@Test
 	public void returnAllConfirmedMatchLinks() throws IOException {
-		File testFile = new File(KickerpageParserTest.RECOURCES_DIRECTORY
-				+ "begegnungen_live.html");
-		Jerry doc = jerry().parse(FileUtil.readString(testFile));
-
-		List<String> matchLinks = parser.findMatchLinks(doc);
+		List<String> matchLinks = parser.findMatchLinks(begegnungenLiveDoc);
 
 		assertThat(matchLinks.size(), equalTo(24));
 	}
 
 	@Test
 	public void returnAllLigaLinks() throws IOException {
-		File testFile = new File(KickerpageParserTest.RECOURCES_DIRECTORY
-				+ "uebersicht.html");
-		Jerry doc = jerry().parse(FileUtil.readString(testFile));
-
-		List<String> ligaLinksIDs = parser.findLigaLinks(doc);
+		List<String> ligaLinksIDs = parser.findLigaLinks(uebersichtDoc);
 
 		assertThat(ligaLinksIDs.size(), equalTo(5));
 		assertThat(
@@ -110,37 +112,29 @@ public class KickerpageParserUnitTest {
 
 	@Test
 	public void filteringAllMatchLinks() throws IOException {
-		File testFile = new File(KickerpageParserTest.RECOURCES_DIRECTORY
-				+ "begegnungen.html");
-		Jerry doc = jerry().parse(FileUtil.readString(testFile));
+		int matchCount = parser.filterMatchLinkSnippets(begegnungenDoc).size();
 
-		assertThat(parser.filterMatchLinkSnippets(doc).size(), equalTo(110));
+		assertThat(matchCount, equalTo(110));
 	}
 
 	@Test
 	public void filteringAllGames() throws IOException {
-		File testFile = new File(KickerpageParserTest.RECOURCES_DIRECTORY
-				+ "begegnung.html");
-		Jerry doc = jerry().parse(FileUtil.readString(testFile));
+		int gameCount = parser.filterGameSnippets(begegnungDoc).size();
 
-		assertThat(parser.filterGameSnippets(doc).size(), equalTo(16));
+		assertThat(gameCount, equalTo(16));
 	}
 
 	@Test
 	public void gameIsValid() throws IOException {
-		File testFile = new File(KickerpageParserTest.RECOURCES_DIRECTORY
-				+ "begegnung.html");
-		Jerry doc = jerry().parse(FileUtil.readString(testFile));
-		Jerry gameSnippets = parser.filterGameSnippets(doc);
+		Jerry gameSnippets = parser.filterGameSnippets(begegnungDoc);
+
 		assertThat(parser.isValidGameList(gameSnippets), equalTo(true));
 	}
 
 	@Test
 	public void gameIsValidWithImages() throws IOException {
-		File testFile = new File(KickerpageParserTest.RECOURCES_DIRECTORY
-				+ "begegnung_bild.html");
-		Jerry doc = jerry().parse(FileUtil.readString(testFile));
-		Jerry gameSnippets = parser.filterGameSnippets(doc);
+		Jerry gameSnippets = parser.filterGameSnippets(begegnungBildDoc);
+
 		assertThat(parser.isValidGameList(gameSnippets), equalTo(true));
 	}
 
@@ -160,35 +154,24 @@ public class KickerpageParserUnitTest {
 
 	@Test
 	public void gameHasHomeTeam() throws IOException {
-		File testFile = new File(KickerpageParserTest.RECOURCES_DIRECTORY
-				+ "begegnung.html");
-		Jerry doc = jerry().parse(FileUtil.readString(testFile));
-		assertThat(parser.parseHomeTeam(doc),
+		assertThat(parser.parseHomeTeam(begegnungDoc),
 				equalTo("Tingeltangel FC St. Pauli"));
 	}
 
 	@Test
 	public void gameHasGuestTeam() throws IOException {
-		File testFile = new File(KickerpageParserTest.RECOURCES_DIRECTORY
-				+ "begegnung.html");
-		Jerry doc = jerry().parse(FileUtil.readString(testFile));
-		assertThat(parser.parseGuestTeam(doc), equalTo("Hamburg Privateers 08"));
+		assertThat(parser.parseGuestTeam(begegnungDoc),
+				equalTo("Hamburg Privateers 08"));
 	}
 
 	@Test
 	public void gameHasNoMatchdate() throws IOException {
-		File testFile = new File(KickerpageParserTest.RECOURCES_DIRECTORY
-				+ "begegnung_no_date.html");
-		Jerry doc = jerry().parse(FileUtil.readString(testFile));
-		assertThat(parser.hasMatchDate(doc), equalTo(false));
+		assertThat(parser.hasMatchDate(begegnungNoDateDoc), equalTo(false));
 	}
 
 	@Test
 	public void gameHasMatchdate() throws IOException {
-		File testFile = new File(KickerpageParserTest.RECOURCES_DIRECTORY
-				+ "begegnung.html");
-		Jerry doc = jerry().parse(FileUtil.readString(testFile));
-		assertThat(parser.hasMatchDate(doc), equalTo(true));
+		assertThat(parser.hasMatchDate(begegnungDoc), equalTo(true));
 	}
 
 	@Test
@@ -205,82 +188,123 @@ public class KickerpageParserUnitTest {
 
 	@Test
 	public void parsingMatchdate() throws IOException {
-		File testFile = new File(KickerpageParserTest.RECOURCES_DIRECTORY
-				+ "begegnung.html");
 		Calendar expectedDate = Calendar.getInstance();
 		expectedDate.clear();
 		expectedDate.set(2013, 1, 27, 20, 0);
-		Jerry doc = jerry().parse(FileUtil.readString(testFile));
 
-		assertThat(parser.parseMatchDate(doc, true), equalTo(expectedDate));
+		assertThat(parser.parseMatchDate(begegnungDoc, true),
+				equalTo(expectedDate));
 	}
 
 	@Test
 	public void parseGameWithoutMatchdate() throws IOException {
-		File testFile = new File(KickerpageParserTest.RECOURCES_DIRECTORY
-				+ "begegnung_no_date.html");
 		Calendar expectedDate = Calendar.getInstance();
 		expectedDate.setTimeInMillis(0);
-		Jerry doc = jerry().parse(FileUtil.readString(testFile));
 
-		assertThat(parser.parseMatchDate(doc, false), equalTo(expectedDate));
+		assertThat(parser.parseMatchDate(begegnungNoDateDoc, false),
+				equalTo(expectedDate));
 	}
 
 	@Test
 	public void parseMatchday() throws IOException {
-		File testFile = new File(KickerpageParserTest.RECOURCES_DIRECTORY
-				+ "begegnung.html");
-		Jerry doc = jerry().parse(FileUtil.readString(testFile));
-
-		assertThat(parser.parseMatchDay(doc, true), equalTo(1));
+		assertThat(parser.parseMatchDay(begegnungDoc, true), equalTo(1));
 	}
 
 	@Test
 	public void parseMatchdayWithoutDate() throws IOException {
-		File testFile = new File(KickerpageParserTest.RECOURCES_DIRECTORY
-				+ "begegnung_no_date.html");
-		Jerry doc = jerry().parse(FileUtil.readString(testFile));
-
-		assertThat(parser.parseMatchDay(doc, false), equalTo(5));
+		assertThat(parser.parseMatchDay(begegnungNoDateDoc, false), equalTo(5));
 	}
-	
+
 	@Test
 	public void parseHomeScore() throws IOException {
-		File testFile = new File(KickerpageParserTest.RECOURCES_DIRECTORY
-				+ "begegnung.html");
-		Jerry doc = jerry().parse(FileUtil.readString(testFile));
+		Jerry rawGames = parser.filterGameSnippets(begegnungDoc);
 
-		Jerry rawGames = parser.filterGameSnippets(doc);
 		assertThat(parser.parseHomeScore(rawGames.first(), false), equalTo(4));
 	}
-	
+
 	@Test
 	public void parseGuestScore() throws IOException {
-		File testFile = new File(KickerpageParserTest.RECOURCES_DIRECTORY
-				+ "begegnung.html");
-		Jerry doc = jerry().parse(FileUtil.readString(testFile));
+		Jerry rawGames = parser.filterGameSnippets(begegnungDoc);
 
-		Jerry rawGames = parser.filterGameSnippets(doc);
 		assertThat(parser.parseGuestScore(rawGames.first(), false), equalTo(7));
 	}
-	
+
 	@Test
 	public void parseHomeScoreWithImages() throws IOException {
-		File testFile = new File(KickerpageParserTest.RECOURCES_DIRECTORY
-				+ "begegnung_bild.html");
-		Jerry doc = jerry().parse(FileUtil.readString(testFile));
+		Jerry rawGames = parser.filterGameSnippets(begegnungBildDoc);
 
-		Jerry rawGames = parser.filterGameSnippets(doc);
 		assertThat(parser.parseHomeScore(rawGames.first(), true), equalTo(4));
 	}
-	
+
 	@Test
 	public void parseGuestScoreWithImages() throws IOException {
-		File testFile = new File(KickerpageParserTest.RECOURCES_DIRECTORY
-				+ "begegnung_bild.html");
-		Jerry doc = jerry().parse(FileUtil.readString(testFile));
+		Jerry rawGames = parser.filterGameSnippets(begegnungBildDoc);
 
-		Jerry rawGames = parser.filterGameSnippets(doc);
 		assertThat(parser.parseGuestScore(rawGames.first(), true), equalTo(7));
+	}
+
+	@Test
+	public void singleMatchIsNotADoubleMatch() throws IOException {
+		Jerry rawGames = parser.filterGameSnippets(begegnungDoc);
+
+		assertThat(parser.isDoubleMatch(rawGames.first()), equalTo(false));
+	}
+
+	@Test
+	public void detectDoubleMatch() throws IOException {
+		Jerry rawGames = parser.filterGameSnippets(begegnungDoc);
+
+		assertThat(parser.isDoubleMatch(rawGames.last()), equalTo(true));
+	}
+
+	@Test
+	public void detectDoubleMatchWithImages() throws IOException {
+		Jerry rawGames = parser.filterGameSnippets(begegnungBildDoc);
+
+		assertThat(parser.isDoubleMatch(rawGames.last()), equalTo(true));
+	}
+
+	@Test
+	public void parsePositionOfFirstGame() throws IOException {
+		Jerry rawGames = parser.filterGameSnippets(begegnungDoc);
+
+		assertThat(parser.parseGamePosition(rawGames.first()), equalTo(1));
+	}
+
+	@Test
+	public void parsePositionOfLastGame() throws IOException {
+		Jerry rawGames = parser.filterGameSnippets(begegnungDoc);
+
+		assertThat(parser.parseGamePosition(rawGames.last()), equalTo(16));
+	}
+
+	@Test
+	public void parseNamesOfLastGame() throws IOException {
+		Jerry rawGames = parser.filterGameSnippets(begegnungDoc);
+		Game game = new Game();
+
+		parser.addPlayerNames(game, rawGames.last(), true);
+
+		assertThat(game.getHomePlayer1(), equalTo("Sommer, Sebastian"));
+		assertThat(game.getHomePlayer2(), equalTo("Hölzer, Heinz"));
+		assertThat(game.getGuestPlayer1(), equalTo("Nestvogel, Markus"));
+		assertThat(game.getGuestPlayer2(), equalTo("Matheuszik, Sven"));
+	}
+
+	@Test
+	public void parseNamesOfFirstGame() throws IOException {
+		Jerry rawGames = parser.filterGameSnippets(begegnungDoc);
+		Game game = new Game();
+
+		parser.addPlayerNames(game, rawGames.first(), false);
+
+		assertThat(game.getHomePlayer1(), equalTo("Technau, Jerome"));
+		assertThat(game.getGuestPlayer1(), equalTo("Hojas, René"));
+	}
+
+	private static Jerry loadFile(String fileName) throws IOException {
+		File testFile = new File(KickerpageParserTest.RECOURCES_DIRECTORY
+				+ fileName);
+		return jerry().parse(FileUtil.readString(testFile));
 	}
 }
