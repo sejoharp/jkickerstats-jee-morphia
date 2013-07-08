@@ -307,4 +307,43 @@ public class KickerpageParserUnitTest {
 		assertThat(game.getHomePlayer1(), equalTo("Technau, Jerome"));
 		assertThat(game.getGuestPlayer1(), equalTo("Hojas, René"));
 	}
+
+	@Test
+	public void returnsAllGamesFromAMatch() {
+
+	}
+
+	@Test
+	public void returnsAllGamesWithImagesFromAMatch() {
+
+	}
+
+	@Test
+	public void returnsAFullFilledSingleGame() {
+
+	}
+
+	@Test
+	public void returnsAFullFilledDoubleGame() {
+
+	}
+
+	@Test
+	public void returnsAFullFilledSingleGameWithImages() {
+
+	}
+
+	@Test
+	public void returnsAFullFilledDoubleGameWithImages() {
+
+	}
+	
+	@Test
+	public void doesNotReturnGamesFromRelagation() {
+
+	}
+	@Test
+	public void parsesGamesWithoutPlayernames() {
+
+	}
 }
