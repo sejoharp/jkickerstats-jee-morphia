@@ -30,7 +30,7 @@ public class KickerpageParserUnitTest {
 	private static Jerry uebersichtDoc;
 
 	@BeforeClass
-	public static void setup() throws IOException {
+	public static void loadTestFiles() throws IOException {
 		begegnungDoc = loadFile("begegnung.html");
 		begegnungenDoc = loadFile("begegnungen.html");
 		begegnungenLiveDoc = loadFile("begegnungen_live.html");
@@ -39,13 +39,19 @@ public class KickerpageParserUnitTest {
 		uebersichtDoc = loadFile("uebersicht.html");
 	}
 
+	private static Jerry loadFile(String fileName) throws IOException {
+		File testFile = new File(KickerpageParserTest.RECOURCES_DIRECTORY
+				+ fileName);
+		return jerry().parse(FileUtil.readString(testFile));
+	}
+
 	@Before
 	public void initialize() {
 		parser = new KickerpageParser();
 	}
 
 	@Test
-	public void theMatchIsNotConfirmed() {
+	public void anUnconfirmedMatchIsNotAValidMatch() {
 		String htmlSnippet = "<tr class=\"sectiontableentry2\"><td nowrap><a name=\"id3837\"></a><a href=\"/liga-tool/mannschaftswettbewerbe?task=begegnung_spielplan&veranstaltungid=64&id=3837\">Do., 11.04.2013 20:30</a></td><td nowrap>St. Ellingen 1<br /><small>verantwortlich</small><small> seit 12.04.2013</small></td><td nowrap>Drehschieber FC St. Pauli				</td><td nowrap align=\"center\">60:83					</td><td nowrap align=\"center\">9:23<br /><small>unbest&auml;tigt</small>				</td></tr>";
 		Jerry doc = jerry().parse(htmlSnippet);
 
@@ -55,7 +61,7 @@ public class KickerpageParserUnitTest {
 	}
 
 	@Test
-	public void theMatchIsRunning() {
+	public void aRunningMatchIsNotAValidMatch() {
 		String htmlSnippet = "<tr class=\"sectiontableentry2\"><td nowrap><a name=\"id3837\"></a><a href=\"/liga-tool/mannschaftswettbewerbe?task=begegnung_spielplan&veranstaltungid=64&id=3837\">Do., 11.04.2013 20:30</a></td><td nowrap>St. Ellingen 1<br /><small>verantwortlich</small><small> seit 12.04.2013</small></td><td nowrap>Drehschieber FC St. Pauli				</td><td nowrap align=\"center\">60:83					</td><td nowrap align=\"center\">9:23<br /><small>live</small>				</td></tr>";
 		Jerry doc = jerry().parse(htmlSnippet);
 
@@ -65,7 +71,7 @@ public class KickerpageParserUnitTest {
 	}
 
 	@Test
-	public void theMatchIsConfirmed() {
+	public void aConfirmedMatchIsAValidMatch() {
 		String htmlSnippet = "<tr class=\"sectiontableentry2\"><td nowrap><a name=\"id3837\"></a><a href=\"/liga-tool/mannschaftswettbewerbe?task=begegnung_spielplan&veranstaltungid=64&id=3837\">Do., 11.04.2013 20:30</a></td><td nowrap>St. Ellingen 1<br /><small>verantwortlich</small><small> seit 12.04.2013</small></td><td nowrap>Drehschieber FC St. Pauli				</td><td nowrap align=\"center\">60:83					</td><td nowrap align=\"center\">9:23				</td></tr>";
 		Jerry doc = jerry().parse(htmlSnippet);
 
@@ -75,7 +81,7 @@ public class KickerpageParserUnitTest {
 	}
 
 	@Test
-	public void returnAllSeasons() throws IOException {
+	public void returnsAllSeasons() throws IOException {
 		List<Integer> expectedSeasonsIDs = Lists.newArrayList(7, 4, 3, 2, 1);
 
 		List<Integer> seasonsIDs = parser.findSeasonIDs(uebersichtDoc);
@@ -85,7 +91,7 @@ public class KickerpageParserUnitTest {
 	}
 
 	@Test
-	public void returnAllMatchLinks() throws IOException {
+	public void returnsAllMatchLinks() throws IOException {
 		List<String> matchLinks = parser.findMatchLinks(begegnungenDoc);
 
 		assertThat(matchLinks.size(), equalTo(14));
@@ -94,14 +100,14 @@ public class KickerpageParserUnitTest {
 	}
 
 	@Test
-	public void returnAllConfirmedMatchLinks() throws IOException {
+	public void returnsAllConfirmedMatchLinks() throws IOException {
 		List<String> matchLinks = parser.findMatchLinks(begegnungenLiveDoc);
 
 		assertThat(matchLinks.size(), equalTo(24));
 	}
 
 	@Test
-	public void returnAllLigaLinks() throws IOException {
+	public void returnsAllLigaLinks() throws IOException {
 		List<String> ligaLinksIDs = parser.findLigaLinks(uebersichtDoc);
 
 		assertThat(ligaLinksIDs.size(), equalTo(5));
@@ -111,71 +117,71 @@ public class KickerpageParserUnitTest {
 	}
 
 	@Test
-	public void filteringAllMatchLinks() throws IOException {
+	public void filtersAllMatchLinkSnippets() throws IOException {
 		int matchCount = parser.filterMatchLinkSnippets(begegnungenDoc).size();
 
 		assertThat(matchCount, equalTo(110));
 	}
 
 	@Test
-	public void filteringAllGames() throws IOException {
+	public void filtersAllGames() throws IOException {
 		int gameCount = parser.filterGameSnippets(begegnungDoc).size();
 
 		assertThat(gameCount, equalTo(16));
 	}
 
 	@Test
-	public void gameIsValid() throws IOException {
+	public void detectsGamelistAsValid() throws IOException {
 		Jerry gameSnippets = parser.filterGameSnippets(begegnungDoc);
 
 		assertThat(parser.isValidGameList(gameSnippets), equalTo(true));
 	}
 
 	@Test
-	public void gameIsValidWithImages() throws IOException {
+	public void detectsGameIsValidWithImagesAsValid() throws IOException {
 		Jerry gameSnippets = parser.filterGameSnippets(begegnungBildDoc);
 
 		assertThat(parser.isValidGameList(gameSnippets), equalTo(true));
 	}
 
 	@Test
-	public void teamnameWithoutDescription() {
+	public void removesDescriptionFromTeamname() {
 		String teamname = "Team Hauff (A)";
 		assertThat(parser.removeTeamDescriptions(teamname),
 				equalTo("Team Hauff"));
 	}
 
 	@Test
-	public void teamnameWithoutDescriptionIsStillComplete() {
+	public void returnsCompleteTeamnameIfItDoesNotContainDescriptions() {
 		String teamname = "Team Hauff";
 		assertThat(parser.removeTeamDescriptions(teamname),
 				equalTo("Team Hauff"));
 	}
 
 	@Test
-	public void gameHasHomeTeam() throws IOException {
+	public void returnsHomeTeamname() throws IOException {
 		assertThat(parser.parseHomeTeam(begegnungDoc),
 				equalTo("Tingeltangel FC St. Pauli"));
 	}
 
 	@Test
-	public void gameHasGuestTeam() throws IOException {
+	public void returnsGuestTeamname() throws IOException {
 		assertThat(parser.parseGuestTeam(begegnungDoc),
 				equalTo("Hamburg Privateers 08"));
 	}
 
 	@Test
-	public void gameHasNoMatchdate() throws IOException {
+	public void detectsThatMatchHasNoMatchdate() throws IOException {
 		assertThat(parser.hasMatchDate(begegnungNoDateDoc), equalTo(false));
 	}
 
 	@Test
-	public void gameHasMatchdate() throws IOException {
+	public void detectsThatMatchHasAMatchdate() throws IOException {
 		assertThat(parser.hasMatchDate(begegnungDoc), equalTo(true));
 	}
 
 	@Test
-	public void parsingADate() throws IOException {
+	public void parsesAStringToDate() throws IOException {
 		String rawDate = "27.02.2013 20:00";
 		Calendar expectedDate = Calendar.getInstance();
 		expectedDate.setTimeInMillis(0);
@@ -187,7 +193,7 @@ public class KickerpageParserUnitTest {
 	}
 
 	@Test
-	public void parsingMatchdate() throws IOException {
+	public void parsesMatchdateFromMatchSnippet() throws IOException {
 		Calendar expectedDate = Calendar.getInstance();
 		expectedDate.clear();
 		expectedDate.set(2013, 1, 27, 20, 0);
@@ -197,7 +203,7 @@ public class KickerpageParserUnitTest {
 	}
 
 	@Test
-	public void parseGameWithoutMatchdate() throws IOException {
+	public void returnsCleanCalendarIfMatchHasNoMatchDate() throws IOException {
 		Calendar expectedDate = Calendar.getInstance();
 		expectedDate.setTimeInMillis(0);
 
@@ -206,38 +212,38 @@ public class KickerpageParserUnitTest {
 	}
 
 	@Test
-	public void parseMatchday() throws IOException {
+	public void parsesMatchdayFromMatchSnippet() throws IOException {
 		assertThat(parser.parseMatchDay(begegnungDoc, true), equalTo(1));
 	}
 
 	@Test
-	public void parseMatchdayWithoutDate() throws IOException {
+	public void parsesMatchdayFromMatchSnippetWithoutDate() throws IOException {
 		assertThat(parser.parseMatchDay(begegnungNoDateDoc, false), equalTo(5));
 	}
 
 	@Test
-	public void parseHomeScore() throws IOException {
+	public void parsesHomeScoreFromGameSnippet() throws IOException {
 		Jerry rawGames = parser.filterGameSnippets(begegnungDoc);
 
 		assertThat(parser.parseHomeScore(rawGames.first(), false), equalTo(4));
 	}
 
 	@Test
-	public void parseGuestScore() throws IOException {
+	public void parsesGuestScoreFromGameSnippet() throws IOException {
 		Jerry rawGames = parser.filterGameSnippets(begegnungDoc);
 
 		assertThat(parser.parseGuestScore(rawGames.first(), false), equalTo(7));
 	}
 
 	@Test
-	public void parseHomeScoreWithImages() throws IOException {
+	public void parsesHomeScoreFromGameSnippetWithImages() throws IOException {
 		Jerry rawGames = parser.filterGameSnippets(begegnungBildDoc);
 
 		assertThat(parser.parseHomeScore(rawGames.first(), true), equalTo(4));
 	}
 
 	@Test
-	public void parseGuestScoreWithImages() throws IOException {
+	public void parsesGuestScoreFromGameSnippetWithImages() throws IOException {
 		Jerry rawGames = parser.filterGameSnippets(begegnungBildDoc);
 
 		assertThat(parser.parseGuestScore(rawGames.first(), true), equalTo(7));
@@ -251,35 +257,35 @@ public class KickerpageParserUnitTest {
 	}
 
 	@Test
-	public void detectDoubleMatch() throws IOException {
+	public void detectsDoubleMatch() throws IOException {
 		Jerry rawGames = parser.filterGameSnippets(begegnungDoc);
 
 		assertThat(parser.isDoubleMatch(rawGames.last()), equalTo(true));
 	}
 
 	@Test
-	public void detectDoubleMatchWithImages() throws IOException {
+	public void detectsDoubleMatchWithImages() throws IOException {
 		Jerry rawGames = parser.filterGameSnippets(begegnungBildDoc);
 
 		assertThat(parser.isDoubleMatch(rawGames.last()), equalTo(true));
 	}
 
 	@Test
-	public void parsePositionOfFirstGame() throws IOException {
+	public void parsesPositionOfFirstGame() throws IOException {
 		Jerry rawGames = parser.filterGameSnippets(begegnungDoc);
 
 		assertThat(parser.parseGamePosition(rawGames.first()), equalTo(1));
 	}
 
 	@Test
-	public void parsePositionOfLastGame() throws IOException {
+	public void parsesPositionOfLastGame() throws IOException {
 		Jerry rawGames = parser.filterGameSnippets(begegnungDoc);
 
 		assertThat(parser.parseGamePosition(rawGames.last()), equalTo(16));
 	}
 
 	@Test
-	public void parseNamesOfLastGame() throws IOException {
+	public void parsesPlayerNamesOfLastGame() throws IOException {
 		Jerry rawGames = parser.filterGameSnippets(begegnungDoc);
 		Game game = new Game();
 
@@ -292,7 +298,7 @@ public class KickerpageParserUnitTest {
 	}
 
 	@Test
-	public void parseNamesOfFirstGame() throws IOException {
+	public void parsesPlayerNamesOfFirstGame() throws IOException {
 		Jerry rawGames = parser.filterGameSnippets(begegnungDoc);
 		Game game = new Game();
 
@@ -300,11 +306,5 @@ public class KickerpageParserUnitTest {
 
 		assertThat(game.getHomePlayer1(), equalTo("Technau, Jerome"));
 		assertThat(game.getGuestPlayer1(), equalTo("Hojas, René"));
-	}
-
-	private static Jerry loadFile(String fileName) throws IOException {
-		File testFile = new File(KickerpageParserTest.RECOURCES_DIRECTORY
-				+ fileName);
-		return jerry().parse(FileUtil.readString(testFile));
 	}
 }

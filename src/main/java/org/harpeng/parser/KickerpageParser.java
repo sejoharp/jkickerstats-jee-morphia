@@ -185,8 +185,8 @@ public class KickerpageParser {
 	}
 
 	protected String parsePlayerName(Jerry rawPlayerNames, int position) {
-		return rawPlayerNames.length() - 1 >= position ? rawPlayerNames.eq(
-				position).text() : "";
+		return rawPlayerNames.size() > position ? rawPlayerNames.eq(position)
+				.text() : "";
 	}
 
 }

@@ -33,7 +33,7 @@ public class KickerpageParserTest {
 	}
 
 	@Test
-	public void returnAllLigaLinks() throws IOException {
+	public void returnsAllLigaLinks() throws IOException {
 		File testFile = new File(RECOURCES_DIRECTORY + "uebersicht.html");
 		Jerry doc = jerry().parse(FileUtil.readString(testFile));
 
