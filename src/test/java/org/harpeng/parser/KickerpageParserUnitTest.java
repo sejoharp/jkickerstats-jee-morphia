@@ -28,7 +28,9 @@ public class KickerpageParserUnitTest {
 	private static Jerry begegnungBildDoc;
 	private static Jerry begegnungenLiveDoc;
 	private static Jerry uebersichtDoc;
-
+	private static Jerry relegationDoc;
+	private static Jerry begegnungNoNamesDoc;
+	
 	@BeforeClass
 	public static void loadTestFiles() throws IOException {
 		begegnungDoc = loadFile("begegnung.html");
@@ -37,12 +39,8 @@ public class KickerpageParserUnitTest {
 		begegnungBildDoc = loadFile("begegnung_bild.html");
 		begegnungNoDateDoc = loadFile("begegnung_no_date.html");
 		uebersichtDoc = loadFile("uebersicht.html");
-	}
-
-	private static Jerry loadFile(String fileName) throws IOException {
-		File testFile = new File(KickerpageParserTest.RECOURCES_DIRECTORY
-				+ fileName);
-		return jerry().parse(FileUtil.readString(testFile));
+		relegationDoc = loadFile("relegation.html");
+		begegnungNoNamesDoc = loadFile("begegnung_no_names.html");
 	}
 
 	@Before
@@ -310,40 +308,130 @@ public class KickerpageParserUnitTest {
 
 	@Test
 	public void returnsAllGamesFromAMatch() {
+		List<Game> games = parser.findGames(begegnungDoc);
 
+		assertThat(games.size(), equalTo(16));
 	}
 
 	@Test
 	public void returnsAllGamesWithImagesFromAMatch() {
+		List<Game> games = parser.findGames(begegnungBildDoc);
 
+		assertThat(games.size(), equalTo(16));
 	}
 
 	@Test
 	public void returnsAFullFilledSingleGame() {
+		Game game = new Game();
+		game.setDoubleMatch(false);
+		game.setGuestPlayer1("Matheuszik, Sven");
+		game.setGuestScore(7);
+		game.setGuestTeam("Hamburg Privateers 08");
+		game.setHomePlayer1("Kränz, Ludwig");
+		game.setHomeScore(5);
+		game.setHomeTeam("Tingeltangel FC St. Pauli");
+		game.setMatchDate(createCalendar(2013, 1, 27, 20, 0));
+		game.setPosition(2);
 
+		List<Game> games = parser.findGames(begegnungDoc);
+
+		assertThat(games.get(1), equalTo(game));
 	}
 
 	@Test
 	public void returnsAFullFilledDoubleGame() {
+		Game game = new Game();
+		game.setDoubleMatch(true);
+		game.setGuestPlayer1("Zierott, Ulli");
+		game.setGuestPlayer2("Hojas, René");
+		game.setGuestScore(5);
+		game.setGuestTeam("Hamburg Privateers 08");
+		game.setHomePlayer1("Fischer, Harro");
+		game.setHomePlayer2("Kränz, Ludwig");
+		game.setHomeScore(4);
+		game.setHomeTeam("Tingeltangel FC St. Pauli");
+		game.setMatchDate(createCalendar(2013, 1, 27, 20, 0));
+		game.setPosition(3);
 
+		List<Game> games = parser.findGames(begegnungDoc);
+
+		assertThat(games.get(2), equalTo(game));
 	}
 
 	@Test
 	public void returnsAFullFilledSingleGameWithImages() {
+		Game game = new Game();
+		game.setDoubleMatch(false);
+		game.setGuestPlayer1("Bai, Minyoung");
+		game.setGuestScore(7);
+		game.setGuestTeam("Die Maschinerie");
+		game.setHomePlayer1("Arslan, Mehmet Emin");
+		game.setHomeScore(4);
+		game.setHomeTeam("Cim Bom Bom");
+		game.setMatchDate(createCalendar(2013, 1, 28, 20, 0));
+		game.setPosition(1);
+
+		List<Game> games = parser.findGames(begegnungBildDoc);
+
+		assertThat(games.get(0), equalTo(game));
 
 	}
 
 	@Test
 	public void returnsAFullFilledDoubleGameWithImages() {
+		Game game = new Game();
+		game.setDoubleMatch(true);
+		game.setHomePlayer1("Arslan, Mehmet Emin ");
+		game.setHomePlayer2("Böckeler, Frank");
+		game.setHomeScore(4);
+		game.setHomeTeam("Cim Bom Bom");
+		game.setGuestPlayer1("Bai, Minyoung");
+		game.setGuestPlayer2("Linnenberg, Sebastian");
+		game.setGuestScore(5);
+		game.setGuestTeam("Die Maschinerie");
+		game.setMatchDate(createCalendar(2013, 1, 28, 20, 0));
+		game.setPosition(16);
 
+		List<Game> games = parser.findGames(begegnungBildDoc);
+
+		assertThat(games.get(15), equalTo(game));
 	}
-	
+
 	@Test
 	public void doesNotReturnGamesFromRelagation() {
+		List<Game> games = parser.findGames(relegationDoc);
 
+		assertThat(games.size(), equalTo(0));
 	}
+
 	@Test
 	public void parsesGamesWithoutPlayernames() {
+		List<Game> games = parser.findGames(begegnungNoNamesDoc);
+		
+		Game gameNoNames = games.get(13);
+		assertThat(gameNoNames.getGuestPlayer1(), equalTo(""));
+		assertThat(gameNoNames.getHomePlayer1(), equalTo(""));
+		assertThat(gameNoNames.getHomeTeam(), equalTo("Die Hinkelsteinchen"));
+		assertThat(gameNoNames.getGuestTeam(), equalTo("Kurbelkraft Bergedorf"));
+		assertThat(gameNoNames.getHomeScore(), equalTo(7));
+		assertThat(gameNoNames.getGuestScore(), equalTo(0));
+		assertThat(gameNoNames.getPosition(), equalTo(14));
+		assertThat(gameNoNames.getMatchDay(), equalTo(1));
+		assertThat(gameNoNames.isDoubleMatch(), equalTo(false));
+		assertThat(gameNoNames.getMatchDate(), equalTo(createCalendar(2013, 1, 28, 20, 0)));
+	}
 
+	private static Jerry loadFile(String fileName) throws IOException {
+		File testFile = new File(KickerpageParserTest.RECOURCES_DIRECTORY
+				+ fileName);
+		return jerry().parse(FileUtil.readString(testFile));
+	}
+
+	private static Calendar createCalendar(int year, int month, int day,
+			int hour, int min) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.clear();
+		calendar.set(year, month, day, hour, min);
+		return calendar;
 	}
 }
