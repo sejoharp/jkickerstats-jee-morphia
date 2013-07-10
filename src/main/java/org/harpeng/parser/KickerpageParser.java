@@ -9,6 +9,10 @@ import java.util.List;
 import jodd.jerry.Jerry;
 import jodd.jerry.JerryFunction;
 
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
 public class KickerpageParser {
 	public static final String DOMAIN = "http://www.kickern-hamburg.de";
 
@@ -51,20 +55,20 @@ public class KickerpageParser {
 		return columnCount == 6 || columnCount == 4;
 	}
 
-	protected Jerry filterGameSnippets(Jerry doc) {
-		Jerry rawDoc = doc.$("div#Content table.contentpaneopen");
-		return rawDoc.$("tr.sectiontableentry1, tr.sectiontableentry2");
+	protected Elements filterGameSnippets(Document doc) {
+		Elements rawDoc = doc.select("div#Content > table.contentpaneopen:nth-child(6) > tbody");
+		return rawDoc.select("tr.sectiontableentry1, tr.sectiontableentry2");
 	}
 
-	protected String parseHomeTeam(Jerry doc) {
-		Jerry teams = doc.$("div#Content table.contentpaneopen").eq(1)
-				.$("tr > td > table h2");
+	protected String parseHomeTeam(Document doc) {
+		Elements teams = doc
+				.select("html body div#Container div#Layout div.typography div#Content table.contentpaneopen tbody tr td table tbody tr td h2");
 		return removeTeamDescriptions(teams.first().text());
 	}
 
-	protected String parseGuestTeam(Jerry doc) {
-		Jerry teams = doc.$("div#Content table.contentpaneopen").eq(1)
-				.$("tr > td > table h2");
+	protected String parseGuestTeam(Document doc) {
+		Elements teams = doc
+				.select("html body div#Container div#Layout div.typography div#Content table.contentpaneopen tbody tr td table tbody tr td h2");
 		return removeTeamDescriptions(teams.last().text());
 	}
 
@@ -72,25 +76,25 @@ public class KickerpageParser {
 		return teamString.split("\\(")[0].trim();
 	}
 
-	protected boolean hasMatchDate(Jerry doc) {
-		String rawData = doc.$("div#Content table > tr > td").first().text();
+	protected boolean hasMatchDate(Document doc) {
+		String rawData = doc.select("#Content table tbody > tr > td").first().text();
 		String[] dateChunks = rawData.split(",");
 		return dateChunks.length == 3;
 	}
 
-	protected Calendar parseMatchDate(Jerry doc, boolean matchDateAvailable) {
+	protected Calendar parseMatchDate(Document doc, boolean matchDateAvailable) {
 		if (matchDateAvailable == false) {
 			Calendar matchDate = Calendar.getInstance();
 			matchDate.setTimeInMillis(0);
 			return matchDate;
 		}
-		String rawData = doc.$("div#Content table > tr > td").first().text();
+		String rawData = doc.select("#Content table tbody > tr > td").first().text();
 		String rawDate = rawData.split(",")[1];
 		return parseDate(rawDate);
 	}
 
-	protected int parseMatchDay(Jerry doc, boolean matchDateAvailable) {
-		String rawData = doc.$("div#Content table > tr > td").first().text();
+	protected int parseMatchDay(Document doc, boolean matchDateAvailable) {
+		String rawData = doc.select("#Content table tbody > tr > td").first().text();
 		String[] dateChunks = rawData.split(",");
 		String matchDayString;
 		if (matchDateAvailable) {
@@ -101,18 +105,18 @@ public class KickerpageParser {
 		return Integer.parseInt(matchDayString.trim());
 	}
 
-	protected String[] parseScore(Jerry doc, boolean imagesAvailable) {
+	protected String[] parseScore(Element doc, boolean imagesAvailable) {
 		int index = imagesAvailable ? 3 : 2;
 		String scoreString = doc.children().eq(index).text();
 		return scoreString.split(":");
 	}
 
-	protected int parseHomeScore(Jerry doc, boolean imagesAvailable) {
+	protected int parseHomeScore(Element doc, boolean imagesAvailable) {
 		String homescore = parseScore(doc, imagesAvailable)[0].trim();
 		return Integer.parseInt(homescore);
 	}
 
-	protected int parseGuestScore(Jerry doc, boolean imagesAvailable) {
+	protected int parseGuestScore(Element doc, boolean imagesAvailable) {
 		String guestscore = parseScore(doc, imagesAvailable)[1].trim();
 		return Integer.parseInt(guestscore);
 	}
@@ -184,8 +188,8 @@ public class KickerpageParser {
 		return true;
 	}
 
-	protected Boolean isDoubleMatch(Jerry gameDoc) {
-		return gameDoc.$("td a").length() == 4;
+	protected Boolean isDoubleMatch(Element gameDoc) {
+		return gameDoc.select("td a").size() == 4;
 	}
 
 	protected Integer parseGamePosition(Jerry gameDoc) {

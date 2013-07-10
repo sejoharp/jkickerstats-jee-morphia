@@ -6,7 +6,6 @@ import static org.hamcrest.core.IsEqual.equalTo;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -14,6 +13,9 @@ import java.util.List;
 import jodd.io.FileUtil;
 import jodd.jerry.Jerry;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -24,6 +26,7 @@ public class KickerpageParserUnitTest {
 
 	private KickerpageParser parser;
 	private static Jerry begegnungDoc;
+	private static Document begegnungDocument;
 	private static Jerry begegnungNoDateDoc;
 	private static Jerry begegnungenDoc;
 	private static Jerry begegnungBildDoc;
@@ -31,6 +34,8 @@ public class KickerpageParserUnitTest {
 	private static Jerry uebersichtDoc;
 	private static Jerry relegationDoc;
 	private static Jerry begegnungNoNamesDoc;
+	private static Document begegnungNoDateDocument;
+	private static Document begegnungBildDocument;
 	
 	@BeforeClass
 	public static void loadTestFiles() throws IOException {
@@ -42,6 +47,10 @@ public class KickerpageParserUnitTest {
 		uebersichtDoc = loadFile("uebersicht.html");
 		relegationDoc = loadFile("relegation.html");
 		begegnungNoNamesDoc = loadFile("begegnung_no_names.html");
+		
+		begegnungDocument = loadFileForSoup("begegnung.html");
+		begegnungNoDateDocument = loadFileForSoup("begegnung_no_date.html");
+		begegnungBildDocument = loadFileForSoup("begegnung_bild.html");
 	}
 
 	@Before
@@ -159,24 +168,24 @@ public class KickerpageParserUnitTest {
 
 	@Test
 	public void returnsHomeTeamname() throws IOException {
-		assertThat(parser.parseHomeTeam(begegnungDoc),
+		assertThat(parser.parseHomeTeam(begegnungDocument),
 				equalTo("Tingeltangel FC St. Pauli"));
 	}
 
 	@Test
 	public void returnsGuestTeamname() throws IOException {
-		assertThat(parser.parseGuestTeam(begegnungDoc),
+		assertThat(parser.parseGuestTeam(begegnungDocument),
 				equalTo("Hamburg Privateers 08"));
 	}
 
 	@Test
 	public void detectsThatMatchHasNoMatchdate() throws IOException {
-		assertThat(parser.hasMatchDate(begegnungNoDateDoc), equalTo(false));
+		assertThat(parser.hasMatchDate(begegnungNoDateDocument), equalTo(false));
 	}
 
 	@Test
 	public void detectsThatMatchHasAMatchdate() throws IOException {
-		assertThat(parser.hasMatchDate(begegnungDoc), equalTo(true));
+		assertThat(parser.hasMatchDate(begegnungDocument), equalTo(true));
 	}
 
 	@Test
@@ -197,7 +206,7 @@ public class KickerpageParserUnitTest {
 		expectedDate.clear();
 		expectedDate.set(2013, 1, 27, 20, 0);
 
-		assertThat(parser.parseMatchDate(begegnungDoc, true),
+		assertThat(parser.parseMatchDate(begegnungDocument, true),
 				equalTo(expectedDate));
 	}
 
@@ -206,72 +215,72 @@ public class KickerpageParserUnitTest {
 		Calendar expectedDate = Calendar.getInstance();
 		expectedDate.setTimeInMillis(0);
 
-		assertThat(parser.parseMatchDate(begegnungNoDateDoc, false),
+		assertThat(parser.parseMatchDate(begegnungNoDateDocument, false),
 				equalTo(expectedDate));
 	}
 
 	@Test
-	public void parsesMatchdayFromMatchSnippet() throws IOException {
-		assertThat(parser.parseMatchDay(begegnungDoc, true), equalTo(1));
+	public void parsesMatchday() throws IOException {
+		assertThat(parser.parseMatchDay(begegnungDocument, true), equalTo(1));
 	}
 
 	@Test
-	public void parsesMatchdayFromMatchSnippetWithoutDate() throws IOException {
-		assertThat(parser.parseMatchDay(begegnungNoDateDoc, false), equalTo(5));
+	public void parsesMatchdayWithoutDate() throws IOException {
+		assertThat(parser.parseMatchDay(begegnungNoDateDocument, false), equalTo(5));
 	}
 
 	@Test
-	public void parsesHomeScoreFromGameSnippet() throws IOException {
-		Jerry rawGames = parser.filterGameSnippets(begegnungDoc);
+	public void parsesHomeScore() throws IOException {
+		Elements rawGames = parser.filterGameSnippets(begegnungDocument);
 
 		assertThat(parser.parseHomeScore(rawGames.first(), false), equalTo(4));
 	}
 
 	@Test
-	public void parsesGuestScoreFromGameSnippet() throws IOException {
-		Jerry rawGames = parser.filterGameSnippets(begegnungDoc);
+	public void parsesGuestScore() throws IOException {
+		Elements rawGames = parser.filterGameSnippets(begegnungDocument);
 
 		assertThat(parser.parseGuestScore(rawGames.first(), false), equalTo(7));
 	}
 
 	@Test
 	public void parsesHomeScoreFromGameSnippetWithImages() throws IOException {
-		Jerry rawGames = parser.filterGameSnippets(begegnungBildDoc);
+		Elements rawGames = parser.filterGameSnippets(begegnungBildDocument);
 
 		assertThat(parser.parseHomeScore(rawGames.first(), true), equalTo(4));
 	}
 
 	@Test
 	public void parsesGuestScoreFromGameSnippetWithImages() throws IOException {
-		Jerry rawGames = parser.filterGameSnippets(begegnungBildDoc);
+		Elements rawGames = parser.filterGameSnippets(begegnungBildDocument);
 
 		assertThat(parser.parseGuestScore(rawGames.first(), true), equalTo(7));
 	}
 
 	@Test
 	public void singleMatchIsNotADoubleMatch() throws IOException {
-		Jerry rawGames = parser.filterGameSnippets(begegnungDoc);
+		Elements rawGames = parser.filterGameSnippets(begegnungDocument);
 
 		assertThat(parser.isDoubleMatch(rawGames.first()), equalTo(false));
 	}
 
 	@Test
 	public void detectsDoubleMatch() throws IOException {
-		Jerry rawGames = parser.filterGameSnippets(begegnungDoc);
+		Elements rawGames = parser.filterGameSnippets(begegnungDocument);
 
 		assertThat(parser.isDoubleMatch(rawGames.last()), equalTo(true));
 	}
 
 	@Test
 	public void detectsDoubleMatchWithImages() throws IOException {
-		Jerry rawGames = parser.filterGameSnippets(begegnungBildDoc);
+		Elements rawGames = parser.filterGameSnippets(begegnungBildDocument);
 
 		assertThat(parser.isDoubleMatch(rawGames.last()), equalTo(true));
 	}
 
 	@Test
 	public void parsesPositionOfFirstGame() throws IOException {
-		Jerry rawGames = parser.filterGameSnippets(begegnungDoc);
+		Elements rawGames = parser.filterGameSnippets(begegnungDocument);
 
 		assertThat(parser.parseGamePosition(rawGames.first()), equalTo(1));
 	}
@@ -449,6 +458,12 @@ public class KickerpageParserUnitTest {
 		return jerry().parse(FileUtil.readString(testFile));
 	}
 
+	private static Document loadFileForSoup(String fileName) throws IOException {
+		File testFile = new File(KickerpageParserTest.RECOURCES_DIRECTORY
+				+ fileName);
+		return Jsoup.parse(testFile, "UTF-8", "");
+	}
+	
 	private static Calendar createCalendar(int year, int month, int day,
 			int hour, int min) {
 		Calendar calendar = Calendar.getInstance();
