@@ -14,13 +14,36 @@ public class KickerpageParser {
 
 	public List<Game> findGames(Jerry doc) {
 		final List<Game> games = new ArrayList<>();
-		filterGameSnippets(doc).each(new JerryFunction() {
-			public boolean onNode(Jerry $this, int index) {
-				// games.add(DOMAIN + $this.attr("href"));
-				return true;
-			}
-		});
+		Jerry gameSnippets = filterGameSnippets(doc);
+		if (isValidGameList(gameSnippets)) {
+			final String homeTeam = parseHomeTeam(doc);
+			final String guestTeam = parseGuestTeam(doc);
+			boolean matchDateAvailable = hasMatchDate(doc);
+			final int matchDay = parseMatchDay(doc, matchDateAvailable);
+			final Calendar matchDate = parseMatchDate(doc, matchDateAvailable);
+			final boolean imagesAvailable = hasImages(gameSnippets);
+			gameSnippets.each(new JerryFunction() {
+				public boolean onNode(Jerry $this, int index) {
+					Game game = new Game();
+					game.setDoubleMatch(isDoubleMatch($this));
+					game.setPosition(parseGamePosition($this));
+					game.setHomeTeam(homeTeam);
+					game.setGuestTeam(guestTeam);
+					game.setMatchDate(matchDate);
+					game.setMatchDay(matchDay);
+					addPlayerNames(game, $this, game.isDoubleMatch());
+					game.setHomeScore(parseHomeScore($this, imagesAvailable));
+					game.setGuestScore(parseGuestScore($this, imagesAvailable));
+					games.add(game);
+					return true;
+				}
+			});
+		}
 		return games;
+	}
+
+	protected boolean hasImages(Jerry gameDoc) {
+		return gameDoc.first().children().length() == 6;
 	}
 
 	protected boolean isValidGameList(Jerry doc) {
@@ -162,7 +185,6 @@ public class KickerpageParser {
 	}
 
 	protected Boolean isDoubleMatch(Jerry gameDoc) {
-		System.out.println(gameDoc.text());
 		return gameDoc.$("td a").length() == 4;
 	}
 

@@ -140,6 +140,9 @@ public class Game {
 
 	@Override
 	public boolean equals(Object obj) {
+		System.out.println(this);
+		System.out.println((Game) obj);
+
 		if (this == obj)
 			return true;
 		if (obj == null)
@@ -186,12 +189,24 @@ public class Game {
 		if (matchDate == null) {
 			if (other.matchDate != null)
 				return false;
-		} else if (!matchDate.equals(other.matchDate))
+		} else if (matchDate.getTimeInMillis() != other.matchDate
+				.getTimeInMillis())
 			return false;
 		if (matchDay != other.matchDay)
 			return false;
 		if (position != other.position)
 			return false;
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "Game [homePlayer1=" + homePlayer1 + ", homePlayer2="
+				+ homePlayer2 + ", homeTeam=" + homeTeam + ", homeScore="
+				+ homeScore + ", guestPlayer1=" + guestPlayer1
+				+ ", guestPlayer2=" + guestPlayer2 + ", guestTeam=" + guestTeam
+				+ ", guestScore=" + guestScore + ", position=" + position
+				+ ", matchDate=" + matchDate + ", matchDay=" + matchDay
+				+ ", doubleMatch=" + doubleMatch + "]";
 	}
 }

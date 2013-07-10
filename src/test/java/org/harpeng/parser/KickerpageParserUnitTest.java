@@ -6,6 +6,7 @@ import static org.hamcrest.core.IsEqual.equalTo;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -369,19 +370,19 @@ public class KickerpageParserUnitTest {
 		game.setHomeScore(4);
 		game.setHomeTeam("Cim Bom Bom");
 		game.setMatchDate(createCalendar(2013, 1, 28, 20, 0));
+		game.setMatchDay(1);
 		game.setPosition(1);
 
 		List<Game> games = parser.findGames(begegnungBildDoc);
 
 		assertThat(games.get(0), equalTo(game));
-
 	}
 
 	@Test
 	public void returnsAFullFilledDoubleGameWithImages() {
 		Game game = new Game();
 		game.setDoubleMatch(true);
-		game.setHomePlayer1("Arslan, Mehmet Emin ");
+		game.setHomePlayer1("Arslan, Mehmet Emin");
 		game.setHomePlayer2("Böckeler, Frank");
 		game.setHomeScore(4);
 		game.setHomeTeam("Cim Bom Bom");
@@ -389,6 +390,7 @@ public class KickerpageParserUnitTest {
 		game.setGuestPlayer2("Linnenberg, Sebastian");
 		game.setGuestScore(5);
 		game.setGuestTeam("Die Maschinerie");
+		game.setMatchDay(1);
 		game.setMatchDate(createCalendar(2013, 1, 28, 20, 0));
 		game.setPosition(16);
 
@@ -405,20 +407,40 @@ public class KickerpageParserUnitTest {
 	}
 
 	@Test
+	public void parsesAllGamesInCorrectOrder(){
+		List<Game> games = parser.findGames(begegnungNoNamesDoc);
+		assertThat(games.get(0).getPosition(), equalTo(1));
+		assertThat(games.get(1).getPosition(), equalTo(2));
+		assertThat(games.get(2).getPosition(), equalTo(3));
+		assertThat(games.get(3).getPosition(), equalTo(4));
+		assertThat(games.get(4).getPosition(), equalTo(5));
+		assertThat(games.get(5).getPosition(), equalTo(6));
+		assertThat(games.get(6).getPosition(), equalTo(7));
+		assertThat(games.get(7).getPosition(), equalTo(8));
+		assertThat(games.get(8).getPosition(), equalTo(9));
+		assertThat(games.get(9).getPosition(), equalTo(10));
+		assertThat(games.get(10).getPosition(), equalTo(11));
+		assertThat(games.get(11).getPosition(), equalTo(12));
+		assertThat(games.get(12).getPosition(), equalTo(13));
+		assertThat(games.get(13).getPosition(), equalTo(14));
+		assertThat(games.get(14).getPosition(), equalTo(15));
+		assertThat(games.get(15).getPosition(), equalTo(16));
+	}
+	@Test
 	public void parsesGamesWithoutPlayernames() {
 		List<Game> games = parser.findGames(begegnungNoNamesDoc);
 		
-		Game gameNoNames = games.get(13);
-		assertThat(gameNoNames.getGuestPlayer1(), equalTo(""));
-		assertThat(gameNoNames.getHomePlayer1(), equalTo(""));
-		assertThat(gameNoNames.getHomeTeam(), equalTo("Die Hinkelsteinchen"));
-		assertThat(gameNoNames.getGuestTeam(), equalTo("Kurbelkraft Bergedorf"));
-		assertThat(gameNoNames.getHomeScore(), equalTo(7));
-		assertThat(gameNoNames.getGuestScore(), equalTo(0));
-		assertThat(gameNoNames.getPosition(), equalTo(14));
-		assertThat(gameNoNames.getMatchDay(), equalTo(1));
-		assertThat(gameNoNames.isDoubleMatch(), equalTo(false));
-		assertThat(gameNoNames.getMatchDate(), equalTo(createCalendar(2013, 1, 28, 20, 0)));
+		Game gameWithoutPlayernames = games.get(13);
+		assertThat(gameWithoutPlayernames.getGuestPlayer1(), equalTo(""));
+		assertThat(gameWithoutPlayernames.getHomePlayer1(), equalTo(""));
+		assertThat(gameWithoutPlayernames.getHomeTeam(), equalTo("Die Hinkelsteinchen"));
+		assertThat(gameWithoutPlayernames.getGuestTeam(), equalTo("Kurbelkraft Bergedorf"));
+		assertThat(gameWithoutPlayernames.getHomeScore(), equalTo(7));
+		assertThat(gameWithoutPlayernames.getGuestScore(), equalTo(0));
+		assertThat(gameWithoutPlayernames.getPosition(), equalTo(14));
+		assertThat(gameWithoutPlayernames.getMatchDay(), equalTo(1));
+		assertThat(gameWithoutPlayernames.isDoubleMatch(), equalTo(false));
+		assertThat(gameWithoutPlayernames.getMatchDate(), equalTo(createCalendar(2013, 1, 28, 20, 0)));
 	}
 
 	private static Jerry loadFile(String fileName) throws IOException {
@@ -431,7 +453,11 @@ public class KickerpageParserUnitTest {
 			int hour, int min) {
 		Calendar calendar = Calendar.getInstance();
 		calendar.clear();
-		calendar.set(year, month, day, hour, min);
+		calendar.set(Calendar.YEAR, year);
+		calendar.set(Calendar.MONTH, month);
+		calendar.set(Calendar.DAY_OF_MONTH, day);
+		calendar.set(Calendar.HOUR_OF_DAY, hour);
+		calendar.set(Calendar.MINUTE, min);
 		return calendar;
 	}
 }
