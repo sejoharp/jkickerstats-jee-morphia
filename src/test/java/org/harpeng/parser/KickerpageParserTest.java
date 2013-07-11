@@ -1,6 +1,5 @@
 package org.harpeng.parser;
 
-import static jodd.jerry.Jerry.jerry;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNull.notNullValue;
@@ -11,10 +10,9 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import jodd.io.FileUtil;
-import jodd.jerry.Jerry;
-
 import org.harpeng.WeldJUnit4Runner;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -35,7 +33,7 @@ public class KickerpageParserTest {
 	@Test
 	public void returnsAllLigaLinks() throws IOException {
 		File testFile = new File(RECOURCES_DIRECTORY + "uebersicht.html");
-		Jerry doc = jerry().parse(FileUtil.readString(testFile));
+		Document doc = Jsoup.parse(testFile, "UTF-8", "");
 
 		List<String> ligaLinksIDs = parser.findLigaLinks(doc);
 

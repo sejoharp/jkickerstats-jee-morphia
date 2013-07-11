@@ -6,9 +6,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import jodd.jerry.Jerry;
-import jodd.jerry.JerryFunction;
-
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -16,9 +13,9 @@ import org.jsoup.select.Elements;
 public class KickerpageParser {
 	public static final String DOMAIN = "http://www.kickern-hamburg.de";
 
-	public List<Game> findGames(Jerry doc) {
+	public List<Game> findGames(Document doc) {
 		final List<Game> games = new ArrayList<>();
-		Jerry gameSnippets = filterGameSnippets(doc);
+		Elements gameSnippets = filterGameSnippets(doc);
 		if (isValidGameList(gameSnippets)) {
 			final String homeTeam = parseHomeTeam(doc);
 			final String guestTeam = parseGuestTeam(doc);
@@ -26,37 +23,35 @@ public class KickerpageParser {
 			final int matchDay = parseMatchDay(doc, matchDateAvailable);
 			final Calendar matchDate = parseMatchDate(doc, matchDateAvailable);
 			final boolean imagesAvailable = hasImages(gameSnippets);
-			gameSnippets.each(new JerryFunction() {
-				public boolean onNode(Jerry $this, int index) {
-					Game game = new Game();
-					game.setDoubleMatch(isDoubleMatch($this));
-					game.setPosition(parseGamePosition($this));
-					game.setHomeTeam(homeTeam);
-					game.setGuestTeam(guestTeam);
-					game.setMatchDate(matchDate);
-					game.setMatchDay(matchDay);
-					addPlayerNames(game, $this, game.isDoubleMatch());
-					game.setHomeScore(parseHomeScore($this, imagesAvailable));
-					game.setGuestScore(parseGuestScore($this, imagesAvailable));
-					games.add(game);
-					return true;
-				}
-			});
+			for (Element gameSnippet : gameSnippets) {
+				Game game = new Game();
+				game.setDoubleMatch(isDoubleMatch(gameSnippet));
+				game.setPosition(parseGamePosition(gameSnippet));
+				game.setHomeTeam(homeTeam);
+				game.setGuestTeam(guestTeam);
+				game.setMatchDate(matchDate);
+				game.setMatchDay(matchDay);
+				addPlayerNames(game, gameSnippet, game.isDoubleMatch());
+				game.setHomeScore(parseHomeScore(gameSnippet, imagesAvailable));
+				game.setGuestScore(parseGuestScore(gameSnippet, imagesAvailable));
+				games.add(game);
+			}
 		}
 		return games;
 	}
 
-	protected boolean hasImages(Jerry gameDoc) {
-		return gameDoc.first().children().length() == 6;
+	protected boolean hasImages(Elements elements) {
+		return elements.first().children().size() == 6;
 	}
 
-	protected boolean isValidGameList(Jerry doc) {
-		int columnCount = doc.first().children().length();
+	protected boolean isValidGameList(Elements elements) {
+		int columnCount = elements.first().children().size();
 		return columnCount == 6 || columnCount == 4;
 	}
 
 	protected Elements filterGameSnippets(Document doc) {
-		Elements rawDoc = doc.select("div#Content > table.contentpaneopen:nth-child(6) > tbody");
+		Elements rawDoc = doc
+				.select("div#Content > table.contentpaneopen:nth-child(6) > tbody");
 		return rawDoc.select("tr.sectiontableentry1, tr.sectiontableentry2");
 	}
 
@@ -77,7 +72,8 @@ public class KickerpageParser {
 	}
 
 	protected boolean hasMatchDate(Document doc) {
-		String rawData = doc.select("#Content table tbody > tr > td").first().text();
+		String rawData = doc.select("#Content table tbody > tr > td").first()
+				.text();
 		String[] dateChunks = rawData.split(",");
 		return dateChunks.length == 3;
 	}
@@ -88,13 +84,15 @@ public class KickerpageParser {
 			matchDate.setTimeInMillis(0);
 			return matchDate;
 		}
-		String rawData = doc.select("#Content table tbody > tr > td").first().text();
+		String rawData = doc.select("#Content table tbody > tr > td").first()
+				.text();
 		String rawDate = rawData.split(",")[1];
 		return parseDate(rawDate);
 	}
 
 	protected int parseMatchDay(Document doc, boolean matchDateAvailable) {
-		String rawData = doc.select("#Content table tbody > tr > td").first().text();
+		String rawData = doc.select("#Content table tbody > tr > td").first()
+				.text();
 		String[] dateChunks = rawData.split(",");
 		String matchDayString;
 		if (matchDateAvailable) {
@@ -132,72 +130,72 @@ public class KickerpageParser {
 		return date;
 	}
 
-	public List<String> findLigaLinks(Jerry doc) {
+	public List<String> findLigaLinks(Document doc) {
 		final List<String> ligaLinks = new ArrayList<>();
-		doc.$("div#Content > table.contentpaneopen > tr > td > a.readon").each(
-				new JerryFunction() {
-					public boolean onNode(Jerry $this, int index) {
-						ligaLinks.add(DOMAIN + $this.attr("href"));
-						return true;
-					}
-				});
+		Elements elements = doc
+				.select("div#Content > table > tbody > tr > td > a.readon");
+		for (Element element : elements) {
+			ligaLinks.add(DOMAIN + element.attr("href"));
+		}
 		return ligaLinks;
 	}
 
-	public List<Integer> findSeasonIDs(Jerry doc) {
+	public List<Integer> findSeasonIDs(Document doc) {
 		final List<Integer> seasonIDs = new ArrayList<>();
-		doc.$("div#Content select option").each(new JerryFunction() {
-			public boolean onNode(Jerry $this, int index) {
-				seasonIDs.add(Integer.valueOf($this.attr("value")));
-				return true;
-			}
-		});
+		Elements elements = doc.select("div#Content select option");
+		for (Element element : elements) {
+			seasonIDs.add(Integer.valueOf(element.attr("value")));
+		}
 		return seasonIDs;
 	}
 
-	public List<String> findMatchLinks(Jerry doc) {
+	public List<String> findMatchLinks(Document doc) {
 		final List<String> matchLinks = new ArrayList<>();
-		filterMatchLinkSnippets(doc).each(new JerryFunction() {
-			public boolean onNode(Jerry $this, int index) {
-				if (isValidMatchLink($this)) {
-					matchLinks.add(DOMAIN + $this.$("a[href]").attr("href"));
-				}
-				return true;
+		Elements elements = filterMatchLinkSnippets(doc);
+		for (Element element : elements) {
+			if (isValidMatchLink(element)) {
+				matchLinks.add(DOMAIN + element.select("a[href]").attr("href"));
 			}
-		});
+		}
 		return matchLinks;
 	}
 
-	protected Jerry filterMatchLinkSnippets(Jerry doc) {
-		Jerry rawDoc = doc
-				.$("div#Content > table.contentpaneopen:nth-child(7)");
-		return rawDoc.$("tr.sectiontableentry1, tr.sectiontableentry2");
+	protected Elements filterMatchLinkSnippets(Document doc) {
+		Elements rawDoc = doc
+				.select("div#Content > table.contentpaneopen:nth-child(7)");
+		return rawDoc.select("tr.sectiontableentry1, tr.sectiontableentry2");
 	}
 
-	protected boolean isValidMatchLink(Jerry doc) {
-		boolean alreadyPlayed = doc.$("a").length() == 2;
+	protected boolean isValidMatchLink(Element element) {
+		boolean alreadyPlayed = element.select("a").size() == 2;
 		if (alreadyPlayed == false) {
 			return false;
 		}
-		String scoreDescription = doc.$("td:nth-child(5) small").text();
-		boolean scoreConfirmed = "unbestätigt".equals(scoreDescription) == false
-				&& "live".equals(scoreDescription) == false;
-		if (scoreConfirmed == false) {
-			return false;
-		}
-		return true;
+		String scoreDescription = element.select("td:nth-child(5) small")
+				.text();
+		return isMatchUnconfirmed(scoreDescription) == false
+				&& isMatchRunning(scoreDescription) == false;
+	}
+
+	protected boolean isMatchRunning(String scoreDescription) {
+		return "live".equals(scoreDescription);
+	}
+
+	protected boolean isMatchUnconfirmed(String scoreDescription) {
+		return "unbestätigt".equals(scoreDescription);
 	}
 
 	protected Boolean isDoubleMatch(Element gameDoc) {
 		return gameDoc.select("td a").size() == 4;
 	}
 
-	protected Integer parseGamePosition(Jerry gameDoc) {
+	protected Integer parseGamePosition(Element gameDoc) {
 		return Integer.parseInt(gameDoc.children().first().text());
 	}
 
-	protected void addPlayerNames(Game game, Jerry gameDoc, boolean doubleMatch) {
-		Jerry rawPlayerNames = gameDoc.$("td a");
+	protected void addPlayerNames(Game game, Element gameDoc,
+			boolean doubleMatch) {
+		Elements rawPlayerNames = gameDoc.select("td a");
 		if (doubleMatch) {
 			game.setHomePlayer1(parsePlayerName(rawPlayerNames, 0));
 			game.setHomePlayer2(parsePlayerName(rawPlayerNames, 1));
@@ -210,8 +208,8 @@ public class KickerpageParser {
 
 	}
 
-	protected String parsePlayerName(Jerry rawPlayerNames, int position) {
-		return rawPlayerNames.size() > position ? rawPlayerNames.eq(position)
+	protected String parsePlayerName(Elements rawPlayerNames, int position) {
+		return rawPlayerNames.size() > position ? rawPlayerNames.get(position)
 				.text() : "";
 	}
 
