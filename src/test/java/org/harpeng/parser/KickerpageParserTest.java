@@ -1,7 +1,7 @@
 package org.harpeng.parser;
 
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNull.notNullValue;
 
 import java.io.File;
@@ -37,9 +37,9 @@ public class KickerpageParserTest {
 
 		List<String> ligaLinksIDs = parser.findLigaLinks(doc);
 
-		assertThat(ligaLinksIDs.size(), equalTo(5));
+		assertThat(ligaLinksIDs.size(), is(5));
 		assertThat(
 				ligaLinksIDs.get(0),
-				equalTo("http://www.kickern-hamburg.de/liga-tool/mannschaftswettbewerbe?task=veranstaltung&veranstaltungid=8"));
+				is("http://www.kickern-hamburg.de/liga-tool/mannschaftswettbewerbe?task=veranstaltung&veranstaltungid=8"));
 	}
 }
