@@ -1,4 +1,4 @@
-package org.harpeng.parser;
+package kickerstats;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -10,7 +10,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import org.harpeng.WeldJUnit4Runner;
+import kickerstats.KickerpageParser;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.junit.Before;

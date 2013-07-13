@@ -1,4 +1,4 @@
-package org.harpeng.parser;
+package kickerstats;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -8,6 +8,9 @@ import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+
+import kickerstats.Game;
+import kickerstats.KickerpageParser;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

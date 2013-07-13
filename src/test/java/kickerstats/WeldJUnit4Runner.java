@@ -1,4 +1,4 @@
-package org.harpeng;
+package kickerstats;
 
 import org.jboss.weld.environment.se.Weld;
 import org.jboss.weld.environment.se.WeldContainer;

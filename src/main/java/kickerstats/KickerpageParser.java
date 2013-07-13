@@ -1,4 +1,4 @@
-package org.harpeng.parser;
+package kickerstats;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
