@@ -140,9 +140,6 @@ public class Game {
 
 	@Override
 	public boolean equals(Object obj) {
-		System.out.println(this);
-		System.out.println((Game) obj);
-
 		if (this == obj)
 			return true;
 		if (obj == null)

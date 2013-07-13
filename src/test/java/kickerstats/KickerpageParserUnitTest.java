@@ -361,17 +361,7 @@ public class KickerpageParserUnitTest {
 
 	@Test
 	public void returnsAFullFilledSingleGameWithImages() {
-		Game game = new Game();
-		game.setDoubleMatch(false);
-		game.setGuestPlayer1("Bai, Minyoung");
-		game.setGuestScore(7);
-		game.setGuestTeam("Die Maschinerie");
-		game.setHomePlayer1("Arslan, Mehmet Emin");
-		game.setHomeScore(4);
-		game.setHomeTeam("Cim Bom Bom");
-		game.setMatchDate(createCalendar(2013, 1, 28, 20, 0));
-		game.setMatchDay(1);
-		game.setPosition(1);
+		Game game = CsvCreatorTest.createSecondSingleGame();
 
 		List<Game> games = parser.findGames(begegnungBildDoc);
 
@@ -380,19 +370,7 @@ public class KickerpageParserUnitTest {
 
 	@Test
 	public void returnsAFullFilledDoubleGameWithImages() {
-		Game game = new Game();
-		game.setDoubleMatch(true);
-		game.setHomePlayer1("Arslan, Mehmet Emin");
-		game.setHomePlayer2("Böckeler, Frank");
-		game.setHomeScore(4);
-		game.setHomeTeam("Cim Bom Bom");
-		game.setGuestPlayer1("Bai, Minyoung");
-		game.setGuestPlayer2("Linnenberg, Sebastian");
-		game.setGuestScore(5);
-		game.setGuestTeam("Die Maschinerie");
-		game.setMatchDay(1);
-		game.setMatchDate(createCalendar(2013, 1, 28, 20, 0));
-		game.setPosition(16);
+		Game game = CsvCreatorTest.createDoubleGame();
 
 		List<Game> games = parser.findGames(begegnungBildDoc);
 
@@ -453,7 +431,7 @@ public class KickerpageParserUnitTest {
 		return Jsoup.parse(testFile, "UTF-8", "");
 	}
 
-	private static Calendar createCalendar(int year, int month, int day,
+	protected static Calendar createCalendar(int year, int month, int day,
 			int hour, int min) {
 		Calendar calendar = Calendar.getInstance();
 		calendar.clear();
