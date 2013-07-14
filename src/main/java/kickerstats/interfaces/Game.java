@@ -1,4 +1,4 @@
-package kickerstats;
+package kickerstats.interfaces;
 
 import java.util.Calendar;
 
@@ -203,7 +203,7 @@ public class Game {
 				+ homeScore + ", guestPlayer1=" + guestPlayer1
 				+ ", guestPlayer2=" + guestPlayer2 + ", guestTeam=" + guestTeam
 				+ ", guestScore=" + guestScore + ", position=" + position
-				+ ", matchDate=" + matchDate + ", matchDay=" + matchDay
+				+ ", matchDate=" + matchDate.getTimeInMillis() + ", matchDay=" + matchDay
 				+ ", doubleMatch=" + doubleMatch + "]";
 	}
 }

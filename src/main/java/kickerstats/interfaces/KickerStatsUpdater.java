@@ -1,4 +1,4 @@
-package kickerstats;
+package kickerstats.interfaces;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,7 +7,7 @@ import javax.inject.Inject;
 
 import org.jsoup.nodes.Document;
 
-public class GameDownloader {
+public class KickerStatsUpdater {
 	@Inject
 	private KickerpageParser kickerpageParser;
 	@Inject

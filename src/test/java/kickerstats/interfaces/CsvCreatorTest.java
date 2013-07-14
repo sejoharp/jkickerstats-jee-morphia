@@ -1,4 +1,4 @@
-package kickerstats;
+package kickerstats.interfaces;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
@@ -12,6 +12,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Scanner;
+
+import kickerstats.interfaces.CsvCreator;
+import kickerstats.interfaces.Game;
 
 import org.junit.Before;
 import org.junit.Test;

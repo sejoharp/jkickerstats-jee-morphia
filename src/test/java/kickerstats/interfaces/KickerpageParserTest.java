@@ -1,4 +1,4 @@
-package kickerstats;
+package kickerstats.interfaces;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -10,7 +10,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import kickerstats.KickerpageParser;
+import kickerstats.WeldJUnit4Runner;
+import kickerstats.interfaces.KickerpageParser;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

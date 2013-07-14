@@ -1,4 +1,4 @@
-package kickerstats;
+package kickerstats.interfaces;
 
 import java.io.BufferedWriter;
 import java.io.IOException;

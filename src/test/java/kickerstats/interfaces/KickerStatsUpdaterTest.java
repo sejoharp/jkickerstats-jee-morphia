@@ -1,17 +1,22 @@
-package kickerstats;
+package kickerstats.interfaces;
 
 import java.util.List;
 
 import javax.inject.Inject;
+
+import kickerstats.WeldJUnit4Runner;
+import kickerstats.interfaces.CsvCreator;
+import kickerstats.interfaces.Game;
+import kickerstats.interfaces.KickerStatsUpdater;
 
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 @RunWith(WeldJUnit4Runner.class)
-public class GameDownloaderTest {
+public class KickerStatsUpdaterTest {
 	@Inject
-	private GameDownloader gameDownloader;
+	private KickerStatsUpdater gameDownloader;
 
 	@Inject
 	private CsvCreator csvCreator;

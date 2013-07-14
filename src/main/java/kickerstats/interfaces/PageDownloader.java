@@ -1,4 +1,4 @@
-package kickerstats;
+package kickerstats.interfaces;
 
 import java.io.IOException;
 import java.util.HashMap;

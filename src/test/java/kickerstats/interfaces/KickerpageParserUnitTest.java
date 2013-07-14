@@ -1,4 +1,4 @@
-package kickerstats;
+package kickerstats.interfaces;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -9,8 +9,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import kickerstats.Game;
-import kickerstats.KickerpageParser;
+import kickerstats.interfaces.Game;
+import kickerstats.interfaces.KickerpageParser;
+import kickerstats.interfaces.Match;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -28,6 +29,7 @@ public class KickerpageParserUnitTest {
 
 	private static Document begegnungNoDateDoc;
 	private static Document begegnungenDoc;
+	private static Document begegnungenNoDateDoc;
 	private static Document begegnungBildDoc;
 	private static Document begegnungenLiveDoc;
 	private static Document uebersichtDoc;
@@ -44,6 +46,7 @@ public class KickerpageParserUnitTest {
 		uebersichtDoc = loadFile("uebersicht.html");
 		relegationDoc = loadFile("relegation.html");
 		begegnungNoNamesDoc = loadFile("begegnung_no_names.html");
+		begegnungenNoDateDoc = loadFile("begegnungen_no_date.html");
 	}
 
 	@Before
@@ -425,7 +428,29 @@ public class KickerpageParserUnitTest {
 				is(createCalendar(2013, 1, 28, 20, 0)));
 	}
 
-	private static Document loadFile(String fileName) throws IOException {
+	@Test
+	public void returnsAFilledMatch() {
+		List<Match> matches = parser.findMatches(begegnungenDoc);
+		Match match = matches.get(0);
+
+		assertThat(match, is(createMatch()));
+	}
+
+	@Test
+	public void returnsAFilledMatchWithoutDate() {
+		List<Match> matches = parser.findMatches(begegnungenNoDateDoc);
+		Match match = matches.get(25);
+
+		assertThat(match, is(createMatchWithoutDate()));
+	}
+
+	@Test
+	public void returnsAllMatches() {
+		List<Match> matches = parser.findMatches(begegnungenDoc);
+		assertThat(matches.size(), is(14));
+	}
+
+	protected static Document loadFile(String fileName) throws IOException {
 		File testFile = new File(KickerpageParserTest.RECOURCES_DIRECTORY
 				+ fileName);
 		return Jsoup.parse(testFile, "UTF-8", "");
@@ -442,4 +467,37 @@ public class KickerpageParserUnitTest {
 		calendar.set(Calendar.MINUTE, min);
 		return calendar;
 	}
+
+	protected static Calendar createZeroCalendar() {
+		Calendar matchDate = Calendar.getInstance();
+		matchDate.setTimeInMillis(0);
+		return matchDate;
+	}
+
+	protected Match createMatch() {
+		Match match = new Match();
+		match.setMatchDate(createCalendar(2013, 01, 27, 19, 1));
+		match.setHomeTeam("Kickerbande");
+		match.setGuestTeam("St. Ellingen 1");
+		match.setMatchDay(1);
+		match.setHomeGoals(92);
+		match.setGuestGoals(31);
+		match.setHomeScore(32);
+		match.setGuestScore(0);
+		return match;
+	}
+
+	protected Match createMatchWithoutDate() {
+		Match match = new Match();
+		match.setMatchDate(createZeroCalendar());
+		match.setHomeTeam("Fightclub Hamburg FC St. Pauli");
+		match.setGuestTeam("Lotterie");
+		match.setMatchDay(6);
+		match.setHomeGoals(0);
+		match.setGuestGoals(96);
+		match.setHomeScore(0);
+		match.setGuestScore(32);
+		return match;
+	}
+
 }

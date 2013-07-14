@@ -1,4 +1,4 @@
-package kickerstats;
+package kickerstats.interfaces;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -160,10 +160,82 @@ public class KickerpageParser {
 		return matchLinks;
 	}
 
+	public List<Match> findMatches(Document doc) {
+		final List<Match> matches = new ArrayList<>();
+		Elements elements = filterMatchSnippets(doc);
+		int matchDay = 1;
+		for (Element element : elements) {
+			if (isMatchDayElement(element)) {
+				String matchDayString = element.select("i").text();
+				matchDay = Integer.parseInt(matchDayString.split("\\.")[0]);
+			} else if (isValidMatchLink(element)) {
+				matches.add(parseMatch(element, matchDay));
+			}
+		}
+		return matches;
+	}
+
+	private boolean isMatchDayElement(Element element) {
+		return element.hasClass("sectiontableheader")
+				&& element.select("i").text().isEmpty() == false;
+	}
+
+	protected Match parseMatch(Element element, int matchDay) {
+		Match match = new Match();
+		match.setMatchDate(parseMatchDate(element));
+		match.setMatchDay(matchDay);
+		match.setHomeScore(parseMatchHomeScore(element));
+		match.setGuestScore(parseMatchGuestScore(element));
+		match.setHomeTeam(element.children().eq(1).text());
+		match.setGuestTeam(element.children().eq(2).text());
+		match.setGuestGoals(parseMatchGuestGoals(element));
+		match.setHomeGoals(parseMatchHomeGoals(element));
+		return match;
+	}
+
+	protected int parseMatchHomeGoals(Element element) {
+		String goals = element.children().eq(3).text();
+		return Integer.parseInt(goals.split(":")[0]);
+	}
+
+	protected int parseMatchGuestGoals(Element element) {
+		String goals = element.children().eq(3).text();
+		return Integer.parseInt(goals.split(":")[1]);
+	}
+
+	protected int parseMatchHomeScore(Element element) {
+		String score = element.children().eq(4).text();
+		return Integer.parseInt(score.split(":")[0]);
+	}
+
+	protected int parseMatchGuestScore(Element element) {
+		String score = element.children().eq(4).text();
+		return Integer.parseInt(score.split(":")[1]);
+	}
+
+	protected Calendar parseMatchDate(Element element) {
+		String rawData = element.select("a").text();
+		String[] dateString = rawData.split(",");
+		if (dateString.length == 2) {
+			return parseDate(dateString[1]);
+		} else {
+			Calendar matchDate = Calendar.getInstance();
+			matchDate.setTimeInMillis(0);
+			return matchDate;
+		}
+	}
+
 	protected Elements filterMatchLinkSnippets(Document doc) {
 		Elements rawDoc = doc
 				.select("div#Content > table.contentpaneopen:nth-child(7)");
 		return rawDoc.select("tr.sectiontableentry1, tr.sectiontableentry2");
+	}
+
+	protected Elements filterMatchSnippets(Document doc) {
+		Elements rawDoc = doc
+				.select("div#Content > table.contentpaneopen:nth-child(7)");
+		return rawDoc
+				.select("tr.sectiontableheader,tr.sectiontableentry1, tr.sectiontableentry2");
 	}
 
 	protected boolean isValidMatchLink(Element element) {
