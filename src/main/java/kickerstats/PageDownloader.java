@@ -8,9 +8,11 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 public class PageDownloader {
+	private static int TIMEOUT = 10 * 1000;
+
 	public Document downloadPage(String url) {
 		try {
-			return Jsoup.connect(url).get();
+			return Jsoup.connect(url).timeout(TIMEOUT).get();
 		} catch (IOException e) {
 			throw new IllegalStateException(e);
 		}
@@ -22,7 +24,7 @@ public class PageDownloader {
 		parameters.put("task", "veranstaltungen");
 		String url = "http://www.kickern-hamburg.de/liga-tool/mannschaftswettbewerbe";
 		try {
-			return Jsoup.connect(url).data(parameters).post();
+			return Jsoup.connect(url).data(parameters).timeout(TIMEOUT).post();
 		} catch (IOException e) {
 			throw new IllegalStateException(e);
 		}
