@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import kickerstats.interfaces.CsvCreator;
-import kickerstats.interfaces.Game;
+import kickerstats.types.Game;
 
 import org.junit.Before;
 import org.junit.Test;

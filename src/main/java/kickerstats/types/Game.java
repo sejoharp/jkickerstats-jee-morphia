@@ -1,4 +1,4 @@
-package kickerstats.interfaces;
+package kickerstats.types;
 
 import java.util.Calendar;
 

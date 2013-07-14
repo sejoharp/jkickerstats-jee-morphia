@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import kickerstats.types.Game;
+
 import org.jsoup.nodes.Document;
 
 public class KickerStatsUpdater {

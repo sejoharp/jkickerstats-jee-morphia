@@ -6,8 +6,8 @@ import javax.inject.Inject;
 
 import kickerstats.WeldJUnit4Runner;
 import kickerstats.interfaces.CsvCreator;
-import kickerstats.interfaces.Game;
 import kickerstats.interfaces.KickerStatsUpdater;
+import kickerstats.types.Game;
 
 import org.junit.Ignore;
 import org.junit.Test;

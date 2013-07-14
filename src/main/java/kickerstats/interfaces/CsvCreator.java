@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import kickerstats.types.Game;
+
 public class CsvCreator {
 	public void createCsvFile(List<String> gameStrings) {
 		Path path = Paths.get("allGames.csv");

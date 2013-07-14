@@ -9,9 +9,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import kickerstats.interfaces.Game;
 import kickerstats.interfaces.KickerpageParser;
-import kickerstats.interfaces.Match;
+import kickerstats.types.Game;
+import kickerstats.types.Match;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
