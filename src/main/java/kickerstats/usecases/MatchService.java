@@ -20,9 +20,13 @@ public class MatchService implements MatchServiceInterface {
 	}
 
 	@Override
-	public boolean isNewMatch(Calendar matchDate, String homeTeam,
-			String guestTeam) {
-		return matchRepo.isNewMatch(matchDate, homeTeam, guestTeam);
+	public boolean isNewMatch(Match match) {
+		return matchRepo.isNewMatch(match.getMatchDate(), match.getHomeTeam(), match.getGuestTeam());
+	}
+
+	@Override
+	public void saveMatch(Match match) {
+		matchRepo.save(match);
 	}
 
 }

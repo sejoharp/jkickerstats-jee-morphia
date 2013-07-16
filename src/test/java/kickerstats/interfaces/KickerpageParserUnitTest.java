@@ -430,23 +430,23 @@ public class KickerpageParserUnitTest {
 
 	@Test
 	public void returnsAFilledMatch() {
-		List<Match> matches = parser.findMatches(begegnungenDoc);
-		Match match = matches.get(0);
+		List<MatchWithLink> matches = parser.findMatches(begegnungenDoc);
+		MatchWithLink match = matches.get(0);
 
 		assertThat(match, is(createMatch()));
 	}
 
 	@Test
 	public void returnsAFilledMatchWithoutDate() {
-		List<Match> matches = parser.findMatches(begegnungenNoDateDoc);
-		Match match = matches.get(25);
+		List<MatchWithLink> matches = parser.findMatches(begegnungenNoDateDoc);
+		MatchWithLink match = matches.get(25);
 
 		assertThat(match, is(createMatchWithoutDate()));
 	}
 
 	@Test
 	public void returnsAllMatches() {
-		List<Match> matches = parser.findMatches(begegnungenDoc);
+		List<MatchWithLink> matches = parser.findMatches(begegnungenDoc);
 		assertThat(matches.size(), is(14));
 	}
 
@@ -474,8 +474,8 @@ public class KickerpageParserUnitTest {
 		return matchDate;
 	}
 
-	protected Match createMatch() {
-		Match match = new Match();
+	protected MatchWithLink createMatch() {
+		MatchWithLink match = new MatchWithLink();
 		match.setMatchDate(createCalendar(2013, 01, 27, 19, 1));
 		match.setHomeTeam("Kickerbande");
 		match.setGuestTeam("St. Ellingen 1");
@@ -484,11 +484,12 @@ public class KickerpageParserUnitTest {
 		match.setGuestGoals(31);
 		match.setHomeScore(32);
 		match.setGuestScore(0);
+		match.setMatchLink("http://www.kickern-hamburg.de/liga-tool/mannschaftswettbewerbe?task=begegnung_spielplan&veranstaltungid=64&id=3815");
 		return match;
 	}
 
-	protected Match createMatchWithoutDate() {
-		Match match = new Match();
+	protected MatchWithLink createMatchWithoutDate() {
+		MatchWithLink match = new MatchWithLink();
 		match.setMatchDate(createZeroCalendar());
 		match.setHomeTeam("Fightclub Hamburg FC St. Pauli");
 		match.setGuestTeam("Lotterie");
@@ -497,6 +498,7 @@ public class KickerpageParserUnitTest {
 		match.setGuestGoals(96);
 		match.setHomeScore(0);
 		match.setGuestScore(32);
+		match.setMatchLink("http://www.kickern-hamburg.de/liga-tool/mannschaftswettbewerbe?task=begegnung_spielplan&veranstaltungid=54&id=3504");
 		return match;
 	}
 

@@ -157,14 +157,18 @@ public class KickerpageParser {
 		Elements elements = filterMatchLinkSnippets(doc);
 		for (Element element : elements) {
 			if (isValidMatchLink(element)) {
-				matchLinks.add(DOMAIN + element.select("a[href]").attr("href"));
+				matchLinks.add(parseMatchLink(element));
 			}
 		}
 		return matchLinks;
 	}
 
-	public List<Match> findMatches(Document doc) {
-		final List<Match> matches = new ArrayList<>();
+	protected String parseMatchLink(Element element) {
+		return DOMAIN + element.select("a[href]").attr("href");
+	}
+
+	public List<MatchWithLink> findMatches(Document doc) {
+		final List<MatchWithLink> matches = new ArrayList<>();
 		Elements elements = filterMatchSnippets(doc);
 		int matchDay = 1;
 		for (Element element : elements) {
@@ -178,13 +182,13 @@ public class KickerpageParser {
 		return matches;
 	}
 
-	private boolean isMatchDayElement(Element element) {
+	protected boolean isMatchDayElement(Element element) {
 		return element.hasClass("sectiontableheader")
 				&& element.select("i").text().isEmpty() == false;
 	}
 
-	protected Match parseMatch(Element element, int matchDay) {
-		Match match = new Match();
+	protected MatchWithLink parseMatch(Element element, int matchDay) {
+		MatchWithLink match = new MatchWithLink();
 		match.setMatchDate(parseMatchDate(element));
 		match.setMatchDay(matchDay);
 		match.setHomeScore(parseMatchHomeScore(element));
@@ -193,6 +197,7 @@ public class KickerpageParser {
 		match.setGuestTeam(element.children().eq(2).text());
 		match.setGuestGoals(parseMatchGuestGoals(element));
 		match.setHomeGoals(parseMatchHomeGoals(element));
+		match.setMatchLink(parseMatchLink(element));
 		return match;
 	}
 
