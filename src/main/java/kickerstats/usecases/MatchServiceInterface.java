@@ -10,4 +10,6 @@ public interface MatchServiceInterface {
 	public void saveMatch(Match match);
 
 	public boolean isNewMatch(Match match);
+	
+	public boolean noDataAvailable();
 }

@@ -26,4 +26,10 @@ public class MatchRepo implements MatchRepoInterface {
 
 	}
 
+	@Override
+	public boolean isDbEmpty() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

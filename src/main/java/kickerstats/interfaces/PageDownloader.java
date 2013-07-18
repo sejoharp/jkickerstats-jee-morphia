@@ -7,7 +7,7 @@ import java.util.Map;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
-public class PageDownloader {
+class PageDownloader {
 	private static int TIMEOUT = 10 * 1000;
 
 	public Document downloadPage(String url) {

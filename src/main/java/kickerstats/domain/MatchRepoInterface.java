@@ -12,4 +12,6 @@ public interface MatchRepoInterface {
 	public void save(Match match);
 
 	public void save(List<Match> matches);
+
+	public boolean isDbEmpty();
 }

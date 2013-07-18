@@ -1,6 +1,5 @@
 package kickerstats.usecases;
 
-import java.util.Calendar;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -27,6 +26,12 @@ public class MatchService implements MatchServiceInterface {
 	@Override
 	public void saveMatch(Match match) {
 		matchRepo.save(match);
+	}
+
+	@Override
+	public boolean noDataAvailable() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }
