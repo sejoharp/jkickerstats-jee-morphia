@@ -11,7 +11,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import kickerstats.WeldJUnit4Runner;
-import kickerstats.interfaces.KickerpageParser;
+import kickerstats.interfaces.PageParser;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -20,12 +20,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 @RunWith(WeldJUnit4Runner.class)
-public class KickerpageParserTest {
+public class PageParserTest {
 	public static final String RECOURCES_DIRECTORY = System
 			.getProperty("user.dir") + "/src/test/resources/";
 
 	@Inject
-	private KickerpageParser parser;
+	private PageParser parser;
 
 	@Before
 	public void checkPreconditions() {

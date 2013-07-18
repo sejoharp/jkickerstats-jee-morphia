@@ -9,9 +9,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import kickerstats.interfaces.KickerpageParser;
 import kickerstats.types.Game;
-import kickerstats.types.Match;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -22,9 +20,9 @@ import org.junit.Test;
 
 import com.google.common.collect.Lists;
 
-public class KickerpageParserUnitTest {
+public class PageParserUnitTest {
 
-	private KickerpageParser parser;
+	private PageParser parser;
 	private static Document begegnungDoc;
 
 	private static Document begegnungNoDateDoc;
@@ -51,7 +49,7 @@ public class KickerpageParserUnitTest {
 
 	@Before
 	public void initialize() {
-		parser = new KickerpageParser();
+		parser = new PageParser();
 	}
 
 	@Test
@@ -451,7 +449,7 @@ public class KickerpageParserUnitTest {
 	}
 
 	protected static Document loadFile(String fileName) throws IOException {
-		File testFile = new File(KickerpageParserTest.RECOURCES_DIRECTORY
+		File testFile = new File(PageParserTest.RECOURCES_DIRECTORY
 				+ fileName);
 		return Jsoup.parse(testFile, "UTF-8", "");
 	}

@@ -7,13 +7,12 @@ import java.util.Calendar;
 import java.util.List;
 
 import kickerstats.types.Game;
-import kickerstats.types.Match;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-public class KickerpageParser {
+class PageParser {
 	public static final String DOMAIN = "http://www.kickern-hamburg.de";
 
 	public List<Game> findGames(Document doc) {

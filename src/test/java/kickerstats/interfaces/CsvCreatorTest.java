@@ -33,7 +33,7 @@ public class CsvCreatorTest {
 	public void createsACompleteCsvFile() {
 		List<Game> games = Lists.newArrayList(createSingleGame());
 
-		List<String> csvGames = csvCreator.createGameStringList(games);
+		List<String> csvGames = csvCreator.createCsvRowList(games);
 
 		assertThat(
 				csvGames.get(0),
@@ -44,7 +44,7 @@ public class CsvCreatorTest {
 	public void createsACompleteCsvFileWithADoubleGame() {
 		List<Game> games = Lists.newArrayList(createDoubleGame());
 
-		List<String> csvGames = csvCreator.createGameStringList(games);
+		List<String> csvGames = csvCreator.createCsvRowList(games);
 
 		assertThat(
 				csvGames.get(0),
@@ -55,7 +55,7 @@ public class CsvCreatorTest {
 	public void createsCsvFile() {
 		List<Game> games = Lists.newArrayList(createSingleGame(),
 				createDoubleGame());
-		List<String> gameStrings = csvCreator.createGameStringList(games);
+		List<String> gameStrings = csvCreator.createCsvRowList(games);
 
 		csvCreator.createCsvFile(gameStrings);
 
@@ -107,7 +107,7 @@ public class CsvCreatorTest {
 		singleGame.setHomePlayer1("Kränz, Ludwig");
 		singleGame.setHomeScore(5);
 		singleGame.setHomeTeam("Tingeltangel FC St. Pauli");
-		singleGame.setMatchDate(KickerpageParserUnitTest.createCalendar(2013,
+		singleGame.setMatchDate(PageParserUnitTest.createCalendar(2013,
 				1, 27, 20, 0));
 		singleGame.setMatchDay(1);
 		singleGame.setPosition(2);
@@ -123,7 +123,7 @@ public class CsvCreatorTest {
 		game.setHomePlayer1("Arslan, Mehmet Emin");
 		game.setHomeScore(4);
 		game.setHomeTeam("Cim Bom Bom");
-		game.setMatchDate(KickerpageParserUnitTest.createCalendar(2013, 1, 28,
+		game.setMatchDate(PageParserUnitTest.createCalendar(2013, 1, 28,
 				20, 0));
 		game.setMatchDay(1);
 		game.setPosition(1);
@@ -142,7 +142,7 @@ public class CsvCreatorTest {
 		doubleGame.setGuestScore(5);
 		doubleGame.setGuestTeam("Die Maschinerie");
 		doubleGame.setMatchDay(1);
-		doubleGame.setMatchDate(KickerpageParserUnitTest.createCalendar(2013,
+		doubleGame.setMatchDate(PageParserUnitTest.createCalendar(2013,
 				1, 28, 20, 0));
 		doubleGame.setPosition(16);
 		return doubleGame;

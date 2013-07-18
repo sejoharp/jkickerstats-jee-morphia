@@ -14,12 +14,12 @@ import java.util.List;
 import kickerstats.types.Game;
 
 public class CsvCreator {
-	public void createCsvFile(List<String> gameStrings) {
+	public void createCsvFile(List<String> csvRowList) {
 		Path path = Paths.get("allGames.csv");
 		try (BufferedWriter writer = Files.newBufferedWriter(path,
 				StandardCharsets.UTF_8)) {
-			for (String line : gameStrings) {
-				writer.write(line);
+			for (String csvRow : csvRowList) {
+				writer.write(csvRow);
 				writer.newLine();
 			}
 		} catch (IOException e) {
@@ -27,7 +27,7 @@ public class CsvCreator {
 		}
 	}
 
-	public List<String> createGameStringList(List<Game> games) {
+	public List<String> createCsvRowList(List<Game> games) {
 		List<String> csvList = new ArrayList<>();
 		for (Game game : games) {
 			StringBuilder builder = new StringBuilder();
