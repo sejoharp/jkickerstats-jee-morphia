@@ -1,6 +1,8 @@
 package kickerstats.interfaces;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.times;
@@ -40,7 +42,9 @@ public class StatsUpdaterUnitTest {
 	@InjectMocks
 	private StatsUpdater statsUpdater;
 	@Captor
-	private ArgumentCaptor<ArrayList<Game>> captor;
+	private ArgumentCaptor<ArrayList<Game>> gameListCaptor;
+	@Captor
+	private ArgumentCaptor<Match> matchCaptor;
 
 	@Before
 	public void setup() {
@@ -85,23 +89,55 @@ public class StatsUpdaterUnitTest {
 	}
 
 	@Test
-	public void savesOneGame() {
+	public void savesOneGameWhenDBisEmpty() {
 		when(matchServiceMock.noDataAvailable()).thenReturn(true);
 
 		statsUpdater.updateStatistikData();
 
-		verify(gameServiceMock).saveGames(captor.capture());
-		assertThat(captor.getValue().size(), is(1));
+		verify(gameServiceMock).saveGames(gameListCaptor.capture());
+		assertThat(gameListCaptor.getValue().size(), is(1));
 	}
-	
+
 	@Test
-	public void savesOneNewGame() {
+	public void savesOneGameWhenDBisFilled() {
 		when(matchServiceMock.noDataAvailable()).thenReturn(false);
 		when(matchServiceMock.isNewMatch(any(Match.class))).thenReturn(true);
-		
+
 		statsUpdater.updateStatistikData();
 
-		verify(gameServiceMock).saveGames(captor.capture());
-		assertThat(captor.getValue().size(), is(1));
+		verify(gameServiceMock).saveGames(gameListCaptor.capture());
+		assertThat(gameListCaptor.getValue().size(), is(1));
+	}
+
+	@Test
+	public void savesOneMatchWhenDBisFilled() {
+		when(matchServiceMock.noDataAvailable()).thenReturn(false);
+		when(matchServiceMock.isNewMatch(any(Match.class))).thenReturn(true);
+
+		statsUpdater.updateStatistikData();
+
+		verify(matchServiceMock).saveMatch(matchCaptor.capture());
+		assertThat(matchCaptor.getValue(), is(not(nullValue())));
+	}
+
+	@Test
+	public void savesOneMatchWhenDBisEmpty() {
+		when(matchServiceMock.noDataAvailable()).thenReturn(true);
+		when(matchServiceMock.isNewMatch(any(Match.class))).thenReturn(true);
+
+		statsUpdater.updateStatistikData();
+
+		verify(matchServiceMock).saveMatch(matchCaptor.capture());
+		assertThat(matchCaptor.getValue(), is(not(nullValue())));
+	}
+
+	@Test
+	public void doesNotSaveOldMatches() {
+		when(matchServiceMock.noDataAvailable()).thenReturn(false);
+		when(matchServiceMock.isNewMatch(any(Match.class))).thenReturn(false);
+
+		statsUpdater.updateStatistikData();
+
+		verify(matchServiceMock, times(0)).saveMatch(matchCaptor.capture());
 	}
 }
