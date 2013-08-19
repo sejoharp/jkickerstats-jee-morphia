@@ -36,5 +36,10 @@
     	<version>1.9.5</version>
     	<scope>test</scope>
     </dependency>
+    <dependency>
+    	<groupId>org.ektorp</groupId>
+    	<artifactId>org.ektorp</artifactId>
+    	<version>1.3.0</version>
+    </dependency>
   </dependencies>
 </project>

@@ -14,7 +14,7 @@ public class GameService implements GameServiceInterface {
 
 	@Override
 	public void saveGames(List<Game> games) {
-		gameRepo.save(games);
+		gameRepo.saveAll(games);
 	}
 
 	@Override
