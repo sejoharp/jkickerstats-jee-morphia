@@ -8,15 +8,16 @@ import javax.inject.Inject;
 import kickerstats.types.Game;
 
 import org.ektorp.ViewQuery;
+import org.ektorp.ViewResult;
 
 public class GameRepo implements GameRepoInterface {
 
 	@Inject
-	private CouchDbConnectionCreator db;
+	private CouchDb couchdb;
 
 	@Override
 	public void save(Game game) {
-		db.getConn().create(toGameCouchDb(game));
+		couchdb.createConnection().create(toGameCouchDb(game));
 	}
 
 	@Override
@@ -29,13 +30,22 @@ public class GameRepo implements GameRepoInterface {
 	@Override
 	public List<Game> getAllGames() {
 		ViewQuery query = new ViewQuery().designDocId("_design/games")
-				.viewName("by_date").includeDocs(true);
+				.viewName("by_date").descending(true).includeDocs(true);
 
-		List<GameCouchDb> allGames = db.getConn().queryView(query,
+		List<GameCouchDb> allGames = couchdb.createConnection().queryView(query,
 				GameCouchDb.class);
 		return toGameList(allGames);
 	}
 
+	@Override
+	public int getGameCount() {
+		ViewQuery query = new ViewQuery().designDocId("_design/games")
+				.viewName("by_date");
+
+		ViewResult allGames = couchdb.createConnection().queryView(query);
+		return allGames.getSize();
+	}
+	
 	protected List<GameCouchDb> toGameCouchDbList(List<Game> games) {
 		List<GameCouchDb> gameCouchDbList = new ArrayList<>();
 		for (Game game : games) {
@@ -86,11 +96,7 @@ public class GameRepo implements GameRepoInterface {
 		return game;
 	}
 
-	public CouchDbConnectionCreator getDb() {
-		return db;
-	}
-
-	public void setDb(CouchDbConnectionCreator db) {
-		this.db = db;
+	public void setCouchDb(CouchDb db) {
+		this.couchdb = db;
 	}
 }

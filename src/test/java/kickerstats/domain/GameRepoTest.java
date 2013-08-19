@@ -5,6 +5,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.hamcrest.core.IsNull.nullValue;
 
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
@@ -14,6 +15,8 @@ import kickerstats.WeldJUnit4Runner;
 import kickerstats.types.Game;
 
 import org.ektorp.CouchDbConnector;
+import org.ektorp.ViewQuery;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -25,32 +28,40 @@ public class GameRepoTest {
 
 	@Test
 	public void dbConnectionIsAvailable() {
-		CouchDbConnector connection = new CouchDbConnectionCreator().getConn();
+		CouchDbConnector connection = new CouchDb().createConnection();
 		connection.getDbInfo();
 	}
 
 	@Test
-	public void savesGameInDb() {
-		CouchDbConnector connection = new CouchDbConnectionCreator().getConn();
-		GameCouchDb gameCouchDb = createDoubleGame();
+	public void savesGameCouchDbInDb() {
+		CouchDbConnector connection = new CouchDb().createConnection();
+		GameCouchDb gameCouchDb = createDoubleGameCouchDb();
 		assertThat(gameCouchDb.getId(), is(nullValue()));
-		
+
 		connection.create(gameCouchDb);
-		
+
 		assertThat(gameCouchDb.getId(), is(notNullValue()));
 		assertThat(connection.contains(gameCouchDb.getId()), is(true));
-		
+
 		connection.delete(gameCouchDb);
 	}
 
 	@Test
 	public void getsAllGames() {
+		gameRepo.save(createDoubleGame());
 		List<Game> allGames = gameRepo.getAllGames();
-		
+
 		assertThat(allGames.size(), is(1));
 	}
 
-	protected GameCouchDb createDoubleGame() {
+	@Test
+	public void savesAListOfGames() {
+		gameRepo.saveAll(Arrays.asList(createDoubleGame()));
+
+		assertThat(gameRepo.getGameCount(), is(1));
+	}
+
+	protected GameCouchDb createDoubleGameCouchDb() {
 		GameCouchDb gameCouchDb = new GameCouchDb();
 		gameCouchDb.setDoubleMatch(true);
 		gameCouchDb.setGuestPlayer1("guest player1");
@@ -65,5 +76,34 @@ public class GameRepoTest {
 		gameCouchDb.setMatchDay(1);
 		gameCouchDb.setPosition(2);
 		return gameCouchDb;
+	}
+
+	protected Game createDoubleGame() {
+		Game game = new Game();
+		game.setDoubleMatch(true);
+		game.setGuestPlayer1("guest player1");
+		game.setGuestPlayer2("guest player2");
+		game.setGuestScore(10);
+		game.setGuestTeam("guestteam");
+		game.setHomePlayer1("home player1");
+		game.setHomePlayer2("home player2");
+		game.setHomeScore(22);
+		game.setHomeTeam("hometeam");
+		game.setMatchDate(Calendar.getInstance());
+		game.setMatchDay(1);
+		game.setPosition(2);
+		return game;
+	}
+
+	@Before
+	public void cleanDb() {
+		ViewQuery query = new ViewQuery().designDocId("_design/games")
+				.viewName("by_date").includeDocs(true);
+		CouchDbConnector connection = new CouchDb().createConnection();
+		List<GameCouchDb> allGames = connection.queryView(query,
+				GameCouchDb.class);
+		for (GameCouchDb game : allGames) {
+			connection.delete(game);
+		}
 	}
 }

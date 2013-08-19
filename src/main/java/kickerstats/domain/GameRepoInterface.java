@@ -10,4 +10,6 @@ public interface GameRepoInterface {
 	public void saveAll(List<Game> games);
 
 	public List<Game> getAllGames();
+
+	int getGameCount();
 }

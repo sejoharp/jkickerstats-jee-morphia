@@ -8,17 +8,16 @@ import org.ektorp.http.HttpClient;
 import org.ektorp.http.StdHttpClient;
 import org.ektorp.impl.StdCouchDbInstance;
 
-public class CouchDbConnectionCreator {
-	private CouchDbConnector connection;
+public class CouchDb {
+	private CouchDbInstance dbInstance;
 
 	@Singleton
-	public CouchDbConnectionCreator() {
+	public CouchDb() {
 		HttpClient httpClient = new StdHttpClient.Builder().build();
-		CouchDbInstance dbInstance = new StdCouchDbInstance(httpClient);
-		connection = dbInstance.createConnector("kickerstats", false);
+		dbInstance = new StdCouchDbInstance(httpClient);		
 	}
 
-	public CouchDbConnector getConn() {
-		return connection;
+	public CouchDbConnector createConnection() {
+		return dbInstance.createConnector("kickerstats", false);
 	}
 }
