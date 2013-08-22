@@ -14,12 +14,11 @@ public class GameService implements GameServiceInterface {
 
 	@Override
 	public void saveGames(List<Game> games) {
-		gameRepo.saveAll(games);
+		gameRepo.save(games);
 	}
 
 	@Override
 	public List<Game> getAllGames() {
 		return gameRepo.getAllGames();
 	}
-
 }

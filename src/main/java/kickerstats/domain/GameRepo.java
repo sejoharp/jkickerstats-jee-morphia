@@ -21,7 +21,7 @@ public class GameRepo implements GameRepoInterface {
 	}
 
 	@Override
-	public void saveAll(List<Game> games) {
+	public void save(List<Game> games) {
 		for (Game game : games) {
 			save(game);
 		}
