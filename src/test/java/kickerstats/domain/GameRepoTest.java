@@ -26,6 +26,18 @@ public class GameRepoTest {
 	@Inject
 	private GameRepo gameRepo;
 
+	@Before
+	public void cleanGamesInDb() {
+		ViewQuery query = new ViewQuery().designDocId("_design/games")
+				.viewName("by_date").includeDocs(true);
+		CouchDbConnector connection = new CouchDb().createConnection();
+		List<GameCouchDb> allGames = connection.queryView(query,
+				GameCouchDb.class);
+		for (GameCouchDb game : allGames) {
+			connection.delete(game);
+		}
+	}
+	
 	@Test
 	public void dbConnectionIsAvailable() {
 		CouchDbConnector connection = new CouchDb().createConnection();
@@ -56,7 +68,7 @@ public class GameRepoTest {
 
 	@Test
 	public void savesAListOfGames() {
-		gameRepo.saveAll(Arrays.asList(createDoubleGame()));
+		gameRepo.save(Arrays.asList(createDoubleGame()));
 
 		assertThat(gameRepo.getGameCount(), is(1));
 	}
@@ -93,17 +105,5 @@ public class GameRepoTest {
 		game.setMatchDay(1);
 		game.setPosition(2);
 		return game;
-	}
-
-	@Before
-	public void cleanDb() {
-		ViewQuery query = new ViewQuery().designDocId("_design/games")
-				.viewName("by_date").includeDocs(true);
-		CouchDbConnector connection = new CouchDb().createConnection();
-		List<GameCouchDb> allGames = connection.queryView(query,
-				GameCouchDb.class);
-		for (GameCouchDb game : allGames) {
-			connection.delete(game);
-		}
 	}
 }
