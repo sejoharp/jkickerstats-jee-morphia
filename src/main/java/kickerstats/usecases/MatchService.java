@@ -20,7 +20,7 @@ public class MatchService implements MatchServiceInterface {
 
 	@Override
 	public boolean isNewMatch(Match match) {
-		return matchRepo.isNewMatch(match.getMatchDate(), match.getHomeTeam(), match.getGuestTeam());
+		return matchRepo.isNewMatch(match);
 	}
 
 	@Override
@@ -30,8 +30,7 @@ public class MatchService implements MatchServiceInterface {
 
 	@Override
 	public boolean noDataAvailable() {
-		// TODO Auto-generated method stub
-		return false;
+		return matchRepo.matchesAvailable();
 	}
 
 }

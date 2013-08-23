@@ -74,4 +74,12 @@ public class MatchCouchDb extends CouchDbDocument {
 	public int getMatchDay() {
 		return matchDay;
 	}
+
+	public void setMatchDay(int matchDay) {
+		this.matchDay = matchDay;
+	}
+
+	public String getType() {
+		return type;
+	}
 }
