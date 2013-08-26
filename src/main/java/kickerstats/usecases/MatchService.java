@@ -30,7 +30,7 @@ public class MatchService implements MatchServiceInterface {
 
 	@Override
 	public boolean noDataAvailable() {
-		return matchRepo.matchesAvailable();
+		return matchRepo.noMatchesAvailable();
 	}
 
 }

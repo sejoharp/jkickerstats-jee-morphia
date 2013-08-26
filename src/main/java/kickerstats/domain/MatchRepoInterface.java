@@ -11,5 +11,5 @@ public interface MatchRepoInterface {
 
 	public void save(List<Match> matches);
 
-	public boolean matchesAvailable();
+	public boolean noMatchesAvailable();
 }
