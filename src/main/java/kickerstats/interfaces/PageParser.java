@@ -192,8 +192,8 @@ class PageParser {
 		match.setMatchDay(matchDay);
 		match.setHomeScore(parseMatchHomeScore(element));
 		match.setGuestScore(parseMatchGuestScore(element));
-		match.setHomeTeam(element.children().eq(1).text());
-		match.setGuestTeam(element.children().eq(2).text());
+		match.setHomeTeam(removeTeamDescriptions(element.children().eq(1).text()));
+		match.setGuestTeam(removeTeamDescriptions(element.children().eq(2).text()));
 		match.setGuestGoals(parseMatchGuestGoals(element));
 		match.setHomeGoals(parseMatchHomeGoals(element));
 		match.setMatchLink(parseMatchLink(element));
