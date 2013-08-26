@@ -435,6 +435,14 @@ public class PageParserUnitTest {
 	}
 
 	@Test
+	public void returnsTeamNamesWithoutDescriptions() {
+		List<MatchWithLink> matches = parser.findMatches(begegnungenLiveDoc);
+		MatchWithLink match = matches.get(0);
+
+		assertThat(match.getHomeTeam(), is("2-5-3 kiggern.de Stade"));
+	}
+	
+	@Test
 	public void returnsAFilledMatchWithoutDate() {
 		List<MatchWithLink> matches = parser.findMatches(begegnungenNoDateDoc);
 		MatchWithLink match = matches.get(25);
