@@ -16,7 +16,7 @@ import org.junit.runner.RunWith;
 @RunWith(WeldJUnit4Runner.class)
 public class StatsUpdaterTest {
 	@Inject
-	private StatsUpdater gameDownloader;
+	private StatsUpdater statsUpdater;
 
 	@Inject
 	private CsvCreator csvCreator;
@@ -24,8 +24,14 @@ public class StatsUpdaterTest {
 	@Ignore
 	@Test
 	public void createCSVFileWithAllGames() {
-		List<Game> games = gameDownloader.downloadAllGames();
+		List<Game> games = statsUpdater.downloadAllGames();
 		List<String> gameStrings = csvCreator.createCsvRowList(games);
 		csvCreator.createCsvFile(gameStrings);
+	}
+	
+	@Test
+	@Ignore
+	public void savesAllMatchesWithGames() {
+		statsUpdater.getAllData();
 	}
 }
