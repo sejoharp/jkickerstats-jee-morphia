@@ -5,6 +5,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.hamcrest.core.IsNull.nullValue;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
@@ -14,6 +15,7 @@ import javax.inject.Inject;
 import kickerstats.WeldJUnit4Runner;
 import kickerstats.types.Game;
 
+import org.ektorp.BulkDeleteDocument;
 import org.ektorp.CouchDbConnector;
 import org.ektorp.ViewQuery;
 import org.junit.Before;
@@ -29,15 +31,19 @@ public class GameRepoTest {
 	@Before
 	public void cleanGamesInDb() {
 		ViewQuery query = new ViewQuery().designDocId("_design/games")
-				.viewName("by_date").includeDocs(true);
+				.viewName("by_date").includeDocs(true).limit(1000000);
 		CouchDbConnector connection = new CouchDb().createConnection();
-		List<GameCouchDb> allGames = connection.queryView(query,
+		List<GameCouchDb> allDocs = connection.queryView(query,
 				GameCouchDb.class);
-		for (GameCouchDb game : allGames) {
-			connection.delete(game);
+		
+		
+		List<BulkDeleteDocument> docsForDeletion = new ArrayList<>();
+		for (GameCouchDb doc : allDocs) {
+			docsForDeletion.add(BulkDeleteDocument.of(doc));
 		}
+		connection.executeBulk(docsForDeletion);
 	}
-	
+
 	@Test
 	public void dbConnectionIsAvailable() {
 		CouchDbConnector connection = new CouchDb().createConnection();
