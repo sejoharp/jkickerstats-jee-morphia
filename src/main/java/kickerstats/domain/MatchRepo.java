@@ -2,20 +2,23 @@ package kickerstats.domain;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.List;
 
 import javax.inject.Inject;
 
-import org.ektorp.ViewQuery;
-import org.ektorp.ViewResult;
-
 import kickerstats.types.Match;
 
-public class MatchRepo implements MatchRepoInterface {
-	@Inject
-	private CouchDb couchdb;
+import org.ektorp.ViewQuery;
+import org.ektorp.ViewResult;
+import org.ektorp.support.CouchDbRepositorySupport;
 
+public class MatchRepo extends CouchDbRepositorySupport<MatchCouchDb> implements MatchRepoInterface {
+	private static final String MATCH_DESIGN_DOC_NAME = "_design/games";
+
+	@Inject
+	public MatchRepo(CouchDb couchdb) {
+		super(MatchCouchDb.class, couchdb.createConnection(), MATCH_DESIGN_DOC_NAME);
+	}
 	@Override
 	public boolean isNewMatch(Match match) {
 		ViewQuery query = new ViewQuery()
@@ -24,28 +27,26 @@ public class MatchRepo implements MatchRepoInterface {
 				.keys(Arrays.asList(match.getMatchDate(), match.getHomeTeam(),
 						match.getGuestTeam()));
 
-		ViewResult matches = couchdb.createConnection().queryView(query);
+		ViewResult matches = db.queryView(query);
 		return matches.isEmpty();
 	}
 
 	@Override
 	public void save(Match match) {
-		couchdb.createConnection().create(toMatchCouchDb(match));
+		db.create(toMatchCouchDb(match));
 	}
 
 	@Override
 	public void save(List<Match> matches) {
-		for (Match match : matches) {
-			save(match);
-		}
+		db.executeBulk(toMatchCouchDbList(matches));
 	}
 
 	@Override
-	public boolean matchesAvailable() {
+	public boolean noMatchesAvailable() {
 		ViewQuery query = new ViewQuery().designDocId("_design/matches")
-				.viewName("by_date_hometeam_guestteam");
+				.viewName("by_date_hometeam_guestteam").limit(1);
 
-		ViewResult allMatches = couchdb.createConnection().queryView(query);
+		ViewResult allMatches = db.queryView(query);
 		return allMatches.isEmpty();
 	}
 
