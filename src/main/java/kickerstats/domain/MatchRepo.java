@@ -11,9 +11,11 @@ import kickerstats.types.Match;
 import org.ektorp.ViewQuery;
 import org.ektorp.ViewResult;
 import org.ektorp.support.CouchDbRepositorySupport;
+import org.ektorp.support.View;
 
+@View( name = "all", map = "function(doc) { if (doc.type == 'match' ) emit( null, null )}")
 public class MatchRepo extends CouchDbRepositorySupport<MatchCouchDb> implements MatchRepoInterface {
-	private static final String MATCH_DESIGN_DOC_NAME = "_design/games";
+	private static final String MATCH_DESIGN_DOC_NAME = "_design/matches";
 
 	@Inject
 	public MatchRepo(CouchDb couchdb) {
@@ -33,7 +35,7 @@ public class MatchRepo extends CouchDbRepositorySupport<MatchCouchDb> implements
 
 	@Override
 	public void save(Match match) {
-		db.create(toMatchCouchDb(match));
+		add(toMatchCouchDb(match));
 	}
 
 	@Override

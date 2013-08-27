@@ -79,6 +79,13 @@ public class GameRepoTest {
 		assertThat(gameRepo.getGameCount(), is(1));
 	}
 
+	@Test
+	public void getsAllGamesWithInlineQuery() {
+		gameRepo.save(Arrays.asList(createDoubleGame()));
+
+		assertThat(gameRepo.getAll().size(), is(1));
+	}
+	
 	protected GameCouchDb createDoubleGameCouchDb() {
 		GameCouchDb gameCouchDb = new GameCouchDb();
 		gameCouchDb.setDoubleMatch(true);

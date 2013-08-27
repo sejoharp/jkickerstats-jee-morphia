@@ -10,11 +10,13 @@ import kickerstats.types.Game;
 import org.ektorp.ViewQuery;
 import org.ektorp.ViewResult;
 import org.ektorp.support.CouchDbRepositorySupport;
+import org.ektorp.support.View;
 
+@View( name = "all", map = "function(doc) { if (doc.type == 'game' ) emit( null, null )}")
 public class GameRepo extends CouchDbRepositorySupport<GameCouchDb> implements
 		GameRepoInterface {
 
-	private static final String GAME_DESIGN_DOC_NAME = "_design/matches";
+	private static final String GAME_DESIGN_DOC_NAME = "_design/games";
 
 	@Inject
 	public GameRepo(CouchDb couchdb) {
@@ -23,7 +25,7 @@ public class GameRepo extends CouchDbRepositorySupport<GameCouchDb> implements
 
 	@Override
 	public void save(Game game) {
-		db.create(toGameCouchDb(game));
+		add(toGameCouchDb(game));
 	}
 
 	@Override
@@ -43,11 +45,7 @@ public class GameRepo extends CouchDbRepositorySupport<GameCouchDb> implements
 
 	@Override
 	public int getGameCount() {
-		ViewQuery query = new ViewQuery().designDocId("_design/games")
-				.viewName("by_date");
-
-		ViewResult allGames = db.queryView(query);
-		return allGames.getSize();
+		return getAll().size();
 	}
 
 	protected List<GameCouchDb> toGameCouchDbList(List<Game> games) {

@@ -29,8 +29,8 @@ public class StatsUpdaterTest {
 		csvCreator.createCsvFile(gameStrings);
 	}
 	
-	@Test
 	@Ignore
+	@Test
 	public void savesAllMatchesWithGames() {
 		statsUpdater.getAllData();
 	}
