@@ -90,10 +90,13 @@ public class StatsUpdater {
 	}
 
 	protected List<Game> getGames(String matchLink) {
-		log.info("processing match: " + matchLink);
-
 		Document matchDoc = pageDownloader.downloadPage(matchLink);
-		return kickerpageParser.findGames(matchDoc);
+		try {
+			return kickerpageParser.findGames(matchDoc);
+		} catch (Exception e) {
+			log.severe("processing match: " + matchLink);
+			throw e;
+		}
 	}
 
 	protected List<String> getMatchLinks(String ligaLink) {
@@ -103,10 +106,14 @@ public class StatsUpdater {
 	}
 
 	protected List<MatchWithLink> getMatches(String ligaLink) {
-		log.info("processing liga: " + ligaLink);
-
 		Document ligaDoc = pageDownloader.downloadPage(ligaLink);
-		List<MatchWithLink> matchLinks = kickerpageParser.findMatches(ligaDoc);
+		List<MatchWithLink> matchLinks;
+		try {
+			matchLinks = kickerpageParser.findMatches(ligaDoc);
+		} catch (Exception e) {
+			log.severe("processing liga: " + ligaLink);
+			throw e;
+		}
 		return matchLinks;
 	}
 
