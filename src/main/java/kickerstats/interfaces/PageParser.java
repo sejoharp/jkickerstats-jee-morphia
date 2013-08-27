@@ -192,12 +192,20 @@ class PageParser {
 		match.setMatchDay(matchDay);
 		match.setHomeScore(parseMatchHomeScore(element));
 		match.setGuestScore(parseMatchGuestScore(element));
-		match.setHomeTeam(removeTeamDescriptions(element.children().eq(1).text()));
-		match.setGuestTeam(removeTeamDescriptions(element.children().eq(2).text()));
-		match.setGuestGoals(parseMatchGuestGoals(element));
-		match.setHomeGoals(parseMatchHomeGoals(element));
+		match.setHomeTeam(removeTeamDescriptions(element.children().eq(1)
+				.text()));
+		match.setGuestTeam(removeTeamDescriptions(element.children().eq(2)
+				.text()));
+		if (isNewMatchFormat(element)) {
+			match.setGuestGoals(parseMatchGuestGoals(element));
+			match.setHomeGoals(parseMatchHomeGoals(element));
+		}
 		match.setMatchLink(parseMatchLink(element));
 		return match;
+	}
+
+	protected boolean isNewMatchFormat(Element element) {
+		return element.children().size() == 5;
 	}
 
 	protected int parseMatchHomeGoals(Element element) {
@@ -211,12 +219,12 @@ class PageParser {
 	}
 
 	protected int parseMatchHomeScore(Element element) {
-		String score = element.children().eq(4).text();
+		String score = element.children().last().text();
 		return Integer.parseInt(score.split(":")[0]);
 	}
 
 	protected int parseMatchGuestScore(Element element) {
-		String score = element.children().eq(4).text();
+		String score = element.children().last().text();
 		return Integer.parseInt(score.split(":")[1]);
 	}
 

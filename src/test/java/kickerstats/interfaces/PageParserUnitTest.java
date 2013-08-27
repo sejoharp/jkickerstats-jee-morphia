@@ -33,6 +33,7 @@ public class PageParserUnitTest {
 	private static Document uebersichtDoc;
 	private static Document relegationDoc;
 	private static Document begegnungNoNamesDoc;
+	private static Document begegnungenNumberFormatExceptionDoc;
 
 	@BeforeClass
 	public static void loadTestFiles() throws IOException {
@@ -45,6 +46,7 @@ public class PageParserUnitTest {
 		relegationDoc = loadFile("relegation.html");
 		begegnungNoNamesDoc = loadFile("begegnung_no_names.html");
 		begegnungenNoDateDoc = loadFile("begegnungen_no_date.html");
+		begegnungenNumberFormatExceptionDoc = loadFile("begegnungen_NFE.html");
 	}
 
 	@Before
@@ -434,6 +436,17 @@ public class PageParserUnitTest {
 		assertThat(match, is(createMatch()));
 	}
 
+	@Test
+	public void returnsAllMatchesWithoutNumberFormatException() {
+		List<MatchWithLink> matches = parser.findMatches(begegnungenNumberFormatExceptionDoc);
+		MatchWithLink match = matches.get(0);
+
+		assertThat(match.getHomeGoals(), is(0));
+		assertThat(match.getGuestGoals(), is(0));
+		assertThat(match.getHomeScore(), is(8));
+		assertThat(match.getGuestScore(), is(8));
+	}
+	
 	@Test
 	public void returnsTeamNamesWithoutDescriptions() {
 		List<MatchWithLink> matches = parser.findMatches(begegnungenLiveDoc);

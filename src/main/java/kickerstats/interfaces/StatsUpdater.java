@@ -2,6 +2,7 @@ package kickerstats.interfaces;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import javax.inject.Inject;
 
@@ -12,6 +13,9 @@ import kickerstats.usecases.MatchServiceInterface;
 import org.jsoup.nodes.Document;
 
 public class StatsUpdater {
+	private static final Logger log = Logger.getLogger(StatsUpdater.class
+			.getName());
+
 	@Inject
 	private PageParser kickerpageParser;
 	@Inject
@@ -86,6 +90,8 @@ public class StatsUpdater {
 	}
 
 	protected List<Game> getGames(String matchLink) {
+		log.info("processing match: " + matchLink);
+
 		Document matchDoc = pageDownloader.downloadPage(matchLink);
 		return kickerpageParser.findGames(matchDoc);
 	}
@@ -97,6 +103,8 @@ public class StatsUpdater {
 	}
 
 	protected List<MatchWithLink> getMatches(String ligaLink) {
+		log.info("processing liga: " + ligaLink);
+
 		Document ligaDoc = pageDownloader.downloadPage(ligaLink);
 		List<MatchWithLink> matchLinks = kickerpageParser.findMatches(ligaDoc);
 		return matchLinks;
