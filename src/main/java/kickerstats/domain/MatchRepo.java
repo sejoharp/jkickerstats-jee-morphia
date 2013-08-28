@@ -12,14 +12,18 @@ import org.ektorp.ViewQuery;
 import org.ektorp.ViewResult;
 import org.ektorp.support.CouchDbRepositorySupport;
 import org.ektorp.support.View;
+import org.ektorp.support.Views;
 
-@View( name = "all", map = "function(doc) { if (doc.type == 'match' ) emit( null, null )}")
+@Views({
+	@View(name = "all", map = "function(doc) { if (doc.type == 'match' ) emit( null, null );}"),
+	@View(name = "by_date_hometeam_guestteam", map = "function(doc) {if(doc.type=='match'){emit([doc.matchDate,doc.homeTeam,doc.guestTeam], null)};}") })
 public class MatchRepo extends CouchDbRepositorySupport<MatchCouchDb> implements MatchRepoInterface {
-	private static final String MATCH_DESIGN_DOC_NAME = "_design/matches";
+	private static final String MATCH_DESIGN_DOC_NAME = "matches";
 
 	@Inject
 	public MatchRepo(CouchDb couchdb) {
 		super(MatchCouchDb.class, couchdb.createConnection(), MATCH_DESIGN_DOC_NAME);
+		initStandardDesignDocument();
 	}
 	@Override
 	public boolean isNewMatch(Match match) {

@@ -8,19 +8,25 @@ import javax.inject.Inject;
 import kickerstats.types.Game;
 
 import org.ektorp.ViewQuery;
-import org.ektorp.ViewResult;
 import org.ektorp.support.CouchDbRepositorySupport;
 import org.ektorp.support.View;
+import org.ektorp.support.Views;
 
-@View( name = "all", map = "function(doc) { if (doc.type == 'game' ) emit( null, null )}")
+@Views({
+		@View(name = "all", map = "function(doc) { if (doc.type == 'game' ) emit( null, null );}"),
+		@View(name = "by_date", map = "function(doc) {if(doc.type=='game'){emit(doc.matchDate, null)};}"),
+		@View(name = "by_date_hometeam_guestteam", map = "function(doc) {if(doc.type=='game'){emit([doc.matchDate,doc.homeTeam,doc.guestTeam], null)};}") 
+		})
 public class GameRepo extends CouchDbRepositorySupport<GameCouchDb> implements
 		GameRepoInterface {
 
-	private static final String GAME_DESIGN_DOC_NAME = "_design/games";
+	private static final String GAME_DESIGN_DOC_NAME = "games";
 
 	@Inject
 	public GameRepo(CouchDb couchdb) {
-		super(GameCouchDb.class, couchdb.createConnection(), GAME_DESIGN_DOC_NAME);
+		super(GameCouchDb.class, couchdb.createConnection(),
+				GAME_DESIGN_DOC_NAME);
+		initStandardDesignDocument();
 	}
 
 	@Override
@@ -38,8 +44,7 @@ public class GameRepo extends CouchDbRepositorySupport<GameCouchDb> implements
 		ViewQuery query = new ViewQuery().designDocId("_design/games")
 				.viewName("by_date").descending(true).includeDocs(true);
 
-		List<GameCouchDb> allGames = db.queryView(
-				query, GameCouchDb.class);
+		List<GameCouchDb> allGames = db.queryView(query, GameCouchDb.class);
 		return toGameList(allGames);
 	}
 
