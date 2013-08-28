@@ -7,11 +7,11 @@ import static org.hamcrest.core.IsNull.nullValue;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.List;
 
 import javax.inject.Inject;
 
+import kickerstats.GameTestdaten;
 import kickerstats.WeldJUnit4Runner;
 import kickerstats.types.Game;
 
@@ -53,7 +53,7 @@ public class GameRepoTest {
 	@Test
 	public void savesGameCouchDbInDb() {
 		CouchDbConnector connection = new CouchDb().createConnection();
-		GameCouchDb gameCouchDb = createDoubleGameCouchDb();
+		GameCouchDb gameCouchDb = GameTestdaten.createDoubleGameCouchDb();
 		assertThat(gameCouchDb.getId(), is(nullValue()));
 
 		connection.create(gameCouchDb);
@@ -66,7 +66,7 @@ public class GameRepoTest {
 
 	@Test
 	public void getsAllGames() {
-		gameRepo.save(createDoubleGame());
+		gameRepo.save(GameTestdaten.createDoubleGame());
 		List<Game> allGames = gameRepo.getAllGames();
 
 		assertThat(allGames.size(), is(1));
@@ -74,49 +74,15 @@ public class GameRepoTest {
 
 	@Test
 	public void savesAListOfGames() {
-		gameRepo.save(Arrays.asList(createDoubleGame()));
+		gameRepo.save(Arrays.asList(GameTestdaten.createDoubleGame()));
 
 		assertThat(gameRepo.getGameCount(), is(1));
 	}
 
 	@Test
 	public void getsAllGamesWithInlineQuery() {
-		gameRepo.save(Arrays.asList(createDoubleGame()));
+		gameRepo.save(Arrays.asList(GameTestdaten.createDoubleGame()));
 
 		assertThat(gameRepo.getAll().size(), is(1));
-	}
-	
-	protected GameCouchDb createDoubleGameCouchDb() {
-		GameCouchDb gameCouchDb = new GameCouchDb();
-		gameCouchDb.setDoubleMatch(true);
-		gameCouchDb.setGuestPlayer1("guest player1");
-		gameCouchDb.setGuestPlayer2("guest player2");
-		gameCouchDb.setGuestScore(10);
-		gameCouchDb.setGuestTeam("guestteam");
-		gameCouchDb.setHomePlayer1("home player1");
-		gameCouchDb.setHomePlayer2("home player2");
-		gameCouchDb.setHomeScore(22);
-		gameCouchDb.setHomeTeam("hometeam");
-		gameCouchDb.setMatchDate(Calendar.getInstance());
-		gameCouchDb.setMatchDay(1);
-		gameCouchDb.setPosition(2);
-		return gameCouchDb;
-	}
-
-	protected Game createDoubleGame() {
-		Game game = new Game();
-		game.setDoubleMatch(true);
-		game.setGuestPlayer1("guest player1");
-		game.setGuestPlayer2("guest player2");
-		game.setGuestScore(10);
-		game.setGuestTeam("guestteam");
-		game.setHomePlayer1("home player1");
-		game.setHomePlayer2("home player2");
-		game.setHomeScore(22);
-		game.setHomeTeam("hometeam");
-		game.setMatchDate(Calendar.getInstance());
-		game.setMatchDay(1);
-		game.setPosition(2);
-		return game;
 	}
 }

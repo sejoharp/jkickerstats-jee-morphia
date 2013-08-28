@@ -9,6 +9,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import kickerstats.GameTestdaten;
+import kickerstats.MatchTestdaten;
 import kickerstats.types.Game;
 
 import org.jsoup.Jsoup;
@@ -332,7 +334,7 @@ public class PageParserUnitTest {
 		game.setHomePlayer1("Kränz, Ludwig");
 		game.setHomeScore(5);
 		game.setHomeTeam("Tingeltangel FC St. Pauli");
-		game.setMatchDate(createCalendar(2013, 1, 27, 20, 0));
+		game.setMatchDate(GameTestdaten.createCalendar(2013, 1, 27, 20, 0));
 		game.setMatchDay(1);
 		game.setPosition(2);
 
@@ -353,7 +355,7 @@ public class PageParserUnitTest {
 		game.setHomePlayer2("Kränz, Ludwig");
 		game.setHomeScore(4);
 		game.setHomeTeam("Tingeltangel FC St. Pauli");
-		game.setMatchDate(createCalendar(2013, 1, 27, 20, 0));
+		game.setMatchDate(GameTestdaten.createCalendar(2013, 1, 27, 20, 0));
 		game.setMatchDay(1);
 		game.setPosition(3);
 
@@ -364,7 +366,7 @@ public class PageParserUnitTest {
 
 	@Test
 	public void returnsAFullFilledSingleGameWithImages() {
-		Game game = CsvCreatorTest.createSecondSingleGame();
+		Game game = GameTestdaten.createSecondSingleGame();
 
 		List<Game> games = parser.findGames(begegnungBildDoc);
 
@@ -373,7 +375,7 @@ public class PageParserUnitTest {
 
 	@Test
 	public void returnsAFullFilledDoubleGameWithImages() {
-		Game game = CsvCreatorTest.createDoubleGame();
+		Game game = GameTestdaten.createDoubleGame();
 
 		List<Game> games = parser.findGames(begegnungBildDoc);
 
@@ -425,7 +427,7 @@ public class PageParserUnitTest {
 		assertThat(gameWithoutPlayernames.getMatchDay(), is(1));
 		assertThat(gameWithoutPlayernames.isDoubleMatch(), is(false));
 		assertThat(gameWithoutPlayernames.getMatchDate(),
-				is(createCalendar(2013, 1, 28, 20, 0)));
+				is(GameTestdaten.createCalendar(2013, 1, 28, 20, 0)));
 	}
 
 	@Test
@@ -433,7 +435,7 @@ public class PageParserUnitTest {
 		List<MatchWithLink> matches = parser.findMatches(begegnungenDoc);
 		MatchWithLink match = matches.get(0);
 
-		assertThat(match, is(createMatch()));
+		assertThat(match, is(MatchTestdaten.createMatchLink()));
 	}
 
 	@Test
@@ -460,7 +462,7 @@ public class PageParserUnitTest {
 		List<MatchWithLink> matches = parser.findMatches(begegnungenNoDateDoc);
 		MatchWithLink match = matches.get(25);
 
-		assertThat(match, is(createMatchWithoutDate()));
+		assertThat(match, is(MatchTestdaten.createMatchLinkWithoutDate()));
 	}
 
 	@Test
@@ -475,50 +477,5 @@ public class PageParserUnitTest {
 		return Jsoup.parse(testFile, "UTF-8", "");
 	}
 
-	protected static Calendar createCalendar(int year, int month, int day,
-			int hour, int min) {
-		Calendar calendar = Calendar.getInstance();
-		calendar.clear();
-		calendar.set(Calendar.YEAR, year);
-		calendar.set(Calendar.MONTH, month);
-		calendar.set(Calendar.DAY_OF_MONTH, day);
-		calendar.set(Calendar.HOUR_OF_DAY, hour);
-		calendar.set(Calendar.MINUTE, min);
-		return calendar;
-	}
-
-	protected static Calendar createZeroCalendar() {
-		Calendar matchDate = Calendar.getInstance();
-		matchDate.setTimeInMillis(0);
-		return matchDate;
-	}
-
-	protected MatchWithLink createMatch() {
-		MatchWithLink match = new MatchWithLink();
-		match.setMatchDate(createCalendar(2013, 01, 27, 19, 1));
-		match.setHomeTeam("Kickerbande");
-		match.setGuestTeam("St. Ellingen 1");
-		match.setMatchDay(1);
-		match.setHomeGoals(92);
-		match.setGuestGoals(31);
-		match.setHomeScore(32);
-		match.setGuestScore(0);
-		match.setMatchLink("http://www.kickern-hamburg.de/liga-tool/mannschaftswettbewerbe?task=begegnung_spielplan&veranstaltungid=64&id=3815");
-		return match;
-	}
-
-	protected MatchWithLink createMatchWithoutDate() {
-		MatchWithLink match = new MatchWithLink();
-		match.setMatchDate(createZeroCalendar());
-		match.setHomeTeam("Fightclub Hamburg FC St. Pauli");
-		match.setGuestTeam("Lotterie");
-		match.setMatchDay(6);
-		match.setHomeGoals(0);
-		match.setGuestGoals(96);
-		match.setHomeScore(0);
-		match.setGuestScore(32);
-		match.setMatchLink("http://www.kickern-hamburg.de/liga-tool/mannschaftswettbewerbe?task=begegnung_spielplan&veranstaltungid=54&id=3504");
-		return match;
-	}
 
 }

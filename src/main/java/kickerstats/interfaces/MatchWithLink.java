@@ -2,7 +2,7 @@ package kickerstats.interfaces;
 
 import kickerstats.types.Match;
 
-class MatchWithLink extends Match {
+public class MatchWithLink extends Match {
 
 	private String matchLink;
 
