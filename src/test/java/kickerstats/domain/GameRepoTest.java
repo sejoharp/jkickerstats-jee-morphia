@@ -26,17 +26,18 @@ import org.junit.runner.RunWith;
 public class GameRepoTest {
 
 	@Inject
-	private GameRepo gameRepo;
+	private GameRepoInterface gameRepo;
 
 	@Before
 	public void cleanGamesInDb() {
 		ViewQuery query = new ViewQuery().designDocId("_design/games")
 				.viewName("by_date").includeDocs(true).limit(1000000);
+
 		CouchDbConnector connection = new CouchDb().createConnection();
+
 		List<GameCouchDb> allDocs = connection.queryView(query,
 				GameCouchDb.class);
-		
-		
+
 		List<BulkDeleteDocument> docsForDeletion = new ArrayList<>();
 		for (GameCouchDb doc : allDocs) {
 			docsForDeletion.add(BulkDeleteDocument.of(doc));
@@ -77,12 +78,5 @@ public class GameRepoTest {
 		gameRepo.save(Arrays.asList(GameTestdaten.createDoubleGame()));
 
 		assertThat(gameRepo.getGameCount(), is(1));
-	}
-
-	@Test
-	public void getsAllGamesWithInlineQuery() {
-		gameRepo.save(Arrays.asList(GameTestdaten.createDoubleGame()));
-
-		assertThat(gameRepo.getAll().size(), is(1));
 	}
 }

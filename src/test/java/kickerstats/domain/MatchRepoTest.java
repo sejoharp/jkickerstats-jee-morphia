@@ -29,27 +29,29 @@ public class MatchRepoTest {
 	@Before
 	public void cleanMatchesInDb() {
 		ViewQuery query = new ViewQuery().designDocId("_design/matches")
-				.viewName("by_date_hometeam_guestteam").includeDocs(true).limit(1000000);
-		
+				.viewName("by_date_hometeam_guestteam").includeDocs(true)
+				.limit(1000000);
+
 		CouchDbConnector connection = new CouchDb().createConnection();
-		
+
 		List<MatchCouchDb> allDocs = connection.queryView(query,
 				MatchCouchDb.class);
-		
+
 		List<BulkDeleteDocument> docsForDeletion = new ArrayList<>();
 		for (MatchCouchDb doc : allDocs) {
 			docsForDeletion.add(BulkDeleteDocument.of(doc));
 		}
 		connection.executeBulk(docsForDeletion);
 	}
-	
+
 	@Test
 	public void dbHasNoMatches() {
-		assertThat(matchRepo.noMatchesAvailable(),is(true));
+		assertThat(matchRepo.noMatchesAvailable(), is(true));
 	}
+
 	@Test
 	public void dbHasMatches() {
 		matchRepo.save(MatchTestdaten.createMatch());
-		assertThat(matchRepo.noMatchesAvailable(),is(false));
+		assertThat(matchRepo.noMatchesAvailable(), is(false));
 	}
 }
