@@ -1,15 +1,15 @@
 package kickerstats.domain;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import kickerstats.MatchTestdaten;
 import kickerstats.WeldJUnit4Runner;
-import kickerstats.types.Game;
-import kickerstats.types.Match;
 
 import org.ektorp.BulkDeleteDocument;
 import org.ektorp.CouchDbConnector;
@@ -17,9 +17,6 @@ import org.ektorp.ViewQuery;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 @RunWith(WeldJUnit4Runner.class)
 public class MatchRepoTest {

@@ -3,7 +3,6 @@ package kickerstats;
 import java.util.Calendar;
 
 import kickerstats.domain.GameCouchDb;
-import kickerstats.interfaces.MatchWithLink;
 import kickerstats.types.Game;
 
 public class GameTestdaten {
