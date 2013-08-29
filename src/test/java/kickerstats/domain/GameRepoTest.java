@@ -27,13 +27,15 @@ public class GameRepoTest {
 
 	@Inject
 	private GameRepoInterface gameRepo;
+	@Inject
+	private CouchDb couchDb;
 
 	@Before
 	public void cleanGamesInDb() {
 		ViewQuery query = new ViewQuery().designDocId("_design/games")
 				.viewName("by_date").includeDocs(true).limit(1000000);
 
-		CouchDbConnector connection = new CouchDb().createConnection();
+		CouchDbConnector connection = couchDb.createConnection();
 
 		List<GameCouchDb> allDocs = connection.queryView(query,
 				GameCouchDb.class);
@@ -47,13 +49,13 @@ public class GameRepoTest {
 
 	@Test
 	public void dbConnectionIsAvailable() {
-		CouchDbConnector connection = new CouchDb().createConnection();
+		CouchDbConnector connection = couchDb.createConnection();
 		connection.getDbInfo();
 	}
 
 	@Test
 	public void savesGameCouchDbInDb() {
-		CouchDbConnector connection = new CouchDb().createConnection();
+		CouchDbConnector connection = couchDb.createConnection();
 		GameCouchDb gameCouchDb = GameTestdaten.createDoubleGameCouchDb();
 		assertThat(gameCouchDb.getId(), is(nullValue()));
 

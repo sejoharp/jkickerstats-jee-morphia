@@ -22,6 +22,8 @@ import org.junit.runner.RunWith;
 public class MatchRepoTest {
 	@Inject
 	private MatchRepoInterface matchRepo;
+	@Inject
+	private CouchDb couchDb;
 
 	@Before
 	public void cleanMatchesInDb() {
@@ -29,7 +31,7 @@ public class MatchRepoTest {
 				.viewName("by_date_hometeam_guestteam").includeDocs(true)
 				.limit(1000000);
 
-		CouchDbConnector connection = new CouchDb().createConnection();
+		CouchDbConnector connection = couchDb.createConnection();
 
 		List<MatchCouchDb> allDocs = connection.queryView(query,
 				MatchCouchDb.class);
