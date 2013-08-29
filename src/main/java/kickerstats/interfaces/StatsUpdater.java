@@ -27,7 +27,7 @@ public class StatsUpdater {
 
 	private static String SEASONS_URL = "http://www.kickern-hamburg.de/liga-tool/mannschaftswettbewerbe";
 
-	public void updateStatistikData() {
+	public void updateStats() {
 		if (matchService.noDataAvailable()) {
 			getAllData();
 		} else {

@@ -73,7 +73,7 @@ public class StatsUpdaterUnitTest {
 	public void downloadsAllGamesAndMatchesWhenDBisEmpty() {
 		when(matchServiceMock.noDataAvailable()).thenReturn(true);
 
-		statsUpdater.updateStatistikData();
+		statsUpdater.updateStats();
 
 		verify(matchServiceMock, times(0)).isNewMatch(any(Match.class));
 	}
@@ -83,7 +83,7 @@ public class StatsUpdaterUnitTest {
 		when(matchServiceMock.noDataAvailable()).thenReturn(false);
 		when(matchServiceMock.isNewMatch(any(Match.class))).thenReturn(true);
 
-		statsUpdater.updateStatistikData();
+		statsUpdater.updateStats();
 
 		verify(matchServiceMock, times(1)).isNewMatch(any(Match.class));
 	}
@@ -92,7 +92,7 @@ public class StatsUpdaterUnitTest {
 	public void savesOneGameWhenDBisEmpty() {
 		when(matchServiceMock.noDataAvailable()).thenReturn(true);
 
-		statsUpdater.updateStatistikData();
+		statsUpdater.updateStats();
 
 		verify(gameServiceMock).saveGames(gameListCaptor.capture());
 		assertThat(gameListCaptor.getValue().size(), is(1));
@@ -103,7 +103,7 @@ public class StatsUpdaterUnitTest {
 		when(matchServiceMock.noDataAvailable()).thenReturn(false);
 		when(matchServiceMock.isNewMatch(any(Match.class))).thenReturn(true);
 
-		statsUpdater.updateStatistikData();
+		statsUpdater.updateStats();
 
 		verify(gameServiceMock).saveGames(gameListCaptor.capture());
 		assertThat(gameListCaptor.getValue().size(), is(1));
@@ -114,7 +114,7 @@ public class StatsUpdaterUnitTest {
 		when(matchServiceMock.noDataAvailable()).thenReturn(false);
 		when(matchServiceMock.isNewMatch(any(Match.class))).thenReturn(true);
 
-		statsUpdater.updateStatistikData();
+		statsUpdater.updateStats();
 
 		verify(matchServiceMock).saveMatch(matchCaptor.capture());
 		assertThat(matchCaptor.getValue(), is(not(nullValue())));
@@ -125,7 +125,7 @@ public class StatsUpdaterUnitTest {
 		when(matchServiceMock.noDataAvailable()).thenReturn(true);
 		when(matchServiceMock.isNewMatch(any(Match.class))).thenReturn(true);
 
-		statsUpdater.updateStatistikData();
+		statsUpdater.updateStats();
 
 		verify(matchServiceMock).saveMatch(matchCaptor.capture());
 		assertThat(matchCaptor.getValue(), is(not(nullValue())));
@@ -136,7 +136,7 @@ public class StatsUpdaterUnitTest {
 		when(matchServiceMock.noDataAvailable()).thenReturn(false);
 		when(matchServiceMock.isNewMatch(any(Match.class))).thenReturn(false);
 
-		statsUpdater.updateStatistikData();
+		statsUpdater.updateStats();
 
 		verify(matchServiceMock, times(0)).saveMatch(matchCaptor.capture());
 	}
