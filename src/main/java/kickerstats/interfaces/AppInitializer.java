@@ -7,9 +7,11 @@ import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
+import javax.servlet.annotation.WebListener;
 
 import kickerstats.domain.CouchdbConfig;
 
+@WebListener
 public class AppInitializer implements ServletContextListener {
 
 	@Inject
@@ -42,11 +44,10 @@ public class AppInitializer implements ServletContextListener {
 
 	protected void startUpdatingStats() {
 		scheduler = Executors.newSingleThreadScheduledExecutor();
-		scheduler.scheduleAtFixedRate(statsUpdaterBatch, 0, 2,
-				TimeUnit.DAYS);
+		scheduler.scheduleAtFixedRate(statsUpdaterBatch, 0, 2, TimeUnit.DAYS);
 	}
 
-	private class StatsUpdaterBatch implements Runnable {
+	private static class StatsUpdaterBatch implements Runnable {
 
 		@Inject
 		private StatsUpdater statsUpdater;

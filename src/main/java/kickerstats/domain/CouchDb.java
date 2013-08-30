@@ -14,24 +14,38 @@ import org.ektorp.impl.StdCouchDbInstance;
 @Singleton
 public class CouchDb {
 	private CouchDbInstance dbInstance;
-	private String dbname;
-	
+	@Inject
+	private CouchdbConfig config;
+
 	private static final String DEFAULT_DB_NAME = "kickerstats";
 
-	@Inject
-	public CouchDb(CouchdbConfig config) {
+	public CouchDbConnector createConnection() {
+		if (isDbInstanceMissing()) {
+			setDbInstance();
+		}
+		return dbInstance.createConnector(config.getDbname(), false);
+	}
+
+	protected boolean isDbInstanceMissing() {
+		return dbInstance == null;
+	}
+
+	protected void setDbInstance() {
 		if (isConfigMissing(config)) {
-			HttpClient httpClient = new StdHttpClient.Builder().build();
-			dbInstance = new StdCouchDbInstance(httpClient);
-			dbname = DEFAULT_DB_NAME;
+			dbInstance = createStandardDbInstance();
+			config.setDbname(DEFAULT_DB_NAME);
 		} else {
 			dbInstance = createAuthenticatedDbInstance(config);
-			dbname = config.getDbname();
 		}
 	}
 
 	protected boolean isConfigMissing(CouchdbConfig config) {
 		return config.getUser() == null || config.getUser().isEmpty();
+	}
+
+	protected CouchDbInstance createStandardDbInstance() {
+		HttpClient httpClient = new StdHttpClient.Builder().build();
+		return new StdCouchDbInstance(httpClient);
 	}
 
 	protected CouchDbInstance createAuthenticatedDbInstance(CouchdbConfig config) {
@@ -44,9 +58,5 @@ public class CouchDb {
 			throw new IllegalArgumentException(e);
 		}
 		return new StdCouchDbInstance(authenticatedHttpClient);
-	}
-
-	public CouchDbConnector createConnection() {
-		return dbInstance.createConnector(dbname, false);
 	}
 }
