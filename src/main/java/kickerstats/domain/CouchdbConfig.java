@@ -4,6 +4,7 @@ import javax.inject.Singleton;
 
 @Singleton
 public class CouchdbConfig {
+
 	private String user, password, url, dbname;
 
 	public String getUser() {
@@ -37,4 +38,11 @@ public class CouchdbConfig {
 	public void setDbname(String dbname) {
 		this.dbname = dbname;
 	}
+
+	@Override
+	public String toString() {
+		return "CouchdbConfig [user=" + user + ", url=" + url + ", dbname="
+				+ dbname + "]";
+	}
+
 }

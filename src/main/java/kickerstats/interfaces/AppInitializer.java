@@ -23,6 +23,7 @@ public class AppInitializer implements ServletContextListener {
 	@Override
 	public void contextInitialized(ServletContextEvent contextEvent) {
 		setDbConfig(contextEvent);
+		System.out.println(config);
 		startUpdatingStats();
 	}
 
@@ -44,7 +45,7 @@ public class AppInitializer implements ServletContextListener {
 
 	protected void startUpdatingStats() {
 		scheduler = Executors.newSingleThreadScheduledExecutor();
-		scheduler.scheduleAtFixedRate(statsUpdaterBatch, 0, 2, TimeUnit.DAYS);
+		scheduler.scheduleAtFixedRate(statsUpdaterBatch, 0, 1, TimeUnit.DAYS);
 	}
 
 	private static class StatsUpdaterBatch implements Runnable {

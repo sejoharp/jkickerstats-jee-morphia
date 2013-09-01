@@ -35,7 +35,7 @@ public class CouchDb {
 			dbInstance = createStandardDbInstance();
 			config.setDbname(DEFAULT_DB_NAME);
 		} else {
-			dbInstance = createAuthenticatedDbInstance(config);
+			dbInstance = createAuthenticatedDbInstance();
 		}
 	}
 
@@ -48,7 +48,7 @@ public class CouchDb {
 		return new StdCouchDbInstance(httpClient);
 	}
 
-	protected CouchDbInstance createAuthenticatedDbInstance(CouchdbConfig config) {
+	protected CouchDbInstance createAuthenticatedDbInstance() {
 		HttpClient authenticatedHttpClient;
 		try {
 			authenticatedHttpClient = new StdHttpClient.Builder()
