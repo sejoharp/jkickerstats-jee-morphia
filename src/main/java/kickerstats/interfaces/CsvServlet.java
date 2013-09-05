@@ -13,18 +13,15 @@ import javax.servlet.http.HttpServletResponse;
 
 import kickerstats.usecases.GameServiceInterface;
 
-@WebServlet(urlPatterns = { "/csvexport" })
+@WebServlet(urlPatterns = "/csvexport")
 public class CsvServlet extends HttpServlet {
-
+	private static final long serialVersionUID = 1L;
+	
 	@Inject
 	private GameServiceInterface gameService;
 
 	@Inject
 	private CsvCreator csvCreator;
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
