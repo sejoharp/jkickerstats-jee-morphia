@@ -4,24 +4,8 @@
 	xsi:schemaLocation="
     http://java.sun.com/xml/ns/javaee
     http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
-	<display-name>kickerstats</display-name>
 
-	<context-param>
-		<param-name>dbuser</param-name>
-		<param-value></param-value>
-	</context-param>
-	<context-param>
-		<param-name>dbname</param-name>
-		<param-value>kickerstats</param-value>
-	</context-param>
-	<context-param>
-		<param-name>dbpassword</param-name>
-		<param-value></param-value>
-	</context-param>
-	<context-param>
-		<param-name>dburl</param-name>
-		<param-value>http://localhost:5984</param-value>
-	</context-param>
+	<display-name>kickerstats</display-name>
 	<listener>
 		<listener-class>org.jboss.weld.environment.servlet.Listener</listener-class>
 	</listener>
