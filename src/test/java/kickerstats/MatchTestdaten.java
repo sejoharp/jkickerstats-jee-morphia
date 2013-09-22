@@ -1,22 +1,26 @@
 package kickerstats;
 
+import java.util.Arrays;
 import java.util.Calendar;
+
+import com.google.common.collect.Lists;
 
 import kickerstats.interfaces.MatchWithLink;
 import kickerstats.types.Match;
 
 public class MatchTestdaten {
 	public static Match createMatch() {
-		Match game = new Match();
-		game.setGuestScore(10);
-		game.setGuestTeam("guestteam");
-		game.setHomeScore(22);
-		game.setHomeTeam("hometeam");
-		game.setMatchDate(Calendar.getInstance());
-		game.setMatchDay(1);
-		game.setHomeGoals(10);
-		game.setGuestGoals(11);
-		return game;
+		Match match = new Match();
+		match.setGuestScore(10);
+		match.setGuestTeam("guestteam");
+		match.setHomeScore(22);
+		match.setHomeTeam("hometeam");
+		match.setMatchDate(Calendar.getInstance());
+		match.setMatchDay(1);
+		match.setHomeGoals(10);
+		match.setGuestGoals(11);
+		match.setGames(Arrays.asList(GameTestdaten.createSingleGame(), GameTestdaten.createDoubleGame()));
+		return match;
 	}
 
 	public static MatchWithLink createMatchLink() {
@@ -30,6 +34,7 @@ public class MatchTestdaten {
 		match.setHomeScore(32);
 		match.setGuestScore(0);
 		match.setMatchLink("http://www.kickern-hamburg.de/liga-tool/mannschaftswettbewerbe?task=begegnung_spielplan&veranstaltungid=64&id=3815");
+		match.setGames(Arrays.asList(GameTestdaten.createSingleGame(), GameTestdaten.createDoubleGame()));
 		return match;
 	}
 
@@ -44,6 +49,7 @@ public class MatchTestdaten {
 		match.setHomeScore(0);
 		match.setGuestScore(32);
 		match.setMatchLink("http://www.kickern-hamburg.de/liga-tool/mannschaftswettbewerbe?task=begegnung_spielplan&veranstaltungid=54&id=3504");
+		match.setGames(Arrays.asList(GameTestdaten.createSingleGame(), GameTestdaten.createDoubleGame()));
 		return match;
 	}
 }

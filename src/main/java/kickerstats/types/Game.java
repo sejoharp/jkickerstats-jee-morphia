@@ -1,19 +1,13 @@
 package kickerstats.types;
 
-import java.util.Calendar;
-
 public class Game {
 	private String homePlayer1;
 	private String homePlayer2;
-	private String homeTeam;
 	private int homeScore;
 	private String guestPlayer1;
 	private String guestPlayer2;
-	private String guestTeam;
 	private int guestScore;
 	private int position;
-	private Calendar matchDate;
-	private int matchDay;
 	private boolean doubleMatch;
 
 	public String getHomePlayer1() {
@@ -30,14 +24,6 @@ public class Game {
 
 	public void setHomePlayer2(String homePlayer2) {
 		this.homePlayer2 = homePlayer2;
-	}
-
-	public String getHomeTeam() {
-		return homeTeam;
-	}
-
-	public void setHomeTeam(String homeTeam) {
-		this.homeTeam = homeTeam;
 	}
 
 	public int getHomeScore() {
@@ -64,14 +50,6 @@ public class Game {
 		this.guestPlayer2 = guestPlayer2;
 	}
 
-	public String getGuestTeam() {
-		return guestTeam;
-	}
-
-	public void setGuestTeam(String guestTeam) {
-		this.guestTeam = guestTeam;
-	}
-
 	public int getGuestScore() {
 		return guestScore;
 	}
@@ -86,22 +64,6 @@ public class Game {
 
 	public void setPosition(int position) {
 		this.position = position;
-	}
-
-	public Calendar getMatchDate() {
-		return matchDate;
-	}
-
-	public void setMatchDate(Calendar matchDate) {
-		this.matchDate = matchDate;
-	}
-
-	public int getMatchDay() {
-		return matchDay;
-	}
-
-	public void setMatchDay(int matchDay) {
-		this.matchDay = matchDay;
 	}
 
 	public boolean isDoubleMatch() {
@@ -123,17 +85,10 @@ public class Game {
 				+ ((guestPlayer2 == null) ? 0 : guestPlayer2.hashCode());
 		result = prime * result + guestScore;
 		result = prime * result
-				+ ((guestTeam == null) ? 0 : guestTeam.hashCode());
-		result = prime * result
 				+ ((homePlayer1 == null) ? 0 : homePlayer1.hashCode());
 		result = prime * result
 				+ ((homePlayer2 == null) ? 0 : homePlayer2.hashCode());
 		result = prime * result + homeScore;
-		result = prime * result
-				+ ((homeTeam == null) ? 0 : homeTeam.hashCode());
-		result = prime * result
-				+ ((matchDate == null) ? 0 : matchDate.hashCode());
-		result = prime * result + matchDay;
 		result = prime * result + position;
 		return result;
 	}
@@ -161,11 +116,6 @@ public class Game {
 			return false;
 		if (guestScore != other.guestScore)
 			return false;
-		if (guestTeam == null) {
-			if (other.guestTeam != null)
-				return false;
-		} else if (!guestTeam.equals(other.guestTeam))
-			return false;
 		if (homePlayer1 == null) {
 			if (other.homePlayer1 != null)
 				return false;
@@ -178,19 +128,6 @@ public class Game {
 			return false;
 		if (homeScore != other.homeScore)
 			return false;
-		if (homeTeam == null) {
-			if (other.homeTeam != null)
-				return false;
-		} else if (!homeTeam.equals(other.homeTeam))
-			return false;
-		if (matchDate == null) {
-			if (other.matchDate != null)
-				return false;
-		} else if (matchDate.getTimeInMillis() != other.matchDate
-				.getTimeInMillis())
-			return false;
-		if (matchDay != other.matchDay)
-			return false;
 		if (position != other.position)
 			return false;
 		return true;
@@ -199,11 +136,9 @@ public class Game {
 	@Override
 	public String toString() {
 		return "Game [homePlayer1=" + homePlayer1 + ", homePlayer2="
-				+ homePlayer2 + ", homeTeam=" + homeTeam + ", homeScore="
-				+ homeScore + ", guestPlayer1=" + guestPlayer1
-				+ ", guestPlayer2=" + guestPlayer2 + ", guestTeam=" + guestTeam
+				+ homePlayer2 + ", homeScore=" + homeScore + ", guestPlayer1="
+				+ guestPlayer1 + ", guestPlayer2=" + guestPlayer2
 				+ ", guestScore=" + guestScore + ", position=" + position
-				+ ", matchDate=" + matchDate.getTimeInMillis() + ", matchDay=" + matchDay
 				+ ", doubleMatch=" + doubleMatch + "]";
 	}
 }

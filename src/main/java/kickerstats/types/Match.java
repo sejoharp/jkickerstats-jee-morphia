@@ -1,6 +1,7 @@
 package kickerstats.types;
 
 import java.util.Calendar;
+import java.util.List;
 
 public class Match {
 	private String homeTeam;
@@ -11,6 +12,7 @@ public class Match {
 	private int guestScore;
 	private Calendar matchDate;
 	private int matchDay;
+	private List<Game> games;
 
 	public String getHomeTeam() {
 		return homeTeam;
@@ -76,10 +78,19 @@ public class Match {
 		this.matchDay = matchDay;
 	}
 
+	public List<Game> getGames() {
+		return games;
+	}
+
+	public void setGames(List<Game> games) {
+		this.games = games;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((games == null) ? 0 : games.hashCode());
 		result = prime * result + guestGoals;
 		result = prime * result + guestScore;
 		result = prime * result
@@ -103,6 +114,11 @@ public class Match {
 		if (getClass() != obj.getClass())
 			return false;
 		Match other = (Match) obj;
+		if (games == null) {
+			if (other.games != null)
+				return false;
+		} else if (!games.equals(other.games))
+			return false;
 		if (guestGoals != other.guestGoals)
 			return false;
 		if (guestScore != other.guestScore)
@@ -124,8 +140,7 @@ public class Match {
 		if (matchDate == null) {
 			if (other.matchDate != null)
 				return false;
-		} else if (matchDate.getTimeInMillis() != other.matchDate
-				.getTimeInMillis())
+		} else if (!matchDate.equals(other.matchDate))
 			return false;
 		if (matchDay != other.matchDay)
 			return false;
@@ -137,6 +152,8 @@ public class Match {
 		return "Match [homeTeam=" + homeTeam + ", guestTeam=" + guestTeam
 				+ ", homeGoals=" + homeGoals + ", guestGoals=" + guestGoals
 				+ ", homeScore=" + homeScore + ", guestScore=" + guestScore
-				+ ", matchDate=" + matchDate.getTimeInMillis() + ", matchDay=" + matchDay + "]";
+				+ ", matchDate=" + matchDate.getTimeInMillis() + ", matchDay=" + matchDay
+				+ ", games=" + games + "]";
 	}
+
 }

@@ -33,4 +33,10 @@ public class MatchService implements MatchServiceInterface {
 		return matchRepo.noMatchesAvailable();
 	}
 
+	@Override
+	public List<Match> getAllMatches() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

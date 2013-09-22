@@ -33,11 +33,11 @@ public class MatchRepoTest {
 
 		CouchDbConnector connection = couchDb.createConnection();
 
-		List<MatchCouchDb> allDocs = connection.queryView(query,
-				MatchCouchDb.class);
+		List<MatchFromDb> allDocs = connection.queryView(query,
+				MatchFromDb.class);
 
 		List<BulkDeleteDocument> docsForDeletion = new ArrayList<>();
-		for (MatchCouchDb doc : allDocs) {
+		for (MatchFromDb doc : allDocs) {
 			docsForDeletion.add(BulkDeleteDocument.of(doc));
 		}
 		connection.executeBulk(docsForDeletion);

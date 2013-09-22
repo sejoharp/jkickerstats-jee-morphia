@@ -11,14 +11,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import kickerstats.usecases.GameServiceInterface;
+import kickerstats.usecases.MatchServiceInterface;
 
 @WebServlet(urlPatterns = "/csvexport")
 public class CsvServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
 	@Inject
-	private GameServiceInterface gameService;
+	private MatchServiceInterface matchService;
 
 	@Inject
 	private CsvCreator csvCreator;
@@ -26,8 +26,7 @@ public class CsvServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 
-		List<String> csvList = csvCreator.createCsvRowList(gameService
-				.getAllGames());
+		List<String> csvList = csvCreator.createCsvRowList(matchService.getAllMatches());
 
 		response.setContentType("text/csv;charset=UTF-8");
 		PrintWriter writer = response.getWriter();

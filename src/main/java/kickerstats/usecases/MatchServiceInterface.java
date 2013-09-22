@@ -12,4 +12,6 @@ public interface MatchServiceInterface {
 	public boolean isNewMatch(Match match);
 	
 	public boolean noDataAvailable();
+	
+	public List<Match> getAllMatches();
 }

@@ -1,10 +1,18 @@
 package kickerstats.domain;
 
 import java.util.Calendar;
+import java.util.List;
 
-import org.ektorp.support.CouchDbDocument;
+import kickerstats.types.Game;
 
-public class MatchCouchDb extends CouchDbDocument {
+import org.mongodb.morphia.annotations.Embedded;
+import org.mongodb.morphia.annotations.Entity;
+import org.mongodb.morphia.annotations.Id;
+
+@Entity("match")
+public class MatchFromDb {
+	@Id
+	private String id;
 	private String homeTeam;
 	private String guestTeam;
 	private int homeGoals;
@@ -13,7 +21,8 @@ public class MatchCouchDb extends CouchDbDocument {
 	private int guestScore;
 	private Calendar matchDate;
 	private int matchDay;
-	private final String type = "match";
+	@Embedded
+	private List<Game> games;
 
 	public String getHomeTeam() {
 		return homeTeam;
@@ -79,7 +88,19 @@ public class MatchCouchDb extends CouchDbDocument {
 		this.matchDay = matchDay;
 	}
 
-	public String getType() {
-		return type;
+	public List<Game> getGames() {
+		return games;
+	}
+
+	public void setGames(List<Game> games) {
+		this.games = games;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
 	}
 }

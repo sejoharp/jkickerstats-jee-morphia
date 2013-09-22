@@ -1,23 +1,17 @@
 package kickerstats.domain;
 
-import java.util.Calendar;
+import org.mongodb.morphia.annotations.Embedded;
 
-import org.ektorp.support.CouchDbDocument;
-
-public class GameCouchDb extends CouchDbDocument {
+@Embedded
+public class GameFromDb {
 	private String homePlayer1;
 	private String homePlayer2;
-	private String homeTeam;
 	private int homeScore;
 	private String guestPlayer1;
 	private String guestPlayer2;
-	private String guestTeam;
 	private int guestScore;
 	private int position;
-	private Calendar matchDate;
-	private int matchDay;
 	private boolean doubleMatch;
-	private final String type = "game";
 
 	public String getHomePlayer1() {
 		return homePlayer1;
@@ -33,14 +27,6 @@ public class GameCouchDb extends CouchDbDocument {
 
 	public void setHomePlayer2(String homePlayer2) {
 		this.homePlayer2 = homePlayer2;
-	}
-
-	public String getHomeTeam() {
-		return homeTeam;
-	}
-
-	public void setHomeTeam(String homeTeam) {
-		this.homeTeam = homeTeam;
 	}
 
 	public int getHomeScore() {
@@ -67,13 +53,6 @@ public class GameCouchDb extends CouchDbDocument {
 		this.guestPlayer2 = guestPlayer2;
 	}
 
-	public String getGuestTeam() {
-		return guestTeam;
-	}
-
-	public void setGuestTeam(String guestTeam) {
-		this.guestTeam = guestTeam;
-	}
 
 	public int getGuestScore() {
 		return guestScore;
@@ -91,21 +70,6 @@ public class GameCouchDb extends CouchDbDocument {
 		this.position = position;
 	}
 
-	public Calendar getMatchDate() {
-		return matchDate;
-	}
-
-	public void setMatchDate(Calendar matchDate) {
-		this.matchDate = matchDate;
-	}
-
-	public int getMatchDay() {
-		return matchDay;
-	}
-
-	public void setMatchDay(int matchDay) {
-		this.matchDay = matchDay;
-	}
 
 	public boolean isDoubleMatch() {
 		return doubleMatch;
@@ -113,9 +77,5 @@ public class GameCouchDb extends CouchDbDocument {
 
 	public void setDoubleMatch(boolean doubleMatch) {
 		this.doubleMatch = doubleMatch;
-	}
-
-	public String getType() {
-		return type;
 	}
 }

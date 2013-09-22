@@ -37,11 +37,11 @@ public class GameRepoTest {
 
 		CouchDbConnector connection = couchDb.createConnection();
 
-		List<GameCouchDb> allDocs = connection.queryView(query,
-				GameCouchDb.class);
+		List<GameFromDb> allDocs = connection.queryView(query,
+				GameFromDb.class);
 
 		List<BulkDeleteDocument> docsForDeletion = new ArrayList<>();
-		for (GameCouchDb doc : allDocs) {
+		for (GameFromDb doc : allDocs) {
 			docsForDeletion.add(BulkDeleteDocument.of(doc));
 		}
 		connection.executeBulk(docsForDeletion);
@@ -56,13 +56,12 @@ public class GameRepoTest {
 	@Test
 	public void savesGameCouchDbInDb() {
 		CouchDbConnector connection = couchDb.createConnection();
-		GameCouchDb gameCouchDb = GameTestdaten.createDoubleGameCouchDb();
-		assertThat(gameCouchDb.getId(), is(nullValue()));
+		GameFromDb gameCouchDb = GameTestdaten.createDoubleGameCouchDb();
+		assertThat(gameCouchDb, is(nullValue()));
 
 		connection.create(gameCouchDb);
 
 		assertThat(gameCouchDb.getId(), is(notNullValue()));
-		assertThat(connection.contains(gameCouchDb.getId()), is(true));
 
 		connection.delete(gameCouchDb);
 	}

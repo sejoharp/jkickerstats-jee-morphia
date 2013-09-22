@@ -19,20 +19,11 @@ class PageParser {
 		final List<Game> games = new ArrayList<>();
 		Elements gameSnippets = filterGameSnippets(doc);
 		if (isValidGameList(gameSnippets)) {
-			final String homeTeam = parseHomeTeam(doc);
-			final String guestTeam = parseGuestTeam(doc);
-			boolean matchDateAvailable = hasMatchDate(doc);
-			final int matchDay = parseMatchDay(doc, matchDateAvailable);
-			final Calendar matchDate = parseMatchDate(doc, matchDateAvailable);
 			final boolean imagesAvailable = hasImages(gameSnippets);
 			for (Element gameSnippet : gameSnippets) {
 				Game game = new Game();
 				game.setDoubleMatch(isDoubleMatch(gameSnippet));
 				game.setPosition(parseGamePosition(gameSnippet));
-				game.setHomeTeam(homeTeam);
-				game.setGuestTeam(guestTeam);
-				game.setMatchDate(matchDate);
-				game.setMatchDay(matchDay);
 				addPlayerNames(game, gameSnippet, game.isDoubleMatch());
 				game.setHomeScore(parseHomeScore(gameSnippet, imagesAvailable));
 				game.setGuestScore(parseGuestScore(gameSnippet, imagesAvailable));
@@ -169,7 +160,7 @@ class PageParser {
 	public List<MatchWithLink> findMatches(Document doc) {
 		final List<MatchWithLink> matches = new ArrayList<>();
 		Elements elements = filterMatchSnippets(doc);
-		int matchDay = 1;
+		int matchDay = 0;
 		for (Element element : elements) {
 			if (isMatchDayElement(element)) {
 				String matchDayString = element.select("i").text();

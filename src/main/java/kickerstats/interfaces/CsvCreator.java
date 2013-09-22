@@ -12,6 +12,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import kickerstats.types.Game;
+import kickerstats.types.Match;
 
 public class CsvCreator {
 	public void createCsvFile(List<String> csvRowList) {
@@ -27,33 +28,35 @@ public class CsvCreator {
 		}
 	}
 
-	public List<String> createCsvRowList(List<Game> games) {
+	public List<String> createCsvRowList(List<Match> matches) {
 		List<String> csvList = new ArrayList<>();
-		for (Game game : games) {
-			StringBuilder builder = new StringBuilder();
+		for (Match match : matches) {
+			for (Game game : match.getGames()) {
+				StringBuilder builder = new StringBuilder();
 
-			builder.append(formatDate(game.getMatchDate()));
-			builder.append(";");
-			builder.append(game.getMatchDay());
-			builder.append(";");
-			builder.append(game.getPosition());
-			builder.append(";");
-			builder.append(game.getHomeTeam());
-			builder.append(";");
-			builder.append(replaceEmptyNames(game.getHomePlayer1()));
-			builder.append(";");
-			builder.append(replaceEmptyNames(game.getHomePlayer2()));
-			builder.append(";");
-			builder.append(game.getHomeScore());
-			builder.append(";");
-			builder.append(game.getGuestScore());
-			builder.append(";");
-			builder.append(replaceEmptyNames(game.getGuestPlayer1()));
-			builder.append(";");
-			builder.append(replaceEmptyNames(game.getGuestPlayer2()));
-			builder.append(";");
-			builder.append(game.getGuestTeam());
-			csvList.add(builder.toString());
+				builder.append(formatDate(match.getMatchDate()));
+				builder.append(";");
+				builder.append(match.getMatchDay());
+				builder.append(";");
+				builder.append(game.getPosition());
+				builder.append(";");
+				builder.append(match.getHomeTeam());
+				builder.append(";");
+				builder.append(replaceEmptyNames(game.getHomePlayer1()));
+				builder.append(";");
+				builder.append(replaceEmptyNames(game.getHomePlayer2()));
+				builder.append(";");
+				builder.append(game.getHomeScore());
+				builder.append(";");
+				builder.append(game.getGuestScore());
+				builder.append(";");
+				builder.append(replaceEmptyNames(game.getGuestPlayer1()));
+				builder.append(";");
+				builder.append(replaceEmptyNames(game.getGuestPlayer2()));
+				builder.append(";");
+				builder.append(match.getGuestTeam());
+				csvList.add(builder.toString());
+			}
 		}
 		return csvList;
 	}

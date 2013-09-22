@@ -12,4 +12,6 @@ public interface MatchRepoInterface {
 	public void save(List<Match> matches);
 
 	public boolean noMatchesAvailable();
+	
+	public List<Match> getAllGames();
 }

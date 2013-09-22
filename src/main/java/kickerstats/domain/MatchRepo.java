@@ -17,12 +17,12 @@ import org.ektorp.support.Views;
 @Views({
 	@View(name = "all", map = "function(doc) { if (doc.type == 'match' ) emit( null, null );}"),
 	@View(name = "by_date_hometeam_guestteam", map = "function(doc) {if(doc.type=='match'){emit([doc.matchDate,doc.homeTeam,doc.guestTeam], null)};}") })
-public class MatchRepo extends CouchDbRepositorySupport<MatchCouchDb> implements MatchRepoInterface {
+public class MatchRepo extends CouchDbRepositorySupport<MatchFromDb> implements MatchRepoInterface {
 	private static final String MATCH_DESIGN_DOC_NAME = "matches";
 
 	@Inject
 	public MatchRepo(CouchDb couchdb) {
-		super(MatchCouchDb.class, couchdb.createConnection(), MATCH_DESIGN_DOC_NAME);
+		super(MatchFromDb.class, couchdb.createConnection(), MATCH_DESIGN_DOC_NAME);
 		initStandardDesignDocument();
 	}
 	@Override
@@ -56,24 +56,24 @@ public class MatchRepo extends CouchDbRepositorySupport<MatchCouchDb> implements
 		return allMatches.isEmpty();
 	}
 
-	protected List<MatchCouchDb> toMatchCouchDbList(List<Match> matches) {
-		List<MatchCouchDb> matchCouchDbs = new ArrayList<>();
+	protected List<MatchFromDb> toMatchCouchDbList(List<Match> matches) {
+		List<MatchFromDb> matchCouchDbs = new ArrayList<>();
 		for (Match match : matches) {
 			matchCouchDbs.add(toMatchCouchDb(match));
 		}
 		return matchCouchDbs;
 	}
 
-	protected List<Match> toMatchList(List<MatchCouchDb> matchCouchDbs) {
+	protected List<Match> toMatchList(List<MatchFromDb> matchCouchDbs) {
 		List<Match> matches = new ArrayList<>();
-		for (MatchCouchDb matchCouchDb : matchCouchDbs) {
+		for (MatchFromDb matchCouchDb : matchCouchDbs) {
 			matches.add(toMatch(matchCouchDb));
 		}
 		return matches;
 	}
 
-	protected MatchCouchDb toMatchCouchDb(Match match) {
-		MatchCouchDb matchCouchDb = new MatchCouchDb();
+	protected MatchFromDb toMatchCouchDb(Match match) {
+		MatchFromDb matchCouchDb = new MatchFromDb();
 		matchCouchDb.setGuestGoals(match.getGuestGoals());
 		matchCouchDb.setGuestScore(match.getGuestScore());
 		matchCouchDb.setGuestTeam(match.getGuestTeam());
@@ -85,7 +85,7 @@ public class MatchRepo extends CouchDbRepositorySupport<MatchCouchDb> implements
 		return matchCouchDb;
 	}
 
-	protected Match toMatch(MatchCouchDb matchCouchDb) {
+	protected Match toMatch(MatchFromDb matchCouchDb) {
 		Match match = new Match();
 		match.setGuestGoals(matchCouchDb.getGuestGoals());
 		match.setGuestScore(matchCouchDb.getGuestScore());
@@ -96,5 +96,10 @@ public class MatchRepo extends CouchDbRepositorySupport<MatchCouchDb> implements
 		match.setMatchDate(matchCouchDb.getMatchDate());
 		match.setMatchDay(matchCouchDb.getMatchDay());
 		return match;
+	}
+	@Override
+	public List<Match> getAllGames() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
