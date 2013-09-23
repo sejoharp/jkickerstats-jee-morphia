@@ -1,18 +1,11 @@
 package kickerstats.domain;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import kickerstats.types.Match;
-
-import org.ektorp.ViewQuery;
-import org.ektorp.ViewResult;
-import org.ektorp.support.CouchDbRepositorySupport;
-import org.ektorp.support.View;
-import org.ektorp.support.Views;
 
 public class MatchRepo implements MatchRepoInterface {
 

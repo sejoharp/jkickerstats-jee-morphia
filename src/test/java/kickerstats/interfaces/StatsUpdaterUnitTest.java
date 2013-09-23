@@ -13,7 +13,6 @@ import java.util.ArrayList;
 
 import kickerstats.types.Game;
 import kickerstats.types.Match;
-import kickerstats.usecases.GameServiceInterface;
 import kickerstats.usecases.MatchServiceInterface;
 
 import org.jsoup.nodes.Document;
@@ -37,8 +36,6 @@ public class StatsUpdaterUnitTest {
 	private PageDownloader pageDownloaderMock;
 	@Mock
 	private MatchServiceInterface matchServiceMock;
-	@Mock
-	private GameServiceInterface gameServiceMock;
 	@InjectMocks
 	private StatsUpdater statsUpdater;
 	@Captor
@@ -86,27 +83,6 @@ public class StatsUpdaterUnitTest {
 		statsUpdater.updateStats();
 
 		verify(matchServiceMock, times(1)).isNewMatch(any(Match.class));
-	}
-
-	@Test
-	public void savesOneGameWhenDBisEmpty() {
-		when(matchServiceMock.noDataAvailable()).thenReturn(true);
-
-		statsUpdater.updateStats();
-
-		verify(gameServiceMock).saveGames(gameListCaptor.capture());
-		assertThat(gameListCaptor.getValue().size(), is(1));
-	}
-
-	@Test
-	public void savesOneGameWhenDBisFilled() {
-		when(matchServiceMock.noDataAvailable()).thenReturn(false);
-		when(matchServiceMock.isNewMatch(any(Match.class))).thenReturn(true);
-
-		statsUpdater.updateStats();
-
-		verify(gameServiceMock).saveGames(gameListCaptor.capture());
-		assertThat(gameListCaptor.getValue().size(), is(1));
 	}
 
 	@Test

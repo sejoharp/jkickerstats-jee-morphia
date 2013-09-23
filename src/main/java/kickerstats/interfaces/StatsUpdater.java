@@ -8,7 +8,6 @@ import javax.inject.Inject;
 
 import kickerstats.types.Game;
 import kickerstats.types.Match;
-import kickerstats.usecases.GameServiceInterface;
 import kickerstats.usecases.MatchServiceInterface;
 
 import org.jsoup.nodes.Document;
@@ -23,8 +22,6 @@ public class StatsUpdater {
 	private PageDownloader pageDownloader;
 	@Inject
 	private MatchServiceInterface matchService;
-	@Inject
-	private GameServiceInterface gameService;
 
 	private static String SEASONS_URL = "http://www.kickern-hamburg.de/liga-tool/mannschaftswettbewerbe";
 
@@ -75,8 +72,8 @@ public class StatsUpdater {
 			for (String ligaLink : ligaLinks) {
 				List<MatchWithLink> matches = getMatches(ligaLink);
 				for (MatchWithLink match : matches) {
+					match.setGames(getGames(match.getMatchLink()));
 					matchService.saveMatch(match);
-					gameService.saveGames(getGames(match.getMatchLink()));
 				}
 			}
 		}
@@ -89,8 +86,8 @@ public class StatsUpdater {
 			List<MatchWithLink> matches = getMatches(ligaLink);
 			for (MatchWithLink match : matches) {
 				if (matchService.isNewMatch(match)) {
+					match.setGames(getGames(match.getMatchLink()));
 					matchService.saveMatch(match);
-					gameService.saveGames(getGames(match.getMatchLink()));
 				}
 			}
 		}
