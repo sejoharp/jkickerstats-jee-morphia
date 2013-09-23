@@ -13,5 +13,5 @@ public interface MatchRepoInterface {
 
 	public boolean noMatchesAvailable();
 	
-	public List<Match> getAllGames();
+	public List<Match> getAllMatches();
 }

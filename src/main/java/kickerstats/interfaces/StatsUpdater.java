@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 import javax.inject.Inject;
 
 import kickerstats.types.Game;
+import kickerstats.types.Match;
 import kickerstats.usecases.GameServiceInterface;
 import kickerstats.usecases.MatchServiceInterface;
 
@@ -51,6 +52,22 @@ public class StatsUpdater {
 		return games;
 	}
 
+	protected List<Match> downloadAllMatches() {
+		List<Match> allMatches = new ArrayList<>();
+		List<Integer> seasonIds = getSeasonIDs();
+		for (Integer seasonId : seasonIds) {
+			List<String> ligaLinks = getLigaLinks(seasonId);
+			for (String ligaLink : ligaLinks) {
+				List<MatchWithLink> matches = getMatches(ligaLink);
+				for (MatchWithLink match : matches) {
+					match.setGames(getGames(match.getMatchLink()));
+					allMatches.add(match);
+				}
+			}
+		}
+		return allMatches;
+	}
+	
 	protected void getAllData() {
 		List<Integer> seasonIds = getSeasonIDs();
 		for (Integer seasonId : seasonIds) {

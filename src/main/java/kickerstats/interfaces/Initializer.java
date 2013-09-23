@@ -5,51 +5,23 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
-import javax.ejb.Startup;
-import javax.ejb.Timeout;
-import javax.ejb.Timer;
-import javax.ejb.TimerConfig;
-import javax.ejb.TimerService;
-import javax.inject.Inject;
-import javax.inject.Singleton;
+import javax.enterprise.inject.Produces;
 
-import kickerstats.domain.MongoDbConfig;
+import kickerstats.domain.GameFromDb;
+import kickerstats.domain.MatchFromDb;
+import kickerstats.domain.MongoDb;
 
+import org.mongodb.morphia.Datastore;
+import org.mongodb.morphia.Morphia;
+
+import com.mongodb.MongoClient;
 import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
 
-@Startup
-@Singleton
 public class Initializer {
-	@Inject
-	private TimerService timerService;
-	@Inject
-	private MongoDbConfig config;
-	@Inject
-	private StatsUpdater statsUpdater;
-	private Timer timer;
-	private final long DAY_IN_MILLISECONDS = 24 * 60 * 60 * 1000;
 
-	@PostConstruct
-	public void init() {
-		setDbConfig();
-		timer = timerService.createIntervalTimer(DAY_IN_MILLISECONDS,
-				DAY_IN_MILLISECONDS, new TimerConfig(null, false));
-	}
-
-	@PreDestroy
-	public void destroy() {
-		timer.cancel();
-	}
-
-	@Timeout
-	public void schedule(Timer timer) {
-		statsUpdater.updateStats();
-	}
-
-	protected void setDbConfig() {
+	@Produces
+	protected MongoDb createMongoDb() {
 		ResourceBundle configProperties = ResourceBundle
 				.getBundle("kickerstats.config");
 
@@ -60,21 +32,29 @@ public class Initializer {
 		char[] dbpassword = configProperties.getString("dbpassword")
 				.toCharArray();
 
-		ServerAddress dbAddress;
-		try {
-
-			dbAddress = new ServerAddress(dbhost, dbport);
-		} catch (UnknownHostException e) {
-			throw new IllegalArgumentException(e);
-		}
+		ServerAddress dbAddress = createAddress(dbhost, dbport);
 		List<MongoCredential> credentials = Arrays.asList(MongoCredential
 				.createMongoCRCredential(dbuser, dbname, dbpassword));
 
-		config.setCredentials(credentials);
-		config.setDbAddress(dbAddress);
+		Morphia morphia = new Morphia();
+		morphia.map(MatchFromDb.class, GameFromDb.class);
+		Datastore datastore = morphia.createDatastore(new MongoClient(
+				dbAddress, credentials), dbname);
 
-		System.out.println("==> DBSERVER IST: " + dbhost + dbport + dbname
+		MongoDb mongoDb = new MongoDb();
+		mongoDb.setDatastore(datastore);
+
+		System.out.println("==> DBSERVER DATA: " + dbhost + dbport + dbname
 				+ dbuser);
+		return mongoDb;
+	}
 
+	protected ServerAddress createAddress(String dbhost, int dbport) {
+		try {
+
+			return new ServerAddress(dbhost, dbport);
+		} catch (UnknownHostException e) {
+			throw new IllegalArgumentException(e);
+		}
 	}
 }

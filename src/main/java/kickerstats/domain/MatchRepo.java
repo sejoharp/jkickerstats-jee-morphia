@@ -14,65 +14,63 @@ import org.ektorp.support.CouchDbRepositorySupport;
 import org.ektorp.support.View;
 import org.ektorp.support.Views;
 
-@Views({
-	@View(name = "all", map = "function(doc) { if (doc.type == 'match' ) emit( null, null );}"),
-	@View(name = "by_date_hometeam_guestteam", map = "function(doc) {if(doc.type=='match'){emit([doc.matchDate,doc.homeTeam,doc.guestTeam], null)};}") })
-public class MatchRepo extends CouchDbRepositorySupport<MatchFromDb> implements MatchRepoInterface {
-	private static final String MATCH_DESIGN_DOC_NAME = "matches";
+public class MatchRepo implements MatchRepoInterface {
 
 	@Inject
-	public MatchRepo(CouchDb couchdb) {
-		super(MatchFromDb.class, couchdb.createConnection(), MATCH_DESIGN_DOC_NAME);
-		initStandardDesignDocument();
-	}
+	private MongoDb mongoDb;
+
 	@Override
 	public boolean isNewMatch(Match match) {
-		ViewQuery query = new ViewQuery()
-				.designDocId("_design/matches")
-				.viewName("by_date_hometeam_guestteam")
-				.keys(Arrays.asList(match.getMatchDate(), match.getHomeTeam(),
-						match.getGuestTeam()));
+		long numberOfMatches = mongoDb.getDatastore()
+				.find(MatchFromDb.class).field("matchDate")
+				.equal(match.getMatchDate()).field("homeTeam")
+				.equal(match.getHomeTeam()).field("guestTeam")
+				.equal(match.getGuestTeam()).countAll();
 
-		ViewResult matches = db.queryView(query);
-		return matches.isEmpty();
+		return numberOfMatches > 0;
 	}
 
 	@Override
 	public void save(Match match) {
-		add(toMatchCouchDb(match));
+		mongoDb.getDatastore().save(convertToMatchFromDb(match));
 	}
 
 	@Override
 	public void save(List<Match> matches) {
-		db.executeBulk(toMatchCouchDbList(matches));
+		mongoDb.getDatastore().save(convertToMatchFromDbList(matches));
 	}
 
 	@Override
 	public boolean noMatchesAvailable() {
-		ViewQuery query = new ViewQuery().designDocId("_design/matches")
-				.viewName("by_date_hometeam_guestteam").limit(1);
-
-		ViewResult allMatches = db.queryView(query);
-		return allMatches.isEmpty();
+		long numberOfMatches = mongoDb.getDatastore().getCount(
+				MatchFromDb.class);
+		return numberOfMatches == 0;
 	}
 
-	protected List<MatchFromDb> toMatchCouchDbList(List<Match> matches) {
+	@Override
+	public List<Match> getAllMatches() {
+		List<MatchFromDb> matches = mongoDb.getDatastore()
+				.find(MatchFromDb.class).asList();
+		return convertToMatchList(matches);
+	}
+
+	protected List<MatchFromDb> convertToMatchFromDbList(List<Match> matches) {
 		List<MatchFromDb> matchCouchDbs = new ArrayList<>();
 		for (Match match : matches) {
-			matchCouchDbs.add(toMatchCouchDb(match));
+			matchCouchDbs.add(convertToMatchFromDb(match));
 		}
 		return matchCouchDbs;
 	}
 
-	protected List<Match> toMatchList(List<MatchFromDb> matchCouchDbs) {
+	protected List<Match> convertToMatchList(List<MatchFromDb> matchCouchDbs) {
 		List<Match> matches = new ArrayList<>();
 		for (MatchFromDb matchCouchDb : matchCouchDbs) {
-			matches.add(toMatch(matchCouchDb));
+			matches.add(convertToMatch(matchCouchDb));
 		}
 		return matches;
 	}
 
-	protected MatchFromDb toMatchCouchDb(Match match) {
+	protected MatchFromDb convertToMatchFromDb(Match match) {
 		MatchFromDb matchCouchDb = new MatchFromDb();
 		matchCouchDb.setGuestGoals(match.getGuestGoals());
 		matchCouchDb.setGuestScore(match.getGuestScore());
@@ -85,7 +83,7 @@ public class MatchRepo extends CouchDbRepositorySupport<MatchFromDb> implements 
 		return matchCouchDb;
 	}
 
-	protected Match toMatch(MatchFromDb matchCouchDb) {
+	protected Match convertToMatch(MatchFromDb matchCouchDb) {
 		Match match = new Match();
 		match.setGuestGoals(matchCouchDb.getGuestGoals());
 		match.setGuestScore(matchCouchDb.getGuestScore());
@@ -96,10 +94,5 @@ public class MatchRepo extends CouchDbRepositorySupport<MatchFromDb> implements 
 		match.setMatchDate(matchCouchDb.getMatchDate());
 		match.setMatchDay(matchCouchDb.getMatchDay());
 		return match;
-	}
-	@Override
-	public List<Match> getAllGames() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 }

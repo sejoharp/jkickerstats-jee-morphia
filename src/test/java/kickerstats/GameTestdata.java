@@ -5,7 +5,7 @@ import java.util.Calendar;
 import kickerstats.domain.GameFromDb;
 import kickerstats.types.Game;
 
-public class GameTestdaten {
+public class GameTestdata {
 
 	public static Game createSingleGame() {
 		Game singleGame = new Game();

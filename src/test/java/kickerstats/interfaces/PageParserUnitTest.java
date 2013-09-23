@@ -9,8 +9,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import kickerstats.GameTestdaten;
-import kickerstats.MatchTestdaten;
+import kickerstats.GameTestdata;
+import kickerstats.MatchTestdata;
 import kickerstats.types.Game;
 
 import org.jsoup.Jsoup;
@@ -330,12 +330,8 @@ public class PageParserUnitTest {
 		game.setDoubleMatch(false);
 		game.setGuestPlayer1("Matheuszik, Sven");
 		game.setGuestScore(7);
-		game.setGuestTeam("Hamburg Privateers 08");
 		game.setHomePlayer1("Kränz, Ludwig");
 		game.setHomeScore(5);
-		game.setHomeTeam("Tingeltangel FC St. Pauli");
-		game.setMatchDate(GameTestdaten.createCalendar(2013, 1, 27, 20, 0));
-		game.setMatchDay(1);
 		game.setPosition(2);
 
 		List<Game> games = parser.findGames(begegnungDoc);
@@ -350,13 +346,9 @@ public class PageParserUnitTest {
 		game.setGuestPlayer1("Zierott, Ulli");
 		game.setGuestPlayer2("Hojas, René");
 		game.setGuestScore(5);
-		game.setGuestTeam("Hamburg Privateers 08");
 		game.setHomePlayer1("Fischer, Harro");
 		game.setHomePlayer2("Kränz, Ludwig");
 		game.setHomeScore(4);
-		game.setHomeTeam("Tingeltangel FC St. Pauli");
-		game.setMatchDate(GameTestdaten.createCalendar(2013, 1, 27, 20, 0));
-		game.setMatchDay(1);
 		game.setPosition(3);
 
 		List<Game> games = parser.findGames(begegnungDoc);
@@ -366,7 +358,7 @@ public class PageParserUnitTest {
 
 	@Test
 	public void returnsAFullFilledSingleGameWithImages() {
-		Game game = GameTestdaten.createSecondSingleGame();
+		Game game = GameTestdata.createSecondSingleGame();
 
 		List<Game> games = parser.findGames(begegnungBildDoc);
 
@@ -375,7 +367,7 @@ public class PageParserUnitTest {
 
 	@Test
 	public void returnsAFullFilledDoubleGameWithImages() {
-		Game game = GameTestdaten.createDoubleGame();
+		Game game = GameTestdata.createDoubleGame();
 
 		List<Game> games = parser.findGames(begegnungBildDoc);
 
@@ -417,17 +409,10 @@ public class PageParserUnitTest {
 		Game gameWithoutPlayernames = games.get(13);
 		assertThat(gameWithoutPlayernames.getGuestPlayer1(), is(""));
 		assertThat(gameWithoutPlayernames.getHomePlayer1(), is(""));
-		assertThat(gameWithoutPlayernames.getHomeTeam(),
-				is("Die Hinkelsteinchen"));
-		assertThat(gameWithoutPlayernames.getGuestTeam(),
-				is("Kurbelkraft Bergedorf"));
 		assertThat(gameWithoutPlayernames.getHomeScore(), is(7));
 		assertThat(gameWithoutPlayernames.getGuestScore(), is(0));
 		assertThat(gameWithoutPlayernames.getPosition(), is(14));
-		assertThat(gameWithoutPlayernames.getMatchDay(), is(1));
 		assertThat(gameWithoutPlayernames.isDoubleMatch(), is(false));
-		assertThat(gameWithoutPlayernames.getMatchDate(),
-				is(GameTestdaten.createCalendar(2013, 1, 28, 20, 0)));
 	}
 
 	@Test
@@ -435,7 +420,7 @@ public class PageParserUnitTest {
 		List<MatchWithLink> matches = parser.findMatches(begegnungenDoc);
 		MatchWithLink match = matches.get(0);
 
-		assertThat(match, is(MatchTestdaten.createMatchLink()));
+		assertThat(match, is(MatchTestdata.createMatchLink()));
 	}
 
 	@Test
@@ -462,7 +447,7 @@ public class PageParserUnitTest {
 		List<MatchWithLink> matches = parser.findMatches(begegnungenNoDateDoc);
 		MatchWithLink match = matches.get(25);
 
-		assertThat(match, is(MatchTestdaten.createMatchLinkWithoutDate()));
+		assertThat(match, is(MatchTestdata.createMatchLinkWithoutDate()));
 	}
 
 	@Test

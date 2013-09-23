@@ -5,9 +5,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import kickerstats.WeldJUnit4Runner;
-import kickerstats.interfaces.CsvCreator;
-import kickerstats.interfaces.StatsUpdater;
-import kickerstats.types.Game;
+import kickerstats.types.Match;
 
 import org.junit.Ignore;
 import org.junit.Test;
@@ -24,8 +22,8 @@ public class StatsUpdaterTest {
 	@Ignore
 	@Test
 	public void createCSVFileWithAllGames() {
-		List<Game> games = statsUpdater.downloadAllGames();
-		List<String> gameStrings = csvCreator.createCsvRowList(games);
+		List<Match> matches = statsUpdater.downloadAllMatches();
+		List<String> gameStrings = csvCreator.createCsvRowList(matches);
 		csvCreator.createCsvFile(gameStrings);
 	}
 	

@@ -9,7 +9,7 @@ import org.mongodb.morphia.annotations.Embedded;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Id;
 
-@Entity("match")
+@Entity("matches")
 public class MatchFromDb {
 	@Id
 	private String id;

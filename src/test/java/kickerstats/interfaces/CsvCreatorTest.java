@@ -9,13 +9,15 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Scanner;
 
-import kickerstats.GameTestdaten;
-import kickerstats.interfaces.CsvCreator;
+import kickerstats.GameTestdata;
+import kickerstats.MatchTestdata;
 import kickerstats.types.Game;
+import kickerstats.types.Match;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -32,9 +34,9 @@ public class CsvCreatorTest {
 
 	@Test
 	public void createsACompleteCsvFile() {
-		List<Game> games = Lists.newArrayList(GameTestdaten.createSingleGame());
+		List<Match> matches = Arrays.asList(MatchTestdata.createMatchWithSinglegame());
 
-		List<String> csvGames = csvCreator.createCsvRowList(games);
+		List<String> csvGames = csvCreator.createCsvRowList(matches);
 
 		assertThat(
 				csvGames.get(0),
@@ -43,9 +45,9 @@ public class CsvCreatorTest {
 
 	@Test
 	public void createsACompleteCsvFileWithADoubleGame() {
-		List<Game> games = Lists.newArrayList(GameTestdaten.createDoubleGame());
+		List<Match> matches = Arrays.asList(MatchTestdata.createMatchWithDoublegame());
 
-		List<String> csvGames = csvCreator.createCsvRowList(games);
+		List<String> csvGames = csvCreator.createCsvRowList(matches);
 
 		assertThat(
 				csvGames.get(0),
@@ -54,9 +56,9 @@ public class CsvCreatorTest {
 
 	@Test
 	public void createsCsvFile() {
-		List<Game> games = Lists.newArrayList(GameTestdaten.createSingleGame(),
-				GameTestdaten.createDoubleGame());
-		List<String> gameStrings = csvCreator.createCsvRowList(games);
+		List<Match> matches = Arrays.asList(MatchTestdata.createMatch());
+
+		List<String> gameStrings = csvCreator.createCsvRowList(matches);
 
 		csvCreator.createCsvFile(gameStrings);
 
