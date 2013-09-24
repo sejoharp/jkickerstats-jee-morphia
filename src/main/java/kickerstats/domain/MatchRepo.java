@@ -1,6 +1,7 @@
 package kickerstats.domain;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -14,11 +15,10 @@ public class MatchRepo implements MatchRepoInterface {
 
 	@Override
 	public boolean isNewMatch(Match match) {
-		long numberOfMatches = mongoDb.getDatastore()
-				.find(MatchFromDb.class).field("matchDate")
-				.equal(match.getMatchDate()).field("homeTeam")
-				.equal(match.getHomeTeam()).field("guestTeam")
-				.equal(match.getGuestTeam()).countAll();
+		long numberOfMatches = mongoDb.getDatastore().find(MatchFromDb.class)
+				.field("matchDate").equal(match.getMatchDate())
+				.field("homeTeam").equal(match.getHomeTeam())
+				.field("guestTeam").equal(match.getGuestTeam()).countAll();
 
 		return numberOfMatches > 0;
 	}
@@ -71,7 +71,7 @@ public class MatchRepo implements MatchRepoInterface {
 		matchCouchDb.setHomeGoals(match.getHomeGoals());
 		matchCouchDb.setHomeScore(match.getHomeScore());
 		matchCouchDb.setHomeTeam(match.getHomeTeam());
-		matchCouchDb.setMatchDate(match.getMatchDate());
+		matchCouchDb.setMatchDate(match.getMatchDate().getTime());
 		matchCouchDb.setMatchDay(match.getMatchDay());
 		return matchCouchDb;
 	}
@@ -84,7 +84,10 @@ public class MatchRepo implements MatchRepoInterface {
 		match.setHomeGoals(matchCouchDb.getHomeGoals());
 		match.setHomeScore(matchCouchDb.getHomeScore());
 		match.setHomeTeam(matchCouchDb.getHomeTeam());
-		match.setMatchDate(matchCouchDb.getMatchDate());
+
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(matchCouchDb.getMatchDate());
+		match.setMatchDate(cal);
 		match.setMatchDay(matchCouchDb.getMatchDay());
 		return match;
 	}

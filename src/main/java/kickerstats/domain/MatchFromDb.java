@@ -1,6 +1,6 @@
 package kickerstats.domain;
 
-import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import kickerstats.types.Game;
@@ -19,7 +19,7 @@ public class MatchFromDb {
 	private int guestGoals;
 	private int homeScore;
 	private int guestScore;
-	private Calendar matchDate;
+	private Date matchDate;
 	private int matchDay;
 	@Embedded
 	private List<Game> games;
@@ -72,11 +72,11 @@ public class MatchFromDb {
 		this.guestScore = guestScore;
 	}
 
-	public Calendar getMatchDate() {
+	public Date getMatchDate() {
 		return matchDate;
 	}
 
-	public void setMatchDate(Calendar matchDate) {
+	public void setMatchDate(Date matchDate) {
 		this.matchDate = matchDate;
 	}
 

@@ -8,7 +8,7 @@ import org.mongodb.morphia.Datastore;
 public class MongoDb {
 
 	private Datastore datastore;
-
+	
 	public Datastore getDatastore() {
 		return datastore;
 	}

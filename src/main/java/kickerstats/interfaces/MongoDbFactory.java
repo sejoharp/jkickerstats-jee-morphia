@@ -5,7 +5,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import javax.enterprise.inject.Produces;
+import javax.annotation.PostConstruct;
+import javax.ejb.Startup;
+import javax.inject.Inject;
 
 import kickerstats.domain.GameFromDb;
 import kickerstats.domain.MatchFromDb;
@@ -18,10 +20,18 @@ import com.mongodb.MongoClient;
 import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
 
-public class Initializer {
+@Startup
+public class MongoDbFactory {
 
-	@Produces
-	protected MongoDb createMongoDb() {
+	@Inject
+	private MongoDb db;
+	
+	@PostConstruct
+	protected void init() throws UnknownHostException {
+		db.setDatastore(createDatastore());
+	}
+
+	protected Datastore createDatastore() {
 		ResourceBundle configProperties = ResourceBundle
 				.getBundle("kickerstats.config");
 
@@ -41,12 +51,9 @@ public class Initializer {
 		Datastore datastore = morphia.createDatastore(new MongoClient(
 				dbAddress, credentials), dbname);
 
-		MongoDb mongoDb = new MongoDb();
-		mongoDb.setDatastore(datastore);
-
 		System.out.println("==> DBSERVER DATA: " + dbhost + dbport + dbname
 				+ dbuser);
-		return mongoDb;
+		return datastore;
 	}
 
 	protected ServerAddress createAddress(String dbhost, int dbport) {
