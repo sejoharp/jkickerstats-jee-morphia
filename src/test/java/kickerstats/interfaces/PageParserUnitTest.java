@@ -190,7 +190,7 @@ public class PageParserUnitTest {
 		expectedDate.setTimeInMillis(0);
 		expectedDate.set(2013, 1, 27, 20, 0);
 
-		Date resultDate = parser.parseDate(rawDate).getTime();
+		Date resultDate = parser.parseDate(rawDate);
 
 		assertThat(resultDate, is(expectedDate.getTime()));
 	}
@@ -201,7 +201,7 @@ public class PageParserUnitTest {
 		expectedDate.clear();
 		expectedDate.set(2013, 1, 27, 20, 0);
 
-		assertThat(parser.parseMatchDate(begegnungDoc, true), is(expectedDate));
+		assertThat(parser.parseMatchDate(begegnungDoc, true), is(expectedDate.getTime()));
 	}
 
 	@Test
@@ -210,7 +210,7 @@ public class PageParserUnitTest {
 		expectedDate.setTimeInMillis(0);
 
 		assertThat(parser.parseMatchDate(begegnungNoDateDoc, false),
-				is(expectedDate));
+				is(expectedDate.getTime()));
 	}
 
 	@Test

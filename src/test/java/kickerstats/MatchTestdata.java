@@ -1,7 +1,7 @@
 package kickerstats;
 
 import java.util.Arrays;
-import java.util.Calendar;
+import java.util.Date;
 
 import kickerstats.interfaces.MatchWithLink;
 import kickerstats.types.Match;
@@ -13,7 +13,7 @@ public class MatchTestdata {
 		match.setGuestTeam("guestteam");
 		match.setHomeScore(22);
 		match.setHomeTeam("hometeam");
-		match.setMatchDate(Calendar.getInstance());
+		match.setMatchDate(new Date());
 		match.setMatchDay(1);
 		match.setHomeGoals(10);
 		match.setGuestGoals(11);
@@ -27,7 +27,7 @@ public class MatchTestdata {
 		match.setGuestTeam("Hamburg Privateers 08");
 		match.setHomeScore(22);
 		match.setHomeTeam("Tingeltangel FC St. Pauli");
-		match.setMatchDate(GameTestdata.createCalendar(2013, 01, 27, 19, 1));
+		match.setMatchDate(GameTestdata.createDate(2013, 01, 27, 19, 1));
 		match.setMatchDay(1);
 		match.setHomeGoals(10);
 		match.setGuestGoals(11);
@@ -41,7 +41,7 @@ public class MatchTestdata {
 		match.setGuestTeam("Die Maschinerie");
 		match.setHomeScore(22);
 		match.setHomeTeam("Cim Bom Bom");
-		match.setMatchDate(GameTestdata.createCalendar(2013, 01, 28, 19, 1));
+		match.setMatchDate(GameTestdata.createDate(2013, 01, 28, 19, 1));
 		match.setMatchDay(1);
 		match.setHomeGoals(10);
 		match.setGuestGoals(11);
@@ -51,7 +51,7 @@ public class MatchTestdata {
 	
 	public static MatchWithLink createMatchLink() {
 		MatchWithLink match = new MatchWithLink();
-		match.setMatchDate(GameTestdata.createCalendar(2013, 01, 27, 19, 1));
+		match.setMatchDate(GameTestdata.createDate(2013, 01, 27, 19, 1));
 		match.setHomeTeam("Kickerbande");
 		match.setGuestTeam("St. Ellingen 1");
 		match.setMatchDay(1);

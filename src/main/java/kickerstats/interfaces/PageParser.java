@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import kickerstats.types.Game;
@@ -71,11 +72,11 @@ class PageParser {
 		return dateChunks.length == 3;
 	}
 
-	protected Calendar parseMatchDate(Document doc, boolean matchDateAvailable) {
+	protected Date parseMatchDate(Document doc, boolean matchDateAvailable) {
 		if (matchDateAvailable == false) {
 			Calendar matchDate = Calendar.getInstance();
 			matchDate.setTimeInMillis(0);
-			return matchDate;
+			return matchDate.getTime();
 		}
 		String rawData = doc.select("#Content table tbody > tr > td").first()
 				.text();
@@ -112,15 +113,13 @@ class PageParser {
 		return Integer.parseInt(guestscore);
 	}
 
-	protected Calendar parseDate(String rawDate) {
-		Calendar date = Calendar.getInstance();
+	protected Date parseDate(String rawDate) {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm");
 		try {
-			date.setTime(dateFormat.parse(rawDate));
+			return dateFormat.parse(rawDate);
 		} catch (ParseException e) {
 			throw new IllegalStateException(e);
 		}
-		return date;
 	}
 
 	public List<String> findLigaLinks(Document doc) {
@@ -219,7 +218,7 @@ class PageParser {
 		return Integer.parseInt(score.split(":")[1]);
 	}
 
-	protected Calendar parseMatchDate(Element element) {
+	protected Date parseMatchDate(Element element) {
 		String rawData = element.select("a").text();
 		String[] dateString = rawData.split(",");
 		if (dateString.length == 2) {
@@ -227,7 +226,7 @@ class PageParser {
 		} else {
 			Calendar matchDate = Calendar.getInstance();
 			matchDate.setTimeInMillis(0);
-			return matchDate;
+			return matchDate.getTime();
 		}
 	}
 

@@ -1,6 +1,7 @@
 package kickerstats;
 
 import java.util.Calendar;
+import java.util.Date;
 
 import kickerstats.domain.GameFromDb;
 import kickerstats.types.Game;
@@ -42,7 +43,7 @@ public class GameTestdata {
 		return doubleGame;
 	}
 
-	public static Calendar createCalendar(int year, int month, int day,
+	public static Date createDate(int year, int month, int day,
 			int hour, int min) {
 		Calendar calendar = Calendar.getInstance();
 		calendar.clear();
@@ -51,13 +52,13 @@ public class GameTestdata {
 		calendar.set(Calendar.DAY_OF_MONTH, day);
 		calendar.set(Calendar.HOUR_OF_DAY, hour);
 		calendar.set(Calendar.MINUTE, min);
-		return calendar;
+		return calendar.getTime();
 	}
 
-	public static Calendar createZeroCalendar() {
+	public static Date createZeroCalendar() {
 		Calendar matchDate = Calendar.getInstance();
 		matchDate.setTimeInMillis(0);
-		return matchDate;
+		return matchDate.getTime();
 	}
 
 	public static GameFromDb createDoubleGameCouchDb() {

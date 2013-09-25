@@ -72,7 +72,7 @@ public class MatchRepo implements MatchRepoInterface {
 		matchFromDb.setHomeGoals(match.getHomeGoals());
 		matchFromDb.setHomeScore(match.getHomeScore());
 		matchFromDb.setHomeTeam(match.getHomeTeam());
-		matchFromDb.setMatchDate(match.getMatchDate().getTime());
+		matchFromDb.setMatchDate(match.getMatchDate());
 		matchFromDb.setMatchDay(match.getMatchDay());
 		matchFromDb.setGames(convertToGameFromDbList(match.getGames()));
 		return matchFromDb;
@@ -86,10 +86,7 @@ public class MatchRepo implements MatchRepoInterface {
 		match.setHomeGoals(matchFromDb.getHomeGoals());
 		match.setHomeScore(matchFromDb.getHomeScore());
 		match.setHomeTeam(matchFromDb.getHomeTeam());
-
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(matchFromDb.getMatchDate());
-		match.setMatchDate(cal);
+		match.setMatchDate(matchFromDb.getMatchDate());
 		match.setMatchDay(matchFromDb.getMatchDay());
 		match.setGames(convertToGameList(matchFromDb.getGames()));
 		return match;

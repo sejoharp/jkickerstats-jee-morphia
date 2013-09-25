@@ -83,7 +83,7 @@ public class CsvCreatorTest {
 		date.setTimeInMillis(0);
 		date.set(2013, 1, 27, 20, 0);
 
-		assertThat(csvCreator.formatDate(date), is("2013-02-27"));
+		assertThat(csvCreator.formatDate(date.getTime()), is("2013-02-27"));
 	}
 
 	@Test

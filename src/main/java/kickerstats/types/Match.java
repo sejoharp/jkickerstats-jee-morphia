@@ -1,6 +1,7 @@
 package kickerstats.types;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class Match {
@@ -10,7 +11,7 @@ public class Match {
 	private int guestGoals;
 	private int homeScore;
 	private int guestScore;
-	private Calendar matchDate;
+	private Date matchDate;
 	private int matchDay;
 	private List<Game> games;
 
@@ -62,11 +63,11 @@ public class Match {
 		this.homeScore = homeScore;
 	}
 
-	public Calendar getMatchDate() {
+	public Date getMatchDate() {
 		return matchDate;
 	}
 
-	public void setMatchDate(Calendar matchDate) {
+	public void setMatchDate(Date matchDate) {
 		this.matchDate = matchDate;
 	}
 
@@ -152,7 +153,7 @@ public class Match {
 		return "Match [homeTeam=" + homeTeam + ", guestTeam=" + guestTeam
 				+ ", homeGoals=" + homeGoals + ", guestGoals=" + guestGoals
 				+ ", homeScore=" + homeScore + ", guestScore=" + guestScore
-				+ ", matchDate=" + matchDate.getTimeInMillis() + ", matchDay=" + matchDay
+				+ ", matchDate=" + matchDate + ", matchDay=" + matchDay
 				+ ", games=" + games + "]";
 	}
 

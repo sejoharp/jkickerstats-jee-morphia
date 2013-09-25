@@ -8,7 +8,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import kickerstats.types.Game;
@@ -61,9 +61,9 @@ public class CsvCreator {
 		return csvList;
 	}
 
-	protected String formatDate(Calendar matchDate) {
+	protected String formatDate(Date matchDate) {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-		return dateFormat.format(matchDate.getTime());
+		return dateFormat.format(matchDate);
 	}
 
 	protected String replaceEmptyNames(String name) {
