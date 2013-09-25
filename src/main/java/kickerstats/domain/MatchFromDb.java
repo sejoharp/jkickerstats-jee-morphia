@@ -22,7 +22,7 @@ public class MatchFromDb {
 	private Date matchDate;
 	private int matchDay;
 	@Embedded
-	private List<Game> games;
+	private List<GameFromDb> games;
 
 	public String getHomeTeam() {
 		return homeTeam;
@@ -88,11 +88,11 @@ public class MatchFromDb {
 		this.matchDay = matchDay;
 	}
 
-	public List<Game> getGames() {
+	public List<GameFromDb> getGames() {
 		return games;
 	}
 
-	public void setGames(List<Game> games) {
+	public void setGames(List<GameFromDb> games) {
 		this.games = games;
 	}
 

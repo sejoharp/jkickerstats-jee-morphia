@@ -60,7 +60,6 @@ public class MatchTestdata {
 		match.setHomeScore(32);
 		match.setGuestScore(0);
 		match.setMatchLink("http://www.kickern-hamburg.de/liga-tool/mannschaftswettbewerbe?task=begegnung_spielplan&veranstaltungid=64&id=3815");
-		match.setGames(Arrays.asList(GameTestdata.createSingleGame(), GameTestdata.createDoubleGame()));
 		return match;
 	}
 
@@ -75,7 +74,6 @@ public class MatchTestdata {
 		match.setHomeScore(0);
 		match.setGuestScore(32);
 		match.setMatchLink("http://www.kickern-hamburg.de/liga-tool/mannschaftswettbewerbe?task=begegnung_spielplan&veranstaltungid=54&id=3504");
-		match.setGames(Arrays.asList(GameTestdata.createSingleGame(), GameTestdata.createDoubleGame()));
 		return match;
 	}
 }
