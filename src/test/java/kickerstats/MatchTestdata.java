@@ -13,7 +13,7 @@ public class MatchTestdata {
 		match.setGuestTeam("guestteam");
 		match.setHomeScore(22);
 		match.setHomeTeam("hometeam");
-		match.setMatchDate(new Date());
+		match.setMatchDate(GameTestdata.createDate(2013, 01, 27, 19, 1));
 		match.setMatchDay(1);
 		match.setHomeGoals(10);
 		match.setGuestGoals(11);
