@@ -1,7 +1,6 @@
 package kickerstats.domain;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import javax.inject.Inject;

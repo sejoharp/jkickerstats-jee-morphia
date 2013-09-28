@@ -11,7 +11,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import kickerstats.WeldJUnit4Runner;
-import kickerstats.interfaces.PageParser;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

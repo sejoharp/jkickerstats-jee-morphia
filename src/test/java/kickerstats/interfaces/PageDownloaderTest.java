@@ -2,7 +2,6 @@ package kickerstats.interfaces;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.MatcherAssert.assertThat;
-import kickerstats.interfaces.PageDownloader;
 
 import org.jsoup.nodes.Document;
 import org.junit.Before;

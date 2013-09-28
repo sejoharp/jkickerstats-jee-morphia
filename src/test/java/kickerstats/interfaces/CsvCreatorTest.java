@@ -14,15 +14,11 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Scanner;
 
-import kickerstats.GameTestdata;
 import kickerstats.MatchTestdata;
-import kickerstats.types.Game;
 import kickerstats.types.Match;
 
 import org.junit.Before;
 import org.junit.Test;
-
-import com.google.common.collect.Lists;
 
 public class CsvCreatorTest {
 	private CsvCreator csvCreator;

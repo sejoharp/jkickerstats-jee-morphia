@@ -1,7 +1,6 @@
 package kickerstats;
 
 import java.util.Arrays;
-import java.util.Date;
 
 import kickerstats.interfaces.MatchWithLink;
 import kickerstats.types.Match;

@@ -3,8 +3,6 @@ package kickerstats.domain;
 import java.util.Date;
 import java.util.List;
 
-import kickerstats.types.Game;
-
 import org.mongodb.morphia.annotations.Embedded;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Id;
