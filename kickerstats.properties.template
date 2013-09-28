@@ -1,0 +1,8 @@
+# mongodb config should be placed in classpath 
+# example for jboss: server/default/conf
+
+dbhost=localhost
+dbport=27017
+dbuser=
+dbpassword=
+dbname=kickerstats_test
