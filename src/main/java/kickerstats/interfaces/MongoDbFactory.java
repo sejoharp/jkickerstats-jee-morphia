@@ -56,16 +56,16 @@ public class MongoDbFactory {
 		Datastore datastore = morphia.createDatastore(new MongoClient(
 				dbAddress, credentials), dbname);
 
-		System.out.println("==> DBSERVER DATA: " + dbhost + dbport + dbname
-				+ dbuser);
+		System.out.println(String.format(
+				"==> DBSERVER DATA: %s:%s dbname:%s dbuser:%b dbpassword:%b",
+				dbhost, dbport, dbname, dbuser.isEmpty(), dbpassword.toString()
+						.isEmpty()));
 		return datastore;
 	}
 
 	protected Path createConfigfilePath() {
-		return Paths.get(System
-				.getProperty("jboss.server.config.dir")
-				+ File.separator
-				+ "kickerstats.properties");
+		return Paths.get(System.getProperty("jboss.server.config.dir")
+				+ File.separator + "kickerstats.properties");
 	}
 
 	protected Properties loadProperties(Path configfile) {
