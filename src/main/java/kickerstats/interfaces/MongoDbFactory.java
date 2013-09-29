@@ -1,11 +1,18 @@
 package kickerstats.interfaces;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.UnknownHostException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
-import java.util.ResourceBundle;
+import java.util.Properties;
 
 import javax.annotation.PostConstruct;
+import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.inject.Inject;
 
@@ -21,26 +28,24 @@ import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
 
 @Startup
+@Singleton
 public class MongoDbFactory {
 
 	@Inject
 	private MongoDb db;
-	
+
 	@PostConstruct
 	protected void init() throws UnknownHostException {
 		db.setDatastore(createDatastore());
 	}
 
 	protected Datastore createDatastore() {
-		ResourceBundle configProperties = ResourceBundle
-				.getBundle("kickerstats.config");
-
-		String dbhost = configProperties.getString("dbhost");
-		int dbport = Integer.parseInt(configProperties.getString("dbport"));
-		String dbuser = configProperties.getString("dbuser");
-		String dbname = configProperties.getString("dbname");
-		char[] dbpassword = configProperties.getString("dbpassword")
-				.toCharArray();
+		Properties properties = loadProperties(createConfigfilePath());
+		String dbhost = properties.getProperty("dbhost");
+		int dbport = Integer.parseInt(properties.getProperty("dbport"));
+		String dbuser = properties.getProperty("dbuser");
+		String dbname = properties.getProperty("dbname");
+		char[] dbpassword = properties.getProperty("dbpassword").toCharArray();
 
 		ServerAddress dbAddress = createAddress(dbhost, dbport);
 		List<MongoCredential> credentials = Arrays.asList(MongoCredential
@@ -54,6 +59,25 @@ public class MongoDbFactory {
 		System.out.println("==> DBSERVER DATA: " + dbhost + dbport + dbname
 				+ dbuser);
 		return datastore;
+	}
+
+	protected Path createConfigfilePath() {
+		return Paths.get(System
+				.getProperty("jboss.server.config.dir")
+				+ File.separator
+				+ "kickerstats.properties");
+	}
+
+	protected Properties loadProperties(Path configfile) {
+		Properties properties = new Properties();
+		try {
+			InputStream inputStream = Files.newInputStream(configfile);
+			properties.load(inputStream);
+			inputStream.close();
+		} catch (IOException e) {
+			throw new IllegalArgumentException(e);
+		}
+		return properties;
 	}
 
 	protected ServerAddress createAddress(String dbhost, int dbport) {

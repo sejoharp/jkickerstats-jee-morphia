@@ -35,8 +35,7 @@ public class MatchService implements MatchServiceInterface {
 
 	@Override
 	public List<Match> getAllMatches() {
-		// TODO Auto-generated method stub
-		return null;
+		return matchRepo.getAllMatches();
 	}
 
 }
