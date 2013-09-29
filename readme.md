@@ -17,9 +17,9 @@ This app grabs all matches vom kickern-hamburg.de and makes it available as csv.
 * clone this repo
 * maven build
 ## config service
-* customise kickerstats.properties and copy it to a folder in classpath of your servlet container.
+* customise kickerstats.properties and copy it to jboss config folder 'jboss.server.config.dir' .
 ## deployment
-* deploy the war-file to your servlet container.
+* deploy the war-file to jboss.
 
 # Dependencies
 * mongodb
@@ -29,6 +29,7 @@ This app grabs all matches vom kickern-hamburg.de and makes it available as csv.
 * jsoup
 * weld
 * jee
+* jboss
 
 # My setup
 * A shared hosting service
