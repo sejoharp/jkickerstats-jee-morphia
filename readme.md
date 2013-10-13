@@ -20,7 +20,7 @@ This app grabs all matches vom kickern-hamburg.de and makes it available as csv.
 * customise `kickerstats.properties` 
 * copy `kickerstats.properties` to classpath.
 	* for tomee: 
-		* appending `${catalina.home}/conf` to variable `common.loader` in file `catalina.properties`. 
+		* append `${catalina.home}/conf` to variable `common.loader` in file `catalina.properties`. 
 		* add `kickerstats.properties` to your `tomee/conf`-folder
 ## deployment
 * deploy the war-file to ejb-container.
