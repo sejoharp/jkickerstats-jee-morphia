@@ -1,15 +1,12 @@
 package kickerstats.interfaces;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.UnknownHostException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;
@@ -31,6 +28,9 @@ import com.mongodb.ServerAddress;
 @Singleton
 public class MongoDbFactory {
 
+	private static Logger LOG = Logger
+			.getLogger(MongoDbFactory.class.getName());
+	
 	@Inject
 	private MongoDb db;
 
@@ -40,7 +40,7 @@ public class MongoDbFactory {
 	}
 
 	protected Datastore createDatastore() {
-		Properties properties = loadProperties(createConfigfilePath());
+		Properties properties = loadProperties("kickerstats.properties");
 		String dbhost = properties.getProperty("dbhost");
 		int dbport = Integer.parseInt(properties.getProperty("dbport"));
 		String dbuser = properties.getProperty("dbuser");
@@ -56,10 +56,11 @@ public class MongoDbFactory {
 		Datastore datastore = morphia.createDatastore(new MongoClient(
 				dbAddress, credentials), dbname);
 
-		System.out.println(String.format(
-				"==> DBSERVER DATA: %s:%s dbname:%s dbuser:%b dbpassword:%b",
-				dbhost, dbport, dbname, dbuser.isEmpty(), dbpassword.toString()
-						.isEmpty()));
+		Logger.getLogger(this.getClass().getName())
+				.info(String
+						.format("==> DBSERVER DATA: %s:%s dbname:%s dbuser:%b dbpassword:%b",
+								dbhost, dbport, dbname, dbuser.isEmpty(),
+								dbpassword.toString().isEmpty()));
 		return datastore;
 	}
 

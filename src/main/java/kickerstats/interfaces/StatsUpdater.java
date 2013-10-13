@@ -13,7 +13,7 @@ import kickerstats.usecases.MatchServiceInterface;
 import org.jsoup.nodes.Document;
 
 public class StatsUpdater {
-	private static final Logger log = Logger.getLogger(StatsUpdater.class
+	private static final Logger LOG = Logger.getLogger(StatsUpdater.class
 			.getName());
 
 	@Inject
@@ -26,6 +26,7 @@ public class StatsUpdater {
 	private static String SEASONS_URL = "http://www.kickern-hamburg.de/liga-tool/mannschaftswettbewerbe";
 
 	public void updateStats() {
+		LOG.info("updater batch started.");
 		if (matchService.noDataAvailable()) {
 			getAllData();
 		} else {
@@ -64,7 +65,7 @@ public class StatsUpdater {
 		}
 		return allMatches;
 	}
-	
+
 	protected void getAllData() {
 		List<Integer> seasonIds = getSeasonIDs();
 		for (Integer seasonId : seasonIds) {
@@ -108,7 +109,7 @@ public class StatsUpdater {
 		try {
 			return kickerpageParser.findGames(matchDoc);
 		} catch (Exception e) {
-			log.severe("processing match: " + matchLink);
+			LOG.severe("processing match: " + matchLink);
 			throw e;
 		}
 	}
@@ -125,7 +126,7 @@ public class StatsUpdater {
 		try {
 			matchLinks = kickerpageParser.findMatches(ligaDoc);
 		} catch (Exception e) {
-			log.severe("processing liga: " + ligaLink);
+			LOG.severe("processing liga: " + ligaLink);
 			throw e;
 		}
 		return matchLinks;
