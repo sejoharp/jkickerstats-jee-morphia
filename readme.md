@@ -18,7 +18,7 @@ This app grabs all matches vom kickern-hamburg.de and makes it available as csv.
 * maven build
 ## config service
 * customise `kickerstats.properties` and copy it to classpath.
-** for tomee: add conf-folder (`${catalina.home}/conf`) in file `catalina.properties` to the variable `common.loader` 
+	* for tomee: add conf-folder (`${catalina.home}/conf`) in file `catalina.properties` to the variable `common.loader` 
 ## deployment
 * deploy the war-file to ejb-container.
 
