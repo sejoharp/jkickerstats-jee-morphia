@@ -16,12 +16,33 @@ This app grabs all matches vom kickern-hamburg.de and makes it available as csv.
 ## compile 
 * clone this repo
 * maven build
+
+## tomee setup (optional)
+* expect sha passwords:
+	* in file `CATALINA_BASE/conf/server.xml`
+	* add `digest="sha"` to `<realm classname="org.apache.catalina.realm.UserDatabaseRealm" resourcename="UserDatabase"></realm>`
+* create password hash: `CATALINA_BASE/bin/digest.sh -a SHA [CLEARTEXT PASSWORD]`
+* add admin:
+	* in file `CATALINA_BASE/conf/tomcat-users.xml` add these lines:
+	* `<role rolename="tomee-admin" />`
+  	* `<user username="tomee" password="[PASSWORD HASH]" roles="tomee-admin,manager-gui" />`
+* change listening ports:  			
+	* comment the following out:  `<Connector port="8009" protocol="AJP/1.3" redirectPort="8443" />`
+	* change http-connector to `<Connector port="[YOUR PORT]" protocol="HTTP/1.1" connectionTimeout="20000"/>` (no redirect)
+* change shutdown port and command:
+	* in file `CATALINA_BASE/conf/tomcat-users.xml`:
+	* change `<Server port="8005" shutdown="SHUTDOWN">` to something else.
+* remove ROOT-application
+* limit memory usage
+	* open file `CATALINA_BASE/bin/setenv.sh`
+	* add export `JAVA_OPTS="-Djava.awt.headless=true -server -Xms48m -Xmx400M -XX:MaxPermSize=400m"` 
+
 ## config service
 * customise `kickerstats.properties` 
 * copy `kickerstats.properties` to classpath.
 	* for tomee: 
 		* append `${catalina.home}/conf` to variable `common.loader` in file `catalina.properties`. 
-		* add `kickerstats.properties` to your `tomee/conf`-folder
+		* add `kickerstats.properties` to your `CATALINA_BASE/conf`-folder
 ## deployment
 * deploy the war-file to ejb-container.
 
@@ -39,5 +60,3 @@ This app grabs all matches vom kickern-hamburg.de and makes it available as csv.
 * A shared hosting service
 * mongodb
 * tomee 1.5.2
-
-
