@@ -47,35 +47,37 @@ This app grabs all matches vom kickern-hamburg.de and makes it available as csv.
 * add admin user
 	* call `jboss/bin/add-user.sh`
 	* example
-	
-	mbp :: Downloads/java/wildfly-8.0.0.Beta1 » bin/add-user.sh 
 
-	What type of user do you wish to add? 
- 	a) Management User (mgmt-users.properties) 
- 	b) Application User (application-users.properties)
-	(a): a
+```
+mbp :: Downloads/java/wildfly-8.0.0.Beta1 » bin/add-user.sh 
 
-	Enter the details of the new user to add.
-	Using realm 'ManagementRealm' as discovered from the existing property files.
-	Username : admin
-	The username 'admin' is easy to guess
-	Are you sure you want to add user 'admin' yes/no? yes
-	Password requirements are listed below. To modify these restrictions edit the add-user.properties configuration file.
-	Password : 
-	JBAS015264: Password is not strong enough, it is 'VERY_WEAK'. It should be at least 'MODERATE'.
-	Are you sure you want to use the password entered yes/no? yes
-	Re-enter Password : 
-	What groups do you want this user to belong to? (Please enter a comma separated list, or leave blank for none)[  ]: 
-	About to add user 'admin' for realm 'ManagementRealm'
-	Is this correct yes/no? yes
-	Added user 'admin' to file '/Users/joscha/Downloads/java/wildfly-8.0.0.Beta1/standalone/configuration/mgmt-users.properties'
-	Added user 'admin' to file '/Users/joscha/Downloads/java/wildfly-8.0.0.Beta1/domain/configuration/mgmt-users.properties'
-	Added user 'admin' with groups  to file '/Users/joscha/Downloads/java/wildfly-8.0.0.Beta1/standalone/configuration/mgmt-groups.properties'
-	Added user 'admin' with groups  to file '/Users/joscha/Downloads/java/wildfly-8.0.0.Beta1/domain/configuration/mgmt-groups.properties'
-	Is this new user going to be used for one AS process to connect to another AS process? 
-	e.g. for a slave host controller connecting to the master or for a Remoting connection for server to server EJB calls.
-	yes/no? no
-	
+What type of user do you wish to add? 
+ a) Management User (mgmt-users.properties) 
+ b) Application User (application-users.properties)
+(a): a
+
+Enter the details of the new user to add.
+Using realm 'ManagementRealm' as discovered from the existing property files.
+Username : admin
+The username 'admin' is easy to guess
+Are you sure you want to add user 'admin' yes/no? yes
+Password requirements are listed below. To modify these restrictions edit the add-user.properties configuration file.
+Password : 
+JBAS015264: Password is not strong enough, it is 'VERY_WEAK'. It should be at least 'MODERATE'.
+Are you sure you want to use the password entered yes/no? yes
+Re-enter Password : 
+What groups do you want this user to belong to? (Please enter a comma separated list, or leave blank for none)[  ]: 
+About to add user 'admin' for realm 'ManagementRealm'
+Is this correct yes/no? yes
+Added user 'admin' to file '/Users/joscha/Downloads/java/wildfly-8.0.0.Beta1/standalone/configuration/mgmt-users.properties'
+Added user 'admin' to file '/Users/joscha/Downloads/java/wildfly-8.0.0.Beta1/domain/configuration/mgmt-users.properties'
+Added user 'admin' with groups  to file '/Users/joscha/Downloads/java/wildfly-8.0.0.Beta1/standalone/configuration/mgmt-groups.properties'
+Added user 'admin' with groups  to file '/Users/joscha/Downloads/java/wildfly-8.0.0.Beta1/domain/configuration/mgmt-groups.properties'
+Is this new user going to be used for one AS process to connect to another AS process? 
+e.g. for a slave host controller connecting to the master or for a Remoting connection for server to server EJB calls.
+yes/no? no
+```
+
 * limit memory usage
 	* open file `jboss/bin/standalone.sh`
 	* fill SERVER_OPTS like this `SERVER_OPTS="-Djava.awt.headless=true -server -Xms48m -Xmx400M -XX:MaxPermSize=400m"`
