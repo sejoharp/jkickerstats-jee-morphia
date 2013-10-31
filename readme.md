@@ -42,6 +42,11 @@ This app grabs all matches vom kickern-hamburg.de and makes it available as csv.
 * add JAVA_HOME
 	* open file `CATALINA_BASE/bin/setenv.sh`
 	* add `JRE_HOME=/home/joscha/opt/jre`
+* config service
+	* customise `kickerstats.properties` 
+	* copy `kickerstats.properties` to classpath.
+	* append `${catalina.home}/conf` to variable `common.loader` in file `catalina.properties`. 
+	* add `kickerstats.properties` to your `CATALINA_BASE/conf`-folder
 	
 ## jboss setup (optional)
 * add admin user
@@ -99,13 +104,11 @@ yes/no? no
 	* open file `jboss/standalone/configuration/standalone.xml`
 	* add `JRE_HOME=/home/joscha/opt/jre`
 * remove welcome-page
-	* TODO: describe changes	
-## config service
-* customise `kickerstats.properties` 
-* copy `kickerstats.properties` to classpath.
-	* for tomee: 
-		* append `${catalina.home}/conf` to variable `common.loader` in file `catalina.properties`. 
-		* add `kickerstats.properties` to your `CATALINA_BASE/conf`-folder
+	* TODO: describe changes
+* configurate service	
+	* copy `kickerstats.properties` to `jboss/standalone/configuration/`
+	* customise `kickerstats.properties`
+		
 ## deployment
 * deploy the war-file to ejb-container.
 
